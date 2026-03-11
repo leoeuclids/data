@@ -1,17 +1,14 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { basename, dirname, join, resolve } from 'path';
 
-import { InstanciatedLogger, logger } from '../../../utils/logger.js';
+import { type InstanciatedLogger, logger } from '../../../utils/logger.js';
 import type { SkippedFile, TransformerResult } from '../codemod.js';
 import { Codemod } from '../codemod.js';
+import { DEFAULT_RESOURCES_DIR, DEFAULT_TRAITS_DIR } from '../config.js';
 import type { FinalOptions, MigrateOptions, TransformOptions } from '../config.js';
 import { toArtifacts as mixinToArtifacts } from '../processors/mixin.js';
-import {
-  preAnalyzeConnectedMixinExtensions,
-  processIntermediateModelsToTraits,
-  toArtifacts as modelToArtifacts,
-} from '../processors/model.js';
-import type { ParsedFile } from '../utils/file-parser.js';
+import { processIntermediateModelsToTraits, toArtifacts as modelToArtifacts } from '../processors/model.js';
+import type { SchemaArtifact } from '../utils/artifact.js';
 
 const migrateLog = logger.for('migrate');
 
@@ -37,7 +34,7 @@ interface ProcessingResult {
   errors: string[];
 }
 
-type ArtifactType = 'schema' | 'trait' | 'resource-extension' | 'trait-extension';
+type ArtifactType = 'schema' | 'type' | 'trait' | 'resource-extension' | 'trait-extension';
 
 type DirectoryKey = 'resourcesDir' | 'traitsDir' | 'outputDir';
 
@@ -57,26 +54,31 @@ interface ArtifactConfig {
 const ARTIFACT_CONFIG: Record<ArtifactType, ArtifactConfig> = {
   schema: {
     directoryKey: 'resourcesDir',
-    defaultDir: './app/data/resources',
+    defaultDir: DEFAULT_RESOURCES_DIR,
     suffix: '.schema',
     preserveExtension: true,
   },
+  type: {
+    directoryKey: 'resourcesDir',
+    defaultDir: DEFAULT_RESOURCES_DIR,
+    useSuggestedFileName: true,
+  },
   trait: {
     directoryKey: 'traitsDir',
-    defaultDir: './app/data/traits',
+    defaultDir: DEFAULT_TRAITS_DIR,
     useRelativePath: true,
     suffix: '.schema',
     preserveExtension: true,
   },
   'resource-extension': {
     directoryKey: 'resourcesDir',
-    defaultDir: './app/data/resources',
+    defaultDir: DEFAULT_RESOURCES_DIR,
     suffix: '.ext',
     preserveExtension: true,
   },
   'trait-extension': {
     directoryKey: 'traitsDir',
-    defaultDir: './app/data/traits',
+    defaultDir: DEFAULT_TRAITS_DIR,
     useRelativePath: true,
     suffix: '.ext',
     preserveExtension: true,
@@ -84,8 +86,8 @@ const ARTIFACT_CONFIG: Record<ArtifactType, ArtifactConfig> = {
 };
 
 const DEFAULT_FALLBACK_CONFIG: ArtifactConfig = {
-  directoryKey: 'outputDir',
-  defaultDir: './app/schemas',
+  directoryKey: 'resourcesDir',
+  defaultDir: DEFAULT_RESOURCES_DIR,
   useSuggestedFileName: true,
 };
 
@@ -184,7 +186,13 @@ function buildOutputFileName(
   }
 
   if (config.preserveExtension) {
-    const extension = sourceFilePath.endsWith('.ts') ? '.ts' : '.js';
+    const extension = suggestedFileName?.endsWith('.ts')
+      ? '.ts'
+      : suggestedFileName?.endsWith('.js')
+        ? '.js'
+        : sourceFilePath.endsWith('.ts')
+          ? '.ts'
+          : '.js';
     return relativePath.replace(/\.(js|ts)$/, `${config.suffix}${extension}`);
   }
 
@@ -225,7 +233,7 @@ function getArtifactOutputPath(
   // Build the output filename
   const outputName = config.useSuggestedFileName
     ? buildOutputFileName('', filePath, config, artifact.suggestedFileName) || 'unknown'
-    : buildOutputFileName(relativePath, filePath, config);
+    : buildOutputFileName(relativePath, filePath, config, artifact.suggestedFileName);
 
   const outputPath = join(resolve(outputDir), outputName);
 
@@ -278,10 +286,10 @@ function writeIntermediateArtifacts(artifacts: Artifact[], finalOptions: FinalOp
   }
 }
 
-type ArtifactTransformer = (parsedFile: ParsedFile, options: TransformOptions) => TransformerResult;
+type ArtifactTransformer = (entity: SchemaArtifact, options: TransformOptions) => TransformerResult;
 
 interface ProcessFilesOptions {
-  parsedFiles: Map<string, ParsedFile>;
+  parsedFiles: Map<string, SchemaArtifact>;
   transformer: ArtifactTransformer;
   finalOptions: FinalOptions;
   log: InstanciatedLogger;
@@ -296,13 +304,13 @@ function processFiles({ parsedFiles, transformer, finalOptions, log }: ProcessFi
   const skipped: SkippedFile[] = [];
   const errors: string[] = [];
 
-  for (const [filePath, parsedFile] of parsedFiles) {
+  for (const [filePath, entity] of parsedFiles) {
     try {
       if (finalOptions.verbose) {
         log.debug(`🔄 Processing: ${filePath}`);
       }
 
-      const result = transformer(parsedFile, finalOptions);
+      const result = transformer(entity, finalOptions);
 
       if (result.artifacts.length > 0) {
         processed++;
@@ -338,8 +346,10 @@ export async function runMigration(options: MigrateOptions): Promise<void> {
     outputDir: options.outputDir || './app/schemas',
     dryRun: options.dryRun || false,
     verbose: options.verbose || false,
+    warpDriveImports: options.warpDriveImports || 'legacy',
     modelSourceDir: options.modelSourceDir || './app/models',
     mixinSourceDir: options.mixinSourceDir || './app/mixins',
+    projectName: options.projectName || '',
     ...options,
   };
 
@@ -367,7 +377,6 @@ export async function runMigration(options: MigrateOptions): Promise<void> {
 
   if (!options.mixinsOnly) {
     codemod.findMixinsUsedByModels();
-    codemod.findModelExtensions();
   }
 
   const filesToProcess: number = codemod.input.mixins.size + codemod.input.models.size;
@@ -383,13 +392,7 @@ export async function runMigration(options: MigrateOptions): Promise<void> {
   log.warn(`📋 Skipped ${codemod.input.skipped.length} files total`);
   log.warn(`📋 Errors found while reading files: ${codemod.input.errors.length}`);
 
-  // Unfortunately a lot of the utils rely on the options object to carry a lot of the data currently
-  // It'd take a lot of changes to make them use the codemod instance instead.
-  finalOptions.allModelFiles = Array.from(codemod.input.parsedModels.keys());
-  finalOptions.allMixinFiles = Array.from(codemod.input.parsedMixins.keys());
-  finalOptions.modelsWithExtensions = codemod.modelsWithExtensions;
-  finalOptions.modelConnectedMixins = codemod.mixinsImportedByModels;
-  preAnalyzeConnectedMixinExtensions(codemod.input.parsedMixins, finalOptions);
+  finalOptions.entityRegistry = codemod.entityRegistry;
 
   // Process intermediate models to generate trait artifacts first
   // This must be done before processing regular models that extend these intermediate models
@@ -421,9 +424,20 @@ export async function runMigration(options: MigrateOptions): Promise<void> {
     }
   }
 
+  // Build entity maps from the registry for processFiles
+  const modelEntities = new Map<string, SchemaArtifact>();
+  const mixinEntities = new Map<string, SchemaArtifact>();
+  for (const [filePath, entity] of codemod.entityRegistry) {
+    if (entity.kind === 'model') {
+      modelEntities.set(filePath, entity);
+    } else if (entity.kind === 'mixin') {
+      mixinEntities.set(filePath, entity);
+    }
+  }
+
   // Process model files using pre-parsed data
   const modelResults = processFiles({
-    parsedFiles: codemod.input.parsedModels,
+    parsedFiles: modelEntities,
     transformer: modelToArtifacts,
     finalOptions,
     log,
@@ -431,7 +445,7 @@ export async function runMigration(options: MigrateOptions): Promise<void> {
 
   // Process mixin files using pre-parsed data
   const mixinResults = processFiles({
-    parsedFiles: codemod.input.parsedMixins,
+    parsedFiles: mixinEntities,
     transformer: mixinToArtifacts,
     finalOptions,
     log,

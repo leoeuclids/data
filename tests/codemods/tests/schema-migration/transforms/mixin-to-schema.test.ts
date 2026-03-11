@@ -6,7 +6,43 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { FinalOptions } from '@ember-data/codemods/schema-migration/config.js';
 
 import { toArtifacts } from '../../../../../packages/codemods/src/schema-migration/processors/mixin.ts';
+import type { SchemaArtifactRegistry } from '../../../../../packages/codemods/src/schema-migration/utils/artifact.js';
+import { SchemaArtifact } from '../../../../../packages/codemods/src/schema-migration/utils/artifact.js';
 import { parseFile } from '../../../../../packages/codemods/src/schema-migration/utils/file-parser.js';
+
+function createConnectedRegistry(mixinEntity: SchemaArtifact): SchemaArtifactRegistry {
+  const registry: SchemaArtifactRegistry = new Map();
+  registry.set(mixinEntity.path, mixinEntity);
+
+  const dummyModel = SchemaArtifact.fromParsedFile(
+    {
+      name: 'dummy-model',
+      path: 'app/models/dummy-model.ts',
+      extension: '.ts',
+      imports: [],
+      fields: [],
+      behaviors: [],
+      fileType: 'model',
+      traits: [],
+      hasExtension: false,
+      pascalName: 'DummyModel',
+      camelName: 'dummyModel',
+      baseName: 'dummy-model',
+      source: '',
+    },
+    'model'
+  );
+  dummyModel.addTrait(mixinEntity);
+  registry.set(dummyModel.path, dummyModel);
+
+  return registry;
+}
+
+function entityFromSource(path: string, source: string, opts: FinalOptions): SchemaArtifact {
+  const entity = SchemaArtifact.fromParsedFile(parseFile(path, source, opts));
+  opts.entityRegistry = createConnectedRegistry(entity);
+  return entity;
+}
 
 describe('mixin-to-schema transform (artifacts)', () => {
   let tempDir: string;
@@ -44,21 +80,55 @@ describe('mixin-to-schema transform (artifacts)', () => {
 
 export default Mixin.create({});`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/empty.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/empty.js', input, options), options);
       expect(artifacts).toHaveLength(1);
 
       const trait = artifacts.find((a) => a.type === 'trait');
       expect(trait).toMatchInlineSnapshot(`
         {
-          "code": "const EmptySchema = {
+          "baseName": "empty",
+          "code": "import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+
+        const EmptyTraitSchema = {
           'name': 'empty',
           'mode': 'legacy',
           'fields': []
-        };
+        } satisfies LegacyResourceSchema;
 
-        export default EmptySchema;",
-          "name": "EmptySchema",
-          "suggestedFileName": "empty.schema.js",
+        export default EmptyTraitSchema;
+
+        /**
+         * This type represents the full set schema derived fields of
+         * the 'empty' trait, without any of the legacy mode features
+         * and without any extensions.
+         *
+         * > [!TIP]
+         * > It is likely that you will want a more specific type tailored
+         * > to the context of where some data has been loaded, for instance
+         * > one that marks specific fields as readonly, or which only enables
+         * > some fields to be null during create, or which only includes
+         * > a subset of fields based on a specific API response.
+         * >
+         * > For those cases, you can create a more specific type that derives
+         * > from this type to ensure that your type definitions stay consistent
+         * > with the schema. For more details read about {@link https://warp-drive.io/api/@warp-drive/core/types/record/type-aliases/Mask | Masking}
+         *
+         * See also {@link Empty} for fields + legacy mode features
+         */
+        export interface EmptyTrait {
+        }
+
+        /**
+         * This type represents the full set schema derived fields of
+         * the 'empty' trait, including all legacy mode features but
+         * without any extensions.
+         *
+         * See also {@link EmptyTrait} for fields + legacy mode features
+         */
+        export interface Empty extends WithLegacy<EmptyTrait> {}
+        ",
+          "name": "EmptyTraitSchema",
+          "suggestedFileName": "empty.schema.ts",
           "type": "trait",
         }
       `);
@@ -76,14 +146,20 @@ export default Mixin.create({
 	titleCaseName: computed('name', function () { return (this.name || '').toUpperCase(); })
 });`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/fileable.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/fileable.js', input, options), options);
       expect(artifacts).toHaveLength(3); // trait, extension, and resource-type-stub for 'file'
 
       const trait = artifacts.find((a) => a.type === 'trait');
       const extension = artifacts.find((a) => a.type === 'trait-extension');
       expect(trait).toMatchInlineSnapshot(`
         {
-          "code": "const FileableSchema = {
+          "baseName": "fileable",
+          "code": "import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+
+        import type { HasMany } from '@ember-data/model';
+        import type { File } from 'test-app/data/resources/file.schema';
+
+        const FileableTraitSchema = {
           'name': 'fileable',
           'mode': 'legacy',
           'fields': [
@@ -110,24 +186,59 @@ export default Mixin.create({
               }
             }
           ]
-        };
+        } satisfies LegacyResourceSchema;
 
-        export default FileableSchema;",
-          "name": "FileableSchema",
-          "suggestedFileName": "fileable.schema.js",
+        export default FileableTraitSchema;
+
+        /**
+         * This type represents the full set schema derived fields of
+         * the 'fileable' trait, without any of the legacy mode features
+         * and without any extensions.
+         *
+         * > [!TIP]
+         * > It is likely that you will want a more specific type tailored
+         * > to the context of where some data has been loaded, for instance
+         * > one that marks specific fields as readonly, or which only enables
+         * > some fields to be null during create, or which only includes
+         * > a subset of fields based on a specific API response.
+         * >
+         * > For those cases, you can create a more specific type that derives
+         * > from this type to ensure that your type definitions stay consistent
+         * > with the schema. For more details read about {@link https://warp-drive.io/api/@warp-drive/core/types/record/type-aliases/Mask | Masking}
+         *
+         * See also {@link Fileable} for fields + legacy mode features
+         */
+        export interface FileableTrait {
+          files?: HasMany<File>;
+          name?: string | null;
+          isActive?: boolean | null;
+        }
+
+        /**
+         * This type represents the full set schema derived fields of
+         * the 'fileable' trait, including all legacy mode features but
+         * without any extensions.
+         *
+         * See also {@link FileableTrait} for fields + legacy mode features
+         */
+        export interface Fileable extends WithLegacy<FileableTrait> {}
+        ",
+          "name": "FileableTraitSchema",
+          "suggestedFileName": "fileable.schema.ts",
           "type": "trait",
         }
       `);
       expect(extension).toMatchInlineSnapshot(`
         {
-          "code": "import { attr, hasMany } from '@ember-data/model';
-        import Mixin from '@ember/object/mixin';
+          "baseName": "fileable",
+          "code": "
+
         import { computed } from '@ember/object';
 
-        export const FileableExtension = {
+        export const FileableTraitExtension = {
           titleCaseName: computed('name', function () { return (this.name || '').toUpperCase(); })
         };",
-          "name": "FileableExtension",
+          "name": "FileableTraitExtension",
           "suggestedFileName": "fileable.ext.js",
           "type": "trait-extension",
         }
@@ -140,7 +251,7 @@ import { attr } from '@ember-data/model';
 
 export default MyMixin.create({ name: attr('string') });`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/aliased.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/aliased.js', input, options), options);
       expect(
         artifacts.map((a) => ({ type: a.type, name: a.name, suggestedFileName: a.suggestedFileName }))
       ).toMatchSnapshot('metadata');
@@ -154,7 +265,7 @@ import { hasMany } from '@ember-data/model';
 const Fileable = Mixin.create({ files: hasMany('file', { async: false }) });
 export default Fileable;`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/fileable.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/fileable.js', input, options), options);
       expect(
         artifacts.map((a) => ({ type: a.type, name: a.name, suggestedFileName: a.suggestedFileName }))
       ).toMatchSnapshot('metadata');
@@ -166,7 +277,7 @@ export default Fileable;`;
 
 export default SomethingElse.create({ name: attr('string') });`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/not-ember-mixin.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/not-ember-mixin.js', input, options), options);
       expect(artifacts).toHaveLength(0);
     });
 
@@ -179,7 +290,7 @@ export default Mixin.create({
 	computedValue: computed(function() { return 'computed'; })
 });`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/no-traits.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/no-traits.js', input, options), options);
       expect(
         artifacts.map((a) => ({ type: a.type, name: a.name, suggestedFileName: a.suggestedFileName }))
       ).toMatchSnapshot('metadata');
@@ -201,7 +312,7 @@ export default Mixin.create({
 	})
 });`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/plannable.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/plannable.js', input, options), options);
       expect(
         artifacts.map((a) => ({ type: a.type, name: a.name, suggestedFileName: a.suggestedFileName }))
       ).toMatchSnapshot('metadata');
@@ -237,7 +348,10 @@ export default Mixin.create({
 	},
 });`;
 
-      const { artifacts } = toArtifacts(parseFile('apps/client/app/mixins/fileable.js', input, options), options);
+      const { artifacts } = toArtifacts(
+        entityFromSource('apps/client/app/mixins/fileable.js', input, options),
+        options
+      );
       expect(artifacts).toHaveLength(3); // Trait, extension, and resource-type-stub for 'file'
       expect(
         artifacts.map((a) => ({ type: a.type, suggestedFileName: a.suggestedFileName, name: a.name }))
@@ -263,7 +377,7 @@ export default Mixin.create({
 	customProp: computed('name', function() { return this.name; })
 });`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/default-source.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/default-source.js', input, options), options);
       expect(artifacts.map((a) => ({ type: a.type, name: a.name }))).toMatchSnapshot('artifact types');
       expect(artifacts.map((a) => a.code)).toMatchSnapshot('generated code');
     });
@@ -283,7 +397,7 @@ export default Mixin.create({
         ...options,
         emberDataImportSource: '@my-custom/model',
       };
-      const { artifacts } = toArtifacts(parseFile('app/mixins/custom-source.js', input, opts), opts);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/custom-source.js', input, opts), opts);
       expect(artifacts).toMatchSnapshot();
     });
 
@@ -302,7 +416,7 @@ export default Mixin.create({
         ...options,
         emberDataImportSource: '@auditboard/warp-drive/v1/model',
       };
-      const { artifacts } = toArtifacts(parseFile('app/mixins/auditboard-source.js', input, opts), opts);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/auditboard-source.js', input, opts), opts);
       expect(artifacts).toMatchSnapshot();
     });
 
@@ -318,7 +432,7 @@ export default Mixin.create({
 	customProp: computed('name', function() { return this.name; })
 });`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/unsupported-source.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/unsupported-source.js', input, options), options);
       expect(artifacts).toMatchSnapshot();
     });
 
@@ -332,7 +446,7 @@ export default Mixin.create({
 	owner: oneRelation('user')
 });`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/aliased-imports.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/aliased-imports.js', input, options), options);
       expect(artifacts).toMatchSnapshot();
     });
 
@@ -346,7 +460,10 @@ export default Mixin.create({
 	name: attribute('string') // Should be ignored, treated as regular function call
 });`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/renamed-mixed-sources.js', input, options), options);
+      const { artifacts } = toArtifacts(
+        entityFromSource('app/mixins/renamed-mixed-sources.js', input, options),
+        options
+      );
       expect(artifacts).toMatchSnapshot();
     });
 
@@ -360,7 +477,7 @@ export default Mixin.create({
 	customProp: computed('name', function() { return this.name; })
 });`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/no-valid-imports.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/no-valid-imports.js', input, options), options);
       expect(artifacts).toMatchSnapshot();
     });
 
@@ -372,7 +489,7 @@ export default Mixin.create({
 	owner: belongsTo('user', { async: true })
 });`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/belongs-to.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/belongs-to.js', input, options), options);
       expect(artifacts).toMatchSnapshot();
     });
 
@@ -383,7 +500,7 @@ export default class MyClass {
 	name = 'test';
 }`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/not-a-mixin.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/not-a-mixin.js', input, options), options);
       expect(artifacts).toHaveLength(0);
     });
 
@@ -399,7 +516,7 @@ export default Mixin.create({
         ...options,
         emberDataImportSource: '@my-custom/model',
       };
-      const { artifacts } = toArtifacts(parseFile('app/mixins/cli-option.js', input, opts), opts);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/cli-option.js', input, opts), opts);
       expect(artifacts).toMatchSnapshot();
     });
   });
@@ -415,7 +532,7 @@ export default Mixin.create({
 	isActive: attr('boolean', { defaultValue: false })
 });`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/fileable.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/fileable.js', input, options), options);
 
       // Should have trait and resource-type-stub for 'file' (no extension if no computed/methods)
       expect(artifacts).toHaveLength(2);
@@ -423,7 +540,7 @@ export default Mixin.create({
 
       const trait = artifacts.find((a) => a.type === 'trait');
       expect(trait?.code).toMatchSnapshot('basic trait type interface');
-      expect(trait?.suggestedFileName).toBe('fileable.schema.js');
+      expect(trait?.suggestedFileName).toBe('fileable.schema.ts');
     });
 
     it('generates trait and extension artifacts when mixin has computed properties and methods', () => {
@@ -443,7 +560,7 @@ export default Mixin.create({
 	}
 });`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/nameable.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/nameable.js', input, options), options);
 
       // Should have trait and extension artifacts (types merged into trait)
       expect(artifacts).toHaveLength(2);
@@ -454,7 +571,7 @@ export default Mixin.create({
 
       expect(trait?.code).toMatchSnapshot('mixin trait type interface');
       expect(extension?.code).toMatchSnapshot('mixin extension code');
-      expect(trait?.suggestedFileName).toBe('nameable.schema.js');
+      expect(trait?.suggestedFileName).toBe('nameable.schema.ts');
       expect(extension?.suggestedFileName).toBe('nameable.ext.js');
     });
 
@@ -467,7 +584,7 @@ export default Mixin.create({
 	author: belongsTo('user', { async: true })
 });`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/simple.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/simple.js', input, options), options);
 
       // Should have trait and resource-type-stub for 'user' (no extension for data-only mixins)
       expect(artifacts).toHaveLength(2);
@@ -494,7 +611,7 @@ export default Mixin.create({
       };
 
       const opts = { ...options, typeMapping: customTypeMappings };
-      const { artifacts } = toArtifacts(parseFile('app/mixins/typed.js', input, opts), opts);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/typed.js', input, opts), opts);
       const trait = artifacts.find((a) => a.type === 'trait');
 
       expect(trait?.code).toMatchSnapshot('mixin custom type mappings interface');
@@ -534,7 +651,7 @@ export default BaseModelMixin;
         ...options,
         appImportPrefix: 'test-app',
       };
-      const { artifacts } = toArtifacts(parseFile('/app/mixins/base-model.ts', mixinSource, opts), opts);
+      const { artifacts } = toArtifacts(entityFromSource('/app/mixins/base-model.ts', mixinSource, opts), opts);
 
       // Should find both trait fields and extension properties
       expect(artifacts.length).toBeGreaterThan(0);
@@ -592,7 +709,7 @@ export default BaseModelMixin;
         ...options,
         appImportPrefix: 'test-app',
       };
-      const { artifacts } = toArtifacts(parseFile('/app/mixins/base-model.ts', mixinSource, opts), opts);
+      const { artifacts } = toArtifacts(entityFromSource('/app/mixins/base-model.ts', mixinSource, opts), opts);
 
       expect(artifacts.length).toBeGreaterThan(0);
 
@@ -626,7 +743,7 @@ const NestedCastMixin = Mixin.create({
 export default NestedCastMixin;
 `.trim();
 
-      const { artifacts } = toArtifacts(parseFile('/app/mixins/nested-cast.ts', mixinSource, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('/app/mixins/nested-cast.ts', mixinSource, options), options);
 
       expect(artifacts.length).toBeGreaterThan(0);
 
@@ -649,13 +766,16 @@ export default Mixin.create({
       // Test with mirror flag
       const mirrorOpts = { ...options, mirror: true };
       const { artifacts: artifactsMirror } = toArtifacts(
-        parseFile('app/mixins/basic.js', input, mirrorOpts),
+        entityFromSource('app/mixins/basic.js', input, mirrorOpts),
         mirrorOpts
       );
       const traitMirror = artifactsMirror.find((a) => a.type === 'trait');
 
       // Test without mirror flag
-      const { artifacts: artifactsRegular } = toArtifacts(parseFile('app/mixins/basic.js', input, options), options);
+      const { artifacts: artifactsRegular } = toArtifacts(
+        entityFromSource('app/mixins/basic.js', input, options),
+        options
+      );
       const traitRegular = artifactsRegular.find((a) => a.type === 'trait');
 
       // Mixins themselves don't generate @warp-drive imports, so they should be the same
@@ -679,7 +799,7 @@ export default Mixin.createWithMixins(BaseModelMixin, TimestampMixin, {
         ...options,
         appImportPrefix: 'test-app',
       };
-      const { artifacts } = toArtifacts(parseFile('app/mixins/fileable.js', input, opts), opts);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/fileable.js', input, opts), opts);
 
       // Should produce trait and resource-type-stub for 'file' (no extension since no methods/computed properties)
       expect(artifacts).toHaveLength(2);
@@ -719,7 +839,7 @@ export default Mixin.createWithMixins(BaseModelMixin, {
         ...options,
         appImportPrefix: 'test-app',
       };
-      const { artifacts } = toArtifacts(parseFile('app/mixins/describable.js', input, opts), opts);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/describable.js', input, opts), opts);
 
       const trait = artifacts.find((a) => a.type === 'trait');
 
@@ -740,7 +860,7 @@ export default Mixin.create({
 	description: attr('string')
 });`;
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/describable.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/describable.js', input, options), options);
 
       const trait = artifacts.find((a) => a.type === 'trait');
 
@@ -772,7 +892,7 @@ export default Mixin.create({
         debug: false,
       };
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/fileable.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/fileable.js', input, options), options);
 
       // Should have trait (with merged types) and resource-type-stub artifacts
       expect(artifacts).toHaveLength(3); // trait, file stub, user stub
@@ -814,7 +934,7 @@ export default Mixin.create({
         debug: false,
       };
 
-      const { artifacts } = toArtifacts(parseFile('app/mixins/commentable.js', input, options), options);
+      const { artifacts } = toArtifacts(entityFromSource('app/mixins/commentable.js', input, options), options);
 
       // Should have trait (with merged types) and multiple resource-type-stub artifacts
       expect(artifacts.length).toBeGreaterThanOrEqual(4); // trait + 3 stubs

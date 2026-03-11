@@ -433,7 +433,7 @@ export default Mixin.create({
 
   it('places intermediate model extensions in extensionsDir not fallback directory', async () => {
     prepareFiles(tempDir, {
-      'app/core/base-model-with-methods.js': `
+      'app/core/base-model-with-methods.ts': `
 import Model, { attr } from '@ember-data/model';
 
 export default class BaseModelWithMethods extends Model {
@@ -776,12 +776,11 @@ export default class TestModel extends BaseModel {
       {
         "resources/": "__dir__",
         "resources/typed.ext.ts": "
-      import BaseModel from 'test-app/models/base-model';
+      import type { Typed } from './typed.type.ts';
 
-      import type { TypedTrait } from 'test-app/data/resources/typed.schema';
 
-      export interface TypedExtension extends TypedTrait {}
-
+      // @ts-ignore-error in reality fields are not merged, they are overridden
+      export interface TypedExtension extends Typed {}
       export class TypedExtension {
         @attr('string') declare name: string | null
 
@@ -790,11 +789,12 @@ export default class TestModel extends BaseModel {
 
         @hasMany('tag', { async: true, inverse: null })
           declare tags: unknown
-      }",
+      }
+
+      export default TypedExtension;",
         "resources/typed.schema.ts": "
-      import type { Type } from '@ember-data/core-types/symbols';
-      import type { StaticBaseModelTraitTrait } from 'test-app/data/traits/static-base-model-trait.schema';
-      import type { TypedExtension } from 'test-app/data/resources/typed.ext';
+      import type { LegacyResourceSchema } from '@warp-drive/core-types/schema/fields';
+
       const TypedSchema = {
         'type': 'typed',
         'legacy': true,
@@ -809,15 +809,46 @@ export default class TestModel extends BaseModel {
         'objectExtensions': [
           'static-base-model-extension'
         ]
-      } as const;
+      } satisfies LegacyResourceSchema;
 
       export default TypedSchema;
+      ",
+        "resources/typed.type.ts": "
+      import type { Type } from '@warp-drive/core-types/symbols';
+      import type { WithLegacy } from '@ember-data/model/migration-support';
 
-      export interface TypedTrait {
+      /**
+       * This type represents the full set schema derived fields of
+       * the 'typed' resource, without any of the legacy mode features
+       * and without any extensions.
+       *
+       * > [!TIP]
+       * > It is likely that you will want a more specific type tailored
+       * > to the context of where some data has been loaded, for instance
+       * > one that marks specific fields as readonly, or which only enables
+       * > some fields to be null during create, or which only includes
+       * > a subset of fields based on a specific API response.
+       * >
+       * > For those cases, you can create a more specific type that derives
+       * > from this type to ensure that your type definitions stay consistent
+       * > with the schema. For more details read about {@link https://warp-drive.io/api/@warp-drive/core/types/record/type-aliases/Mask | Masking}
+       *
+       * See also {@link Typed} for fields + legacy mode features
+       */
+      export interface TypedResource extends StaticBaseModelTraitTrait {
         readonly [Type]: 'typed';
+        id: string | null;
       }
 
-      export interface Typed extends TypedTrait, TypedExtension, StaticBaseModelTraitTrait {}",
+      /**
+       * This type represents the full set schema derived fields of
+       * the 'typed' resource, including all legacy mode features but
+       * without any extensions.
+       *
+       * See also {@link TypedResource} for fields + legacy mode features
+       */
+      export interface Typed extends WithLegacy<TypedResource> {}
+      ",
         "traits/": "__dir__",
       }
     `);
@@ -855,11 +886,10 @@ export default class TestModel extends BaseModel {
         "resources/": "__dir__",
         "resources/typed.ext.ts": "
       import BaseModel from 'test-app/models/base-model.js';
+      import type { Typed } from './typed.type.ts';
 
-      import type { TypedTrait } from 'test-app/data/resources/typed.schema';
-
-      export interface TypedExtension extends TypedTrait {}
-
+      // @ts-ignore-error in reality fields are not merged, they are overridden
+      export interface TypedExtension extends Typed {}
       export class TypedExtension {
         @attr('string') declare name: string | null
 
@@ -868,11 +898,12 @@ export default class TestModel extends BaseModel {
 
         @hasMany('tag', { async: true, inverse: null })
           declare tags: unknown
-      }",
+      }
+
+      export default TypedExtension;",
         "resources/typed.schema.ts": "
-      import type { Type } from '@ember-data/core-types/symbols';
-      import type { StaticBaseModelTraitTrait } from 'test-app/data/traits/static-base-model-trait.schema';
-      import type { TypedExtension } from 'test-app/data/resources/typed.ext';
+      import type { LegacyResourceSchema } from '@warp-drive/core-types/schema/fields';
+
       const TypedSchema = {
         'type': 'typed',
         'legacy': true,
@@ -887,15 +918,46 @@ export default class TestModel extends BaseModel {
         'objectExtensions': [
           'static-base-model-extension'
         ]
-      } as const;
+      } satisfies LegacyResourceSchema;
 
       export default TypedSchema;
+      ",
+        "resources/typed.type.ts": "
+      import type { Type } from '@warp-drive/core-types/symbols';
+      import type { WithLegacy } from '@ember-data/model/migration-support';
 
-      export interface TypedTrait {
+      /**
+       * This type represents the full set schema derived fields of
+       * the 'typed' resource, without any of the legacy mode features
+       * and without any extensions.
+       *
+       * > [!TIP]
+       * > It is likely that you will want a more specific type tailored
+       * > to the context of where some data has been loaded, for instance
+       * > one that marks specific fields as readonly, or which only enables
+       * > some fields to be null during create, or which only includes
+       * > a subset of fields based on a specific API response.
+       * >
+       * > For those cases, you can create a more specific type that derives
+       * > from this type to ensure that your type definitions stay consistent
+       * > with the schema. For more details read about {@link https://warp-drive.io/api/@warp-drive/core/types/record/type-aliases/Mask | Masking}
+       *
+       * See also {@link Typed} for fields + legacy mode features
+       */
+      export interface TypedResource extends StaticBaseModelTraitTrait {
         readonly [Type]: 'typed';
+        id: string | null;
       }
 
-      export interface Typed extends TypedTrait, TypedExtension, StaticBaseModelTraitTrait {}",
+      /**
+       * This type represents the full set schema derived fields of
+       * the 'typed' resource, including all legacy mode features but
+       * without any extensions.
+       *
+       * See also {@link TypedResource} for fields + legacy mode features
+       */
+      export interface Typed extends WithLegacy<TypedResource> {}
+      ",
         "traits/": "__dir__",
       }
     `);
@@ -926,13 +988,26 @@ export default class User extends Model.extend(Timestampable) {
       'app/mixins/timestampable.ts': `
 import Mixin from '@ember/object/mixin';
 import { attr } from '@ember-data/model';
+import Deleteable from './deleteable';
 
-export default Mixin.create({
+export default Mixin.create(Deleteable, {
   createdAt: attr('date'),
   updatedAt: attr('date'),
 
   timeSince() {
     return Date.now() - this.updatedAt;
+  },
+});
+`,
+      'app/mixins/deleteable.ts': `
+import Mixin from '@ember/object/mixin';
+import { attr } from '@ember-data/model';
+
+export default Mixin.create({
+  deletedAt: attr('date'),
+
+  timeSinceDeleted() {
+    return Date.now() - this.deletedAt;
   }
 });
 `,
@@ -982,10 +1057,8 @@ export default Mixin.create({
       {
         "resources/": "__dir__",
         "resources/typed.schema.ts": "
-      import type { Type } from '@ember-data/core-types/symbols';
-      import type { Framework } from 'test-app/data/resources/framework.schema';
-      import type { HasMany } from '@ember-data/model';
-      import type { StaticBaseModelTraitTrait } from 'test-app/data/traits/static-base-model-trait.schema';
+      import type { LegacyResourceSchema } from '@warp-drive/core-types/schema/fields';
+
       const TypedSchema = {
         'type': 'typed',
         'legacy': true,
@@ -1025,19 +1098,112 @@ export default Mixin.create({
         'objectExtensions': [
           'static-base-model-extension'
         ]
-      } as const;
+      } satisfies LegacyResourceSchema;
 
       export default TypedSchema;
+      ",
+        "resources/typed.type.ts": "
+      import type { Type } from '@warp-drive/core-types/symbols';
+      import type { WithLegacy } from '@ember-data/model/migration-support';
+      import type { Framework } from 'test-app/data/resources/framework.type';
 
-      export interface Typed extends StaticBaseModelTraitTrait {
+      /**
+       * This type represents the full set schema derived fields of
+       * the 'typed' resource, without any of the legacy mode features
+       * and without any extensions.
+       *
+       * > [!TIP]
+       * > It is likely that you will want a more specific type tailored
+       * > to the context of where some data has been loaded, for instance
+       * > one that marks specific fields as readonly, or which only enables
+       * > some fields to be null during create, or which only includes
+       * > a subset of fields based on a specific API response.
+       * >
+       * > For those cases, you can create a more specific type that derives
+       * > from this type to ensure that your type definitions stay consistent
+       * > with the schema. For more details read about {@link https://warp-drive.io/api/@warp-drive/core/types/record/type-aliases/Mask | Masking}
+       *
+       * See also {@link Typed} for fields + legacy mode features
+       */
+      export interface TypedResource extends StaticBaseModelTraitTrait {
         readonly [Type]: 'typed';
-        readonly name: string | null;
-        readonly description: string | null;
-        readonly isForControlsAssessment: boolean | null;
-        readonly frameworks: HasMany<Framework>;
-      }",
+        id: string | null;
+        name: string;
+        description: string;
+        isForControlsAssessment: boolean;
+        frameworks: Framework[];
+      }
+
+      /**
+       * This type represents the full set schema derived fields of
+       * the 'typed' resource, including all legacy mode features but
+       * without any extensions.
+       *
+       * See also {@link TypedResource} for fields + legacy mode features
+       */
+      export interface Typed extends WithLegacy<TypedResource> {}
+      ",
         "traits/": "__dir__",
       }
     `);
+  });
+
+  describe('combineSchemasAndTypes=true', () => {
+    it('generates combined artifacts with mixins, belongsTo, hasMany, and extensions', async () => {
+      prepareFiles(tempDir, {
+        'app/models/user.ts': `
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import Timestampable from '../mixins/timestampable';
+
+export default class User extends Model.extend(Timestampable) {
+  @attr('string') declare name: string;
+  @attr('string') declare email: string;
+  @belongsTo('company', { async: false }) declare company: Company;
+  @hasMany('project', { async: true }) declare projects: Project[];
+
+  get displayName() {
+    return this.name || this.email;
+  }
+
+  async updateProfile(data) {
+    this.setProperties(data);
+    return this.save();
+  }
+}
+`,
+        'app/mixins/timestampable.ts': `
+import Mixin from '@ember/object/mixin';
+import { attr } from '@ember-data/model';
+import Deleteable from './deleteable';
+
+export default Mixin.create(Deleteable, {
+  createdAt: attr('date'),
+  updatedAt: attr('date'),
+
+  timeSince() {
+    return Date.now() - this.updatedAt;
+  },
+});
+`,
+        'app/mixins/deleteable.ts': `
+import Mixin from '@ember/object/mixin';
+import { attr } from '@ember-data/model';
+
+export default Mixin.create({
+  deletedAt: attr('date'),
+
+  timeSinceDeleted() {
+    return Date.now() - this.deletedAt;
+  }
+});
+`,
+      });
+
+      await runMigration({ ...options, combineSchemasAndTypes: true });
+
+      const dataDir = join(tempDir, 'app/data');
+      expect(collectFileStructure(dataDir)).toMatchSnapshot('combined with mixins file structure');
+      expect(collectFilesSnapshot(dataDir)).toMatchSnapshot('combined with mixins files');
+    });
   });
 });

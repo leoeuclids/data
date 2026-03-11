@@ -5,6 +5,13 @@ import { dirname, resolve } from 'path';
 
 import { logger } from '../../../utils/logger.js';
 import type { TransformOptions } from '../config.js';
+import {
+  deriveResourceExtensionName,
+  deriveTraitExtensionName,
+  deriveTraitInterfaceName,
+  findEntityByBaseName,
+  isConnectedToModel,
+} from './artifact.js';
 import { findClassDeclaration, findDefaultExport } from './ast-helpers.js';
 import {
   extractBaseName,
@@ -22,8 +29,6 @@ import {
   IMPORT_PATH_SINGLE_QUOTE_REGEX,
   IMPORT_TYPE_DEFAULT_REGEX,
   LEADING_HYPHEN_REGEX,
-  MODEL_SUFFIX_REGEX,
-  QUOTE_CHARS_REGEX,
   SCHEMA_PATH_REGEX,
   UPPERCASE_LETTER_REGEX,
 } from './string.js';
@@ -35,6 +40,19 @@ const log = logger.for('import-utils');
  */
 export const DEFAULT_EMBER_DATA_SOURCE = '@ember-data/model';
 export const DEFAULT_MIXIN_SOURCE = '@ember/object/mixin';
+export const WARP_DRIVE_MODEL = '@warp-drive/model';
+export const FRAGMENT_DECORATOR_SOURCE = 'ember-data-model-fragments/attributes';
+export const FRAGMENT_BASE_SOURCE = 'ember-data-model-fragments/fragment';
+
+export function getModelImportSources(options?: TransformOptions): string[] {
+  return [
+    options?.emberDataImportSource || DEFAULT_EMBER_DATA_SOURCE,
+    ...(options?.importSubstitutes?.map((s) => s.import) ?? []),
+    WARP_DRIVE_MODEL,
+    FRAGMENT_DECORATOR_SOURCE,
+    FRAGMENT_BASE_SOURCE,
+  ].filter(Boolean);
+}
 
 /**
  * Transform @warp-drive imports to use @warp-drive-mirror when mirror flag is set
@@ -61,47 +79,6 @@ export function generateWarpDriveTypeImport(
 }
 
 /**
- * Derive the Type symbol import path from the emberDataImportSource
- * e.g., @auditboard/warp-drive/v1/model -> @auditboard/warp-drive/v1/core-types/symbols
- *       @ember-data/model -> @warp-drive/core/types/symbols
- */
-function getTypeSymbolImportPath(emberDataSource: string): string {
-  // If using a custom ember-data source with a package prefix, derive the symbols path
-  if (emberDataSource.includes('/model')) {
-    // Replace /model with /core-types/symbols for custom packages
-    // e.g., @auditboard/warp-drive/v1/model -> @auditboard/warp-drive/v1/core-types/symbols
-    return emberDataSource.replace(MODEL_SUFFIX_REGEX, '/core-types/symbols');
-  }
-  // Default to the standard warp-drive path
-  return '@warp-drive/core/types/symbols';
-}
-
-/**
- * Generate common WarpDrive type imports
- */
-export function generateCommonWarpDriveImports(options?: TransformOptions): {
-  typeImport: string;
-  asyncHasManyImport: string;
-  hasManyImport: string;
-  storeImport: string;
-} {
-  const emberDataSource = options?.emberDataImportSource || DEFAULT_EMBER_DATA_SOURCE;
-  const typeSymbolPath = getTypeSymbolImportPath(emberDataSource);
-  // Derive store import path from emberDataSource
-  // e.g., @auditboard/warp-drive/v1/model -> @auditboard/warp-drive/v1/store
-  //       @ember-data/model -> @warp-drive/core
-  const storeImportPath = emberDataSource.includes('/model')
-    ? emberDataSource.replace(MODEL_SUFFIX_REGEX, '/store')
-    : '@warp-drive/core';
-  return {
-    typeImport: generateWarpDriveTypeImport('Type', typeSymbolPath, options),
-    asyncHasManyImport: generateWarpDriveTypeImport('AsyncHasMany', emberDataSource, options),
-    hasManyImport: generateWarpDriveTypeImport('HasMany', emberDataSource, options),
-    storeImport: generateWarpDriveTypeImport('Store', storeImportPath, options),
-  };
-}
-
-/**
  * Generate a trait type import statement
  * e.g., generateTraitImport('shareable', options) returns:
  *   "type { ShareableTrait } from 'app/data/traits/shareable.schema'"
@@ -109,7 +86,7 @@ export function generateCommonWarpDriveImports(options?: TransformOptions): {
  *   "type { ShareableTrait } from '../traits/shareable.schema'"
  */
 export function generateTraitImport(traitName: string, options?: TransformOptions): string {
-  const traitTypeName = `${toPascalCase(traitName)}Trait`;
+  const traitTypeName = deriveTraitInterfaceName(traitName);
   if (options?.traitsImport) {
     return `type { ${traitTypeName} } from '${options.traitsImport}/${traitName}.schema'`;
   }
@@ -129,9 +106,9 @@ export function getModelImportSource(options?: TransformOptions): string {
 /**
  * Get the configured resources import source (required - no default provided)
  */
-export function getResourcesImport(options?: TransformOptions): string {
+export function getResourcesImport(options: TransformOptions): string {
   if (!options?.resourcesImport) {
-    throw new Error('resourcesImport is required but not provided in configuration');
+    return '.';
   }
   return options.resourcesImport;
 }
@@ -141,15 +118,12 @@ export function getResourcesImport(options?: TransformOptions): string {
  * This checks if the type corresponds to a connected mixin or intermediate model
  */
 function shouldImportFromTraits(relatedType: string, options?: TransformOptions): boolean {
-  // Check if any of the connected mixins correspond to this related type
-  const connectedMixins = options?.modelConnectedMixins;
-  if (connectedMixins) {
-    for (const mixinPath of connectedMixins) {
-      // Extract the mixin name from the path
-      const mixinName = extractBaseName(mixinPath);
-      if (mixinName === relatedType) {
-        return true;
-      }
+  // Check if a connected mixin corresponds to this related type via the entity registry
+  const registry = options?.entityRegistry;
+  if (registry) {
+    const mixinEntity = findEntityByBaseName(registry, relatedType, 'mixin');
+    if (mixinEntity && isConnectedToModel(registry, mixinEntity.path)) {
+      return true;
     }
   }
 
@@ -190,61 +164,57 @@ function shouldImportFromTraits(relatedType: string, options?: TransformOptions)
 export function transformModelToResourceImport(
   relatedType: string,
   modelName: string,
-  options?: TransformOptions
+  options: TransformOptions
 ): string {
   // Always check traits first for intermediate models (they're always traits)
   if (shouldImportFromTraits(relatedType, options)) {
     const traitsImport = options?.traitsImport;
     // Trait interfaces are named with 'Trait' suffix but aliased back to non-suffix for backward compatibility
-    const traitInterfaceName = `${toPascalCase(relatedType)}Trait`;
+    const traitName = deriveTraitInterfaceName(relatedType);
     const aliasName = toPascalCase(relatedType); // Use the original name as alias for backward compatibility
     if (traitsImport) {
-      return `type { ${traitInterfaceName} as ${aliasName} } from '${traitsImport}/${relatedType}.schema'`;
+      return `type { ${traitName} as ${aliasName} } from '${traitsImport}/${relatedType}.schema'`;
     } else {
-      return `type { ${traitInterfaceName} as ${aliasName} } from '../traits/${relatedType}.schema'`;
+      return `type { ${traitName} as ${aliasName} } from '../traits/${relatedType}.schema'`;
     }
   }
 
-  // Check if we have a model for this related type
-  let hasModel = false;
-  const allModelFiles = options?.allModelFiles;
-  if (allModelFiles) {
-    for (const modelPath of allModelFiles) {
-      const modelBaseName = extractBaseName(modelPath);
-      if (modelBaseName === relatedType) {
-        hasModel = true;
-        log.debug(`Found model for ${relatedType}, using resource import`);
-        break;
-      }
-    }
-  }
+  // Check if we have a model for this related type using registry
+  const registry = options?.entityRegistry;
+  const hasModel = registry ? !!findEntityByBaseName(registry, relatedType, 'model') : false;
 
   // If no model found, check if we have a mixin/trait to fall back to
-  if (!hasModel) {
-    const allMixinFiles = options?.allMixinFiles;
-    if (allMixinFiles) {
-      for (const mixinPath of allMixinFiles) {
-        const mixinName = extractBaseName(mixinPath);
-        if (mixinName === relatedType) {
-          // Fall back to trait import
-          const traitsImport = options?.traitsImport;
-          const traitInterfaceName = `${toPascalCase(relatedType)}Trait`;
-          const aliasName = toPascalCase(relatedType);
-          log.debug(`No model found for ${relatedType}, falling back to trait`);
-          if (traitsImport) {
-            return `type { ${traitInterfaceName} as ${aliasName} } from '${traitsImport}/${relatedType}.schema'`;
-          } else {
-            return `type { ${traitInterfaceName} as ${aliasName} } from '../traits/${relatedType}.schema'`;
-          }
-        }
+  if (!hasModel && registry) {
+    const mixinEntity = findEntityByBaseName(registry, relatedType, 'mixin');
+    if (mixinEntity) {
+      // Fall back to trait import
+      const traitsImport = options?.traitsImport;
+      const traitName = deriveTraitInterfaceName(relatedType);
+      const aliasName = toPascalCase(relatedType);
+      log.debug(`No model found for ${relatedType}, falling back to trait`);
+      if (traitsImport) {
+        return `type { ${traitName} as ${aliasName} } from '${traitsImport}/${relatedType}.schema'`;
+      } else {
+        return `type { ${traitName} as ${aliasName} } from '../traits/${relatedType}.schema'`;
       }
     }
   }
 
   // Default to resource import (either we found a model, or we're assuming it's a resource)
   const resourcesImport = getResourcesImport(options);
+  const ext = options.projectImportsUseExtensions ? '.ts' : '';
 
-  return `type { ${modelName} } from '${resourcesImport}/${relatedType}.schema'`;
+  // When types are separate, only import from .type if the target model will generate one
+  let useTypeFile = false;
+  if (!options.combineSchemasAndTypes) {
+    const modelEntity = registry ? findEntityByBaseName(registry, relatedType, 'model') : undefined;
+    const isTargetTyped = modelEntity ? modelEntity.parsedFile.extension === '.ts' : false;
+    useTypeFile = isTargetTyped || !options.disableMissingTypeAutoGen;
+  }
+
+  const typeFileName = useTypeFile ? `${relatedType}.type${ext}` : `${relatedType}.schema${ext}`;
+
+  return `type { ${modelName} } from '${resourcesImport}/${typeFileName}'`;
 }
 
 /**
@@ -591,7 +561,7 @@ export function isModelFile(filePath: string, source: string, options?: Transfor
       const importSource = importNode.field('source');
       if (!importSource) continue;
 
-      const sourceText = importSource.text().replace(QUOTE_CHARS_REGEX, '');
+      const sourceText = removeQuotes(importSource.text());
 
       // Check for direct matches with base model sources
       let isBaseModelImport = baseModelSources.includes(sourceText);
@@ -714,7 +684,7 @@ export function findEmberImportLocalName(
 
     // Check if this is a relative import that points to a model file
     if (fromFile && baseDir && (cleanSourceText.startsWith('./') || cleanSourceText.startsWith('../'))) {
-      const resolvedPath = resolveRelativeImport(cleanSourceText, fromFile, baseDir);
+      const resolvedPath = resolveRelativeImport(cleanSourceText, fromFile);
       if (resolvedPath) {
         try {
           const fileContent = readFileSync(resolvedPath, 'utf8');
@@ -776,7 +746,7 @@ function convertImportToAbsolute(
   baseDir: string,
   importNode: SgNode,
   isRelativeImport: boolean,
-  options?: TransformOptions
+  options: TransformOptions
 ): string | null {
   try {
     // Check if the resolved file is a model file
@@ -837,7 +807,7 @@ function convertImportToAbsolute(
 /**
  * Process imports in source code to resolve relative imports and convert them to appropriate types
  */
-export function processImports(source: string, filePath: string, baseDir: string, options?: TransformOptions): string {
+export function processImports(source: string, filePath: string, baseDir: string, options: TransformOptions): string {
   try {
     const lang = getLanguageFromPath(filePath);
     const ast = parse(lang, source);
@@ -869,7 +839,7 @@ export function processImports(source: string, filePath: string, baseDir: string
         // Handle relative imports
         log.debug(`Processing relative import: ${cleanSourceText}`);
         isRelativeImport = true;
-        resolvedPath = resolveRelativeImport(cleanSourceText, filePath, baseDir);
+        resolvedPath = resolveRelativeImport(cleanSourceText, filePath);
       } else if (isSpecialMixinImport(cleanSourceText, options)) {
         // Handle special cases where model imports are actually mixins (e.g., workflowable)
         log.debug(`Processing special mixin import: ${cleanSourceText}`);
@@ -923,7 +893,7 @@ export function processImports(source: string, filePath: string, baseDir: string
               }
               // For trait imports, the export is *Trait but the import name might not have Trait suffix
               if (isTraitImport && baseName && !typeName.endsWith('Trait')) {
-                const traitClassName = toPascalCase(baseName) + 'Trait';
+                const traitClassName = deriveTraitInterfaceName(baseName);
                 return `import type { ${traitClassName} as ${typeName} } from`;
               }
               return `import type { ${typeName} } from`;
@@ -937,7 +907,7 @@ export function processImports(source: string, filePath: string, baseDir: string
                 return `import type { ${interfaceName} as ${typeName} } from`;
               }
               if (isTraitImport && baseName && !typeName.endsWith('Trait')) {
-                const traitClassName = toPascalCase(baseName) + 'Trait';
+                const traitClassName = deriveTraitInterfaceName(baseName);
                 return `import type { ${traitClassName} as ${typeName} } from`;
               }
               return `import type { ${typeName} } from`;
@@ -959,7 +929,12 @@ export function processImports(source: string, filePath: string, baseDir: string
             // Extract the model base name from the import path to get correct Extension class name
             const extensionPathMatch = convertedImport.match(EXT_FILE_PATH_REGEX);
             const modelBaseName = extensionPathMatch ? extensionPathMatch[1] : null;
-            const extensionClassName = modelBaseName ? toPascalCase(modelBaseName) + 'Extension' : null;
+            const isTraitExtension = convertedImport.includes('/traits/');
+            const extensionClassName = modelBaseName
+              ? isTraitExtension
+                ? deriveTraitExtensionName(modelBaseName)
+                : deriveResourceExtensionName(modelBaseName)
+              : null;
 
             if (extensionClassName) {
               newImport = newImport.replace(IMPORT_TYPE_DEFAULT_REGEX, (_match: string, typeName: string) => {

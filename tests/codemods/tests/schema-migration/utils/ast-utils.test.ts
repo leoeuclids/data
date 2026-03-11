@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
+import type { TransformOptions } from '../../../../../packages/codemods/src/schema-migration/config.js';
+import type {
+  ArtifactConfig,
+  ArtifactKind,
+  SchemaArtifactRegistry,
+} from '../../../../../packages/codemods/src/schema-migration/utils/artifact.js';
+import { SchemaArtifact } from '../../../../../packages/codemods/src/schema-migration/utils/artifact.js';
 import type { PropertyInfo } from '../../../../../packages/codemods/src/schema-migration/utils/ast-utils.js';
 import {
   createExtensionArtifactWithTypes,
@@ -8,6 +15,71 @@ import {
   getTypeScriptTypeForAttribute,
   transformModelToResourceImport,
 } from '../../../../../packages/codemods/src/schema-migration/utils/ast-utils.js';
+import type { ParsedFile } from '../../../../../packages/codemods/src/schema-migration/utils/file-parser.js';
+
+function createMockEntity(baseName: string, kind: ArtifactKind, path: string): SchemaArtifact {
+  const parsed = {
+    baseName,
+    pascalName: baseName.replace(/(^|-)(\w)/g, (_m: string, _sep: string, c: string) => c.toUpperCase()),
+    camelName: baseName.replace(/-(\w)/g, (_m: string, c: string) => c.toUpperCase()),
+    path,
+    name: baseName,
+    extension: '.js' as const,
+    imports: [],
+    fields: [],
+    behaviors: [],
+    fileType: kind === 'mixin' ? ('mixin' as const) : ('model' as const),
+    traits: [],
+    hasExtension: false,
+    source: '',
+  } as ParsedFile;
+  return SchemaArtifact.fromParsedFile(parsed, kind);
+}
+
+function buildTestRegistry(
+  entries: Array<{ baseName: string; kind: ArtifactKind; path: string }>
+): SchemaArtifactRegistry {
+  const registry: SchemaArtifactRegistry = new Map();
+  for (const entry of entries) {
+    registry.set(entry.path, createMockEntity(entry.baseName, entry.kind, entry.path));
+  }
+  return registry;
+}
+
+const testOptions: TransformOptions = {
+  warpDriveImports: 'legacy',
+  projectImportsUseExtensions: true,
+  projectName: 'test-app',
+};
+
+function makeTestConfig(
+  name: string,
+  fieldsInterface: string,
+  traits: Array<{ name: string; fieldsInterface: string | null; extension: string | null }> = []
+): ArtifactConfig {
+  return {
+    type: 'resource',
+    name,
+    hasTypes: true,
+    schemaIsTyped: true,
+    extensionIsTyped: false,
+    hasExtension: false,
+    identifiers: {
+      schema: `${fieldsInterface}Schema`,
+      fieldsInterface,
+      type: fieldsInterface,
+      extension: null,
+      extensionAlias: null,
+    },
+    traits: traits.map((t) => ({
+      name: t.name,
+      identifiers: {
+        fieldsInterface: t.fieldsInterface,
+        extension: t.extension,
+      },
+    })),
+  } as ArtifactConfig;
+}
 
 describe('AST utilities', () => {
   describe('getTypeScriptTypeForAttribute', () => {
@@ -43,7 +115,7 @@ describe('AST utilities', () => {
 
     it('falls back to unknown for unsupported types', () => {
       const result1 = getTypeScriptTypeForAttribute('unsupported-type', false, true);
-      expect(result1.tsType).toBe('unknown | null');
+      expect(result1.tsType).toBe('unknown');
 
       const result2 = getTypeScriptTypeForAttribute('weird-transform', true, false);
       expect(result2.tsType).toBe('unknown');
@@ -73,14 +145,17 @@ describe('AST utilities', () => {
         { name: 'isActive', type: 'boolean', readonly: false, optional: false },
       ];
 
-      const code = generateInterfaceCode('TestInterface', properties);
+      const code = generateInterfaceCode(testOptions, makeTestConfig('test', 'TestInterface'), undefined, properties);
       expect(code).toMatchSnapshot('basic interface');
     });
 
     it('generates interface with extends clause', () => {
       const properties = [{ name: 'title', type: 'string', readonly: true, optional: false }];
+      const config = makeTestConfig('test', 'TestInterface', [
+        { name: 'base', fieldsInterface: 'BaseInterface', extension: null },
+      ]);
 
-      const code = generateInterfaceCode('TestInterface', properties, 'BaseInterface');
+      const code = generateInterfaceCode(testOptions, config, undefined, properties);
       expect(code).toMatchSnapshot('interface with extends');
     });
 
@@ -88,7 +163,13 @@ describe('AST utilities', () => {
       const properties = [{ name: 'user', type: 'User', readonly: true, optional: false }];
 
       const imports = ['import type User from "app/models/user";'];
-      const code = generateInterfaceCode('TestInterface', properties, undefined, imports);
+      const code = generateInterfaceCode(
+        testOptions,
+        makeTestConfig('test', 'TestInterface'),
+        undefined,
+        properties,
+        imports
+      );
       expect(code).toMatchSnapshot('interface with imports');
     });
 
@@ -98,12 +179,12 @@ describe('AST utilities', () => {
         { name: 'email', type: 'string', readonly: true, optional: true, comment: 'Optional email address' },
       ];
 
-      const code = generateInterfaceCode('TestInterface', properties);
+      const code = generateInterfaceCode(testOptions, makeTestConfig('test', 'TestInterface'), undefined, properties);
       expect(code).toMatchSnapshot('interface with comments');
     });
 
     it('generates empty interface when no properties', () => {
-      const code = generateInterfaceCode('EmptyInterface', []);
+      const code = generateInterfaceCode(testOptions, makeTestConfig('empty', 'EmptyInterface'), undefined, []);
       expect(code).toMatchSnapshot('empty interface');
     });
   });
@@ -111,8 +192,9 @@ describe('AST utilities', () => {
   describe('createTypeArtifact', () => {
     it('creates resource-type artifact with correct filename and type', () => {
       const properties = [{ name: 'name', type: 'string', readonly: true, optional: false }];
+      const config = makeTestConfig('user', 'UserSchema');
 
-      const artifact = createTypeArtifact('user', 'UserSchema', properties, 'resource');
+      const artifact = createTypeArtifact(testOptions, config, undefined, properties, 'resource');
 
       expect(artifact.type).toBe('resource-type');
       expect(artifact.name).toBe('UserSchema');
@@ -123,8 +205,9 @@ describe('AST utilities', () => {
 
     it('creates extension-type artifact with correct filename and type', () => {
       const properties = [{ name: 'displayName', type: 'unknown', readonly: false, optional: false }];
+      const config = makeTestConfig('user', 'UserExtension');
 
-      const artifact = createTypeArtifact('user', 'UserExtension', properties, 'extension');
+      const artifact = createTypeArtifact(testOptions, config, undefined, properties, 'extension');
 
       expect(artifact.type).toBe('extension-type');
       expect(artifact.name).toBe('UserExtension');
@@ -135,8 +218,9 @@ describe('AST utilities', () => {
 
     it('creates trait-type artifact with correct filename and type', () => {
       const properties = [{ name: 'name', type: 'string', readonly: true, optional: false }];
+      const config = makeTestConfig('fileable', 'FileableTrait');
 
-      const artifact = createTypeArtifact('fileable', 'FileableTrait', properties, 'trait');
+      const artifact = createTypeArtifact(testOptions, config, undefined, properties, 'trait');
 
       expect(artifact.type).toBe('trait-type');
       expect(artifact.name).toBe('FileableTrait');
@@ -147,8 +231,9 @@ describe('AST utilities', () => {
 
     it('creates legacy type artifact when no context provided', () => {
       const properties = [{ name: 'name', type: 'string', readonly: true, optional: false }];
+      const config = makeTestConfig('test', 'TestInterface');
 
-      const artifact = createTypeArtifact('test', 'TestInterface', properties);
+      const artifact = createTypeArtifact(testOptions, config, undefined, properties);
 
       expect(artifact.type).toBe('type');
       // Types are now merged into .schema files
@@ -157,8 +242,11 @@ describe('AST utilities', () => {
 
     it('includes extends clause and imports when provided', () => {
       const properties = [{ name: 'name', type: 'string', readonly: true, optional: false }];
+      const config = makeTestConfig('user', 'UserInterface', [
+        { name: 'base', fieldsInterface: 'BaseInterface', extension: null },
+      ]);
 
-      const artifact = createTypeArtifact('user', 'UserInterface', properties, 'schema', 'BaseInterface', [
+      const artifact = createTypeArtifact(testOptions, config, undefined, properties, 'resource', [
         'import type BaseInterface from "./base";',
       ]);
 
@@ -175,7 +263,7 @@ describe('AST utilities', () => {
           name: 'displayName',
           originalKey: 'displayName',
           value: 'computed("name", function() { return this.name; })',
-          typeInfo: { name: 'displayName', type: 'function', optional: false, readonly: false },
+          typeInfo: { type: 'function', optional: false, readonly: false },
         },
       ];
 
@@ -233,7 +321,7 @@ describe('AST utilities', () => {
         { name: 'metadata', type: 'Record<string, unknown>', readonly: true, optional: true },
       ];
 
-      const code = generateInterfaceCode('TestInterface', properties);
+      const code = generateInterfaceCode(testOptions, makeTestConfig('test', 'TestInterface'), undefined, properties);
       expect(code).toMatchSnapshot('interface with custom type mappings');
       // Should map uuid to string, currency to number, json to Record<string, unknown>
     });
@@ -245,6 +333,7 @@ describe('AST utilities', () => {
         intermediateModelPaths: ['soxhub-client/core/data-field-model', 'my-app/core/base-model'],
         traitsImport: 'my-app/data/traits',
         resourcesImport: 'my-app/data/resources',
+        combineSchemasAndTypes: true,
       };
 
       // Test that data-field-model maps to data-field trait
@@ -261,8 +350,17 @@ describe('AST utilities', () => {
     });
 
     it('generates trait imports for connected mixins', () => {
+      const registry = buildTestRegistry([
+        { baseName: 'workstreamable', kind: 'mixin', path: '/path/to/workstreamable.js' },
+        { baseName: 'user', kind: 'model', path: '/path/to/user.js' },
+      ]);
+      // Link the mixin as a trait of the model
+      const modelEntity = registry.get('/path/to/user.js')!;
+      const mixinEntity = registry.get('/path/to/workstreamable.js')!;
+      modelEntity.addTrait(mixinEntity);
+
       const options = {
-        modelConnectedMixins: new Set(['/path/to/workstreamable.js']),
+        entityRegistry: registry,
         traitsImport: 'my-app/data/traits',
         resourcesImport: 'my-app/data/resources',
       };
@@ -275,10 +373,15 @@ describe('AST utilities', () => {
 
     it('prioritizes resources, falls back to traits when no model exists', () => {
       const options = {
-        allModelFiles: ['/app/models/user.js', '/app/models/company.js'],
-        allMixinFiles: ['/app/mixins/shareable.js', '/app/mixins/suggested.js'],
+        entityRegistry: buildTestRegistry([
+          { baseName: 'user', kind: 'model', path: '/app/models/user.js' },
+          { baseName: 'company', kind: 'model', path: '/app/models/company.js' },
+          { baseName: 'shareable', kind: 'mixin', path: '/app/mixins/shareable.js' },
+          { baseName: 'suggested', kind: 'mixin', path: '/app/mixins/suggested.js' },
+        ]),
         traitsImport: 'my-app/data/traits',
         resourcesImport: 'my-app/data/resources',
+        combineSchemasAndTypes: true,
       };
 
       // Test that existing model routes to resource import
@@ -300,10 +403,15 @@ describe('AST utilities', () => {
 
     it('handles models with same name as mixins by prioritizing model', () => {
       const options = {
-        allModelFiles: ['/app/models/user.js', '/app/models/notification.js'],
-        allMixinFiles: ['/app/mixins/shareable.js', '/app/mixins/notification.js'], // notification exists as both
+        entityRegistry: buildTestRegistry([
+          { baseName: 'user', kind: 'model', path: '/app/models/user.js' },
+          { baseName: 'notification', kind: 'model', path: '/app/models/notification.js' },
+          { baseName: 'shareable', kind: 'mixin', path: '/app/mixins/shareable.js' },
+          { baseName: 'notification', kind: 'mixin', path: '/app/mixins/notification.js' }, // notification exists as both
+        ]),
         traitsImport: 'my-app/data/traits',
         resourcesImport: 'my-app/data/resources',
+        combineSchemasAndTypes: true,
       };
 
       // Test that when both model and mixin exist, model takes priority
@@ -319,8 +427,8 @@ describe('AST utilities', () => {
       // Note: Types are now imported from .schema files regardless of extensions
       // Extensions (.ext files) contain runtime behavior, not types
       const options = {
-        modelsWithExtensions: new Set(['user', 'audit-survey']),
         resourcesImport: 'my-app/data/resources',
+        combineSchemasAndTypes: true,
       };
 
       // All types come from .schema files
@@ -338,9 +446,12 @@ describe('AST utilities', () => {
     it('prefers extension imports over resource imports when both available', () => {
       // Note: Types are now imported from .schema files regardless of extensions
       const options = {
-        modelsWithExtensions: new Set(['user']),
-        allModelFiles: ['/app/models/user.js', '/app/models/company.js'],
+        entityRegistry: buildTestRegistry([
+          { baseName: 'user', kind: 'model', path: '/app/models/user.js' },
+          { baseName: 'company', kind: 'model', path: '/app/models/company.js' },
+        ]),
         resourcesImport: 'my-app/data/resources',
+        combineSchemasAndTypes: true,
       };
 
       // All types come from .schema files
@@ -352,10 +463,10 @@ describe('AST utilities', () => {
       expect(result2).toBe("type { Company } from 'my-app/data/resources/company.schema'");
     });
 
-    it('handles empty modelsWithExtensions set', () => {
+    it('handles empty entityRegistry', () => {
       const options = {
-        modelsWithExtensions: new Set<string>(),
         resourcesImport: 'my-app/data/resources',
+        combineSchemasAndTypes: true,
       };
 
       const result = transformModelToResourceImport('user', 'User', options);
@@ -365,8 +476,8 @@ describe('AST utilities', () => {
     it('uses default resource path when resourcesImport not provided', () => {
       // Note: Types are now imported from .schema files
       const options = {
-        modelsWithExtensions: new Set(['user']),
         resourcesImport: 'my-app/data/resources',
+        combineSchemasAndTypes: true,
       };
 
       const result = transformModelToResourceImport('user', 'User', options);

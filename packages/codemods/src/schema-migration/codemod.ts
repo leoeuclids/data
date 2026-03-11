@@ -3,9 +3,12 @@ import { readFile } from 'fs/promises';
 import { glob } from 'glob';
 import { basename, extname, join, resolve } from 'path';
 
-import { InstanciatedLogger } from '../../utils/logger.js';
+import type { InstanciatedLogger } from '../../utils/logger.js';
 import type { FinalOptions } from './config.js';
 import { analyzeModelMixinUsage } from './processors/mixin-analyzer.js';
+import { generateIntermediateModelTraitArtifacts } from './processors/model.js';
+import type { SchemaArtifactRegistry } from './utils/artifact.js';
+import { buildEntityRegistry, linkEntities } from './utils/artifact.js';
 import type { TransformArtifact } from './utils/ast-utils.js';
 import type { ParsedFile } from './utils/file-parser.js';
 import { parseFile } from './utils/file-parser.js';
@@ -139,6 +142,7 @@ export class Codemod {
   logger: InstanciatedLogger;
   finalOptions: FinalOptions;
   input: Input = new Input();
+  entityRegistry: SchemaArtifactRegistry = new Map();
 
   mixinsImportedByModels: Set<string> = new Set();
   modelsWithExtensions: Set<string> = new Set();
@@ -150,23 +154,7 @@ export class Codemod {
 
   findMixinsUsedByModels() {
     const result = analyzeModelMixinUsage(this, this.finalOptions);
-    this.mixinsImportedByModels = result.connectedMixins;
-    this.finalOptions.modelToMixinsMap = result.modelToMixinsMap;
-  }
-
-  findModelExtensions() {
-    this.logger.info(`🔍 Analyzing which models will have extensions...`);
-    for (const [modelFile, parsedModel] of this.input.parsedModels) {
-      try {
-        // Use pre-parsed data instead of re-parsing
-        if (parsedModel.hasExtension) {
-          this.modelsWithExtensions.add(parsedModel.baseName);
-        }
-      } catch (error) {
-        this.logger.error(`❌ Error analyzing model ${modelFile} for extensions: ${String(error)}`);
-      }
-    }
-    this.logger.info(`✅ Found ${this.modelsWithExtensions.size} models with extensions.`);
+    linkEntities(this.entityRegistry, result.modelToMixinsMap);
   }
 
   parseAllFiles() {
@@ -199,6 +187,8 @@ export class Codemod {
 
     const parseErrors = this.input.skipped.filter((s) => s.reason === 'parse-error').length;
     this.logger.info(`✅ Parsed ${modelsParsed} models and ${mixinsParsed} mixins (${parseErrors} errors).`);
+
+    this.entityRegistry = buildEntityRegistry(this.input.parsedModels, this.input.parsedMixins);
   }
 
   createDestinationDirectories() {
