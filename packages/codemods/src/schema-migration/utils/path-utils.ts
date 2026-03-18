@@ -34,6 +34,13 @@ export function extractBaseName(filePath: string): string {
 }
 
 /**
+ * Extract trailing path segments from a file path
+ */
+export function getPathSuffix(filePath: string, depth: number): string {
+  return filePath.split('/').slice(-depth).join('/');
+}
+
+/**
  * Extract camelCase name from file path (kebab-case to camelCase conversion)
  */
 export function extractCamelCaseName(filePath: string): string {
@@ -81,8 +88,8 @@ export function mixinNameToTraitName(mixinNameOrPath: string, forStringReference
     traitName = traitName.split('-').map(capitalizeFirstLetter).join('');
   }
 
-  if (traitName.endsWith('Mixin')) {
-    traitName = traitName.slice(0, -5); // Remove 'Mixin' suffix
+  if (traitName.toLowerCase().endsWith('mixin')) {
+    traitName = traitName.slice(0, -5); // Remove 'Mixin'/'mixin' suffix
   }
 
   if (forStringReference) {
@@ -167,7 +174,8 @@ const DEFAULT_EXTENSIONS = ['.ts', '.js'];
  * e.g., 'my-app/models/*' -> /^my-app/models\/(.*)$/
  */
 export function wildcardPatternToRegex(pattern: string): RegExp {
-  return new RegExp('^' + pattern.replace(/\*/g, '(.*)') + '$');
+  const escaped = pattern.replace(/[.+?^${}()|[\]\\/]/g, '\\$&');
+  return new RegExp('^' + escaped.replace(/\*/g, '(.*)') + '$');
 }
 
 /**

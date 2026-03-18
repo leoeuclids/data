@@ -1,11 +1,12 @@
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { MigrateOptions } from '@ember-data/codemods/schema-migration/config.js';
 
 import { runMigration } from '../../../../packages/codemods/src/schema-migration/tasks/migrate.js';
+import { logger } from '../../../../packages/codemods/utils/logger.js';
 import { collectFilesSnapshot, collectFileStructure, prepareFiles } from './test-helpers.ts';
 
 describe('migrate-to-schema batch operation', () => {
@@ -791,7 +792,12 @@ export default class TestModel extends BaseModel {
           declare tags: unknown
       }
 
-      export default TypedExtension;",
+      const Registration = {
+        kind: 'object',
+        name: 'typed',
+        features: TypedExtension,
+      };
+      export default Registration;",
         "resources/typed.schema.ts": "
       import type { LegacyResourceSchema } from '@warp-drive/core-types/schema/fields';
 
@@ -816,6 +822,7 @@ export default class TestModel extends BaseModel {
         "resources/typed.type.ts": "
       import type { Type } from '@warp-drive/core-types/symbols';
       import type { WithLegacy } from '@ember-data/model/migration-support';
+      import type { StaticBaseModelTraitTrait } from 'test-app/data/traits/static-base-model-trait.type';
 
       /**
        * This type represents the full set schema derived fields of
@@ -845,7 +852,7 @@ export default class TestModel extends BaseModel {
        * the 'typed' resource, including all legacy mode features but
        * without any extensions.
        *
-       * See also {@link TypedResource} for fields + legacy mode features
+       * See also {@link TypedResource} for just the fields
        */
       export interface Typed extends WithLegacy<TypedResource> {}
       ",
@@ -900,7 +907,12 @@ export default class TestModel extends BaseModel {
           declare tags: unknown
       }
 
-      export default TypedExtension;",
+      const Registration = {
+        kind: 'object',
+        name: 'typed',
+        features: TypedExtension,
+      };
+      export default Registration;",
         "resources/typed.schema.ts": "
       import type { LegacyResourceSchema } from '@warp-drive/core-types/schema/fields';
 
@@ -925,6 +937,7 @@ export default class TestModel extends BaseModel {
         "resources/typed.type.ts": "
       import type { Type } from '@warp-drive/core-types/symbols';
       import type { WithLegacy } from '@ember-data/model/migration-support';
+      import type { StaticBaseModelTraitTrait } from 'test-app/data/traits/static-base-model-trait.type';
 
       /**
        * This type represents the full set schema derived fields of
@@ -954,7 +967,7 @@ export default class TestModel extends BaseModel {
        * the 'typed' resource, including all legacy mode features but
        * without any extensions.
        *
-       * See also {@link TypedResource} for fields + legacy mode features
+       * See also {@link TypedResource} for just the fields
        */
       export interface Typed extends WithLegacy<TypedResource> {}
       ",
@@ -1106,6 +1119,7 @@ export default Mixin.create({
       import type { Type } from '@warp-drive/core-types/symbols';
       import type { WithLegacy } from '@ember-data/model/migration-support';
       import type { Framework } from 'test-app/data/resources/framework.type';
+      import type { StaticBaseModelTraitTrait } from 'test-app/data/traits/static-base-model-trait.type';
 
       /**
        * This type represents the full set schema derived fields of
@@ -1139,7 +1153,7 @@ export default Mixin.create({
        * the 'typed' resource, including all legacy mode features but
        * without any extensions.
        *
-       * See also {@link TypedResource} for fields + legacy mode features
+       * See also {@link TypedResource} for just the fields
        */
       export interface Typed extends WithLegacy<TypedResource> {}
       ",
@@ -1205,5 +1219,254 @@ export default Mixin.create({
       expect(collectFileStructure(dataDir)).toMatchSnapshot('combined with mixins file structure');
       expect(collectFilesSnapshot(dataDir)).toMatchSnapshot('combined with mixins files');
     });
+  });
+
+  it('extracts intermediate model trait when base class uses additionalModelSources', async () => {
+    prepareFiles(tempDir, {
+      'app/core/-base-model.js': `
+import Model from '@custom/decorators/model';
+
+export default class BaseModel extends Model {}
+`,
+      'app/models/approval-request.ts': `
+import BaseModel from '@custom/core/-base-model';
+import { attr, belongsTo } from '@custom/decorators/model';
+import BaseModelMixin from '../mixins/base-model';
+
+export default class ApprovalRequest extends BaseModel.extend(BaseModelMixin) {
+  @attr('string') declare name: string;
+  @attr('number') declare status: number;
+  @belongsTo('user', { async: false, inverse: null }) declare createdBy: unknown;
+}
+`,
+      'app/mixins/base-model.js': `
+import Mixin from '@ember/object/mixin';
+
+export default Mixin.create({
+  baseModelMixinMethod() {},
+});
+`,
+    });
+
+    const testOptions: MigrateOptions = {
+      ...options,
+      emberDataImportSource: '@custom/decorators/model',
+      intermediateModelPaths: ['@custom/core/-base-model'],
+      additionalModelSources: [
+        {
+          pattern: '@custom/core/*',
+          dir: join(tempDir, 'app/core/*'),
+        },
+      ],
+    };
+
+    const originalCwd = process.cwd();
+    process.chdir(tempDir);
+
+    try {
+      await runMigration(testOptions);
+    } finally {
+      process.chdir(originalCwd);
+    }
+
+    const dataDir = join(tempDir, 'app/data');
+    expect(collectFileStructure(dataDir)).toMatchSnapshot(
+      'intermediate model from additionalModelSources file structure'
+    );
+    expect(collectFilesSnapshot(dataDir)).toMatchSnapshot('intermediate model from additionalModelSources files');
+  });
+
+  it('model derived from intermediate model inherits traits and fields', async () => {
+    prepareFiles(tempDir, {
+      'app/core/base-model.ts': `
+import Model from '@ember-data/model';
+
+export default class BaseModel extends Model {
+}
+`,
+      'app/core/data-field-model.ts': `
+import BaseModelMixin from '@external/mixins/base-model';
+import { attr } from '@ember-data/model';
+
+import BaseModel from './base-model';
+
+export default class DataFieldModel extends BaseModel.extend(BaseModelMixin) {
+  /**
+   * The display name of the item.
+   */
+  @attr('string') name: string | undefined;
+
+  /**
+   * The sort order position for this data field.
+   */
+  @attr('number') sortOrder: number | undefined;
+}
+`,
+      'external/mixins/base-model.js': `
+import Mixin from '@ember/object/mixin';
+
+export default Mixin.create({
+});
+`,
+      'app/models/ae-custom-multiselect8-option.ts': `
+import DataFieldModel from '../core/data-field-model';
+
+export default class AeCustomMultiselect8Option extends DataFieldModel {}
+`,
+    });
+
+    const testOptions: MigrateOptions = {
+      ...options,
+      intermediateModelPaths: ['test-app/core/base-model', 'test-app/core/data-field-model'],
+      additionalModelSources: [
+        {
+          pattern: 'test-app/core/*',
+          dir: join(tempDir, 'app/core/*'),
+        },
+      ],
+      additionalMixinSources: [
+        {
+          pattern: '@external/mixins/*',
+          dir: join(tempDir, 'external/mixins/*'),
+        },
+      ],
+    };
+
+    const originalCwd = process.cwd();
+    process.chdir(tempDir);
+
+    try {
+      await runMigration(testOptions);
+    } finally {
+      process.chdir(originalCwd);
+    }
+
+    expect(collectFilesSnapshot(join(tempDir, 'app/data'))).toMatchSnapshot('derived_file_contents');
+  });
+
+  it('does not misclassify model extending base model via relative import as fragment', async () => {
+    prepareFiles(tempDir, {
+      'app/models/base-model.js': `
+import Model, { attr } from '@ember-data/model';
+
+export default class BaseModel extends Model {
+  @attr('string') description;
+}
+`,
+      'app/models/action-plan.js': `
+import { attr } from '@ember-data/model';
+import BaseModel from './base-model';
+
+export default class ActionPlan extends BaseModel {
+  @attr('string') name;
+
+  get displayName() {
+    return this.name;
+  }
+}
+`,
+    });
+
+    await runMigration(options);
+
+    const dataDir = join(tempDir, 'app/data');
+    expect(collectFileStructure(dataDir)).toMatchSnapshot('generated file structure');
+    expect(collectFilesSnapshot(dataDir)).toMatchSnapshot('generated files');
+  });
+
+  it('model with relative base-class import and mixins extracts fields and extensions', async () => {
+    prepareFiles(tempDir, {
+      'app/models/base-model.js': `
+import Model from '@ember-data/model';
+
+export default class BaseModel extends Model {}
+`,
+      'app/mixins/commentable.js': `
+import Mixin from '@ember/object/mixin';
+import { attr } from '@ember-data/model';
+
+export default Mixin.create({
+  commentCount: attr('number'),
+});
+`,
+      'app/models/action-plan.js': `
+import { attr, belongsTo } from '@ember-data/model';
+import BaseModel from './base-model';
+import Commentable from '../mixins/commentable';
+
+export default class ActionPlan extends BaseModel.extend(Commentable) {
+  @attr('string') name;
+  @attr('string') status;
+  @belongsTo('user', { async: false, inverse: null }) owner;
+
+  get displayName() {
+    return this.name;
+  }
+}
+`,
+    });
+
+    await runMigration(options);
+
+    const dataDir = join(tempDir, 'app/data');
+    expect(collectFileStructure(dataDir)).toMatchSnapshot('generated file structure');
+    expect(collectFilesSnapshot(dataDir)).toMatchSnapshot('generated files');
+  });
+
+  it('logs an error when intermediate model artifact conflicts with a mixin baseName', async () => {
+    prepareFiles(tempDir, {
+      'app/models/user.ts': `
+import BaseModel from '../core/base-model.js';
+import BaseMixin from '../mixins/base-model.js';
+import { attr } from '@ember-data/model';
+
+export default class User extends BaseModel.extend(BaseMixin) {
+  @attr('string') declare name: string;
+}
+`,
+      'app/core/base-model.js': `
+import Model, { attr } from '@ember-data/model';
+
+export default class BaseModel extends Model {
+  @attr('date') createdAt;
+}
+`,
+      'app/mixins/base-model.js': `
+import Mixin from '@ember/object/mixin';
+
+export default Mixin.create({
+  isBaseModel: true,
+});
+`,
+    });
+
+    const testOptions: MigrateOptions = {
+      ...options,
+      importSubstitutes: [
+        {
+          import: '../core/base-model',
+          sourcePath: join(tempDir, 'app/core/base-model.js'),
+        },
+      ],
+      additionalModelSources: [
+        {
+          pattern: 'test-app/core/*',
+          dir: join(tempDir, 'app/core/*'),
+        },
+      ],
+    };
+
+    const log = logger.for('migrate-to-schema');
+    const errorSpy = vi.spyOn(log, 'error');
+
+    await runMigration(testOptions);
+
+    const conflictErrors = errorSpy.mock.calls.filter((args) =>
+      args.some((arg) => typeof arg === 'string' && arg.includes('Output file conflict'))
+    );
+    expect(conflictErrors.length).toBeGreaterThan(0);
+    expect(conflictErrors[0][0]).toContain('base-model');
+
+    errorSpy.mockRestore();
   });
 });

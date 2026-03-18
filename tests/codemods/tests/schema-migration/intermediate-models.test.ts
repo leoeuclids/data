@@ -4,6 +4,7 @@ import { join } from 'path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { processIntermediateModelsToTraits } from '../../../../packages/codemods/src/schema-migration/processors/model.js';
+import type { SchemaArtifactRegistry } from '../../../../packages/codemods/src/schema-migration/utils/artifact.js';
 import { prepareFiles } from './test-helpers.ts';
 
 describe('intermediate model processing', () => {
@@ -30,6 +31,7 @@ export default class BaseModel extends Model {
 `,
     });
 
+    const registry: SchemaArtifactRegistry = new Map();
     const result = processIntermediateModelsToTraits(
       ['test-app/core/base-model'],
       [
@@ -42,7 +44,8 @@ export default class BaseModel extends Model {
       {
         verbose: false,
         debug: false,
-      }
+      },
+      registry
     );
 
     expect(result.errors.length).toBe(0);
@@ -62,6 +65,7 @@ export default class SpecialModel extends Model {
 `,
     });
 
+    const registry: SchemaArtifactRegistry = new Map();
     const result = processIntermediateModelsToTraits(
       ['@mylib/core/special-model'],
       [
@@ -74,7 +78,8 @@ export default class SpecialModel extends Model {
       {
         verbose: false,
         debug: false,
-      }
+      },
+      registry
     );
 
     expect(result.errors.length).toBe(0);
@@ -82,10 +87,16 @@ export default class SpecialModel extends Model {
   });
 
   it('should report errors for missing intermediate models', () => {
-    const result = processIntermediateModelsToTraits(['non-existent/model'], undefined, undefined, {
-      verbose: false,
-      debug: false,
-    });
+    const result = processIntermediateModelsToTraits(
+      ['non-existent/model'],
+      undefined,
+      undefined,
+      {
+        verbose: false,
+        debug: false,
+      },
+      new Map()
+    );
 
     expect(result.errors.length).toBe(1);
     expect(result.errors[0]).toContain('Could not find or read intermediate model file for path: non-existent/model');
@@ -104,6 +115,7 @@ export default class DataFieldModel extends Model {
 `,
     });
 
+    const registry: SchemaArtifactRegistry = new Map();
     const result = processIntermediateModelsToTraits(
       ['test-app/core/data-field-model'],
       [
@@ -116,19 +128,20 @@ export default class DataFieldModel extends Model {
       {
         verbose: false,
         debug: false,
-      }
+      },
+      registry
     );
 
     expect(result.errors.length).toBe(0);
     expect(result.artifacts).toMatchInlineSnapshot(`
       [
         {
-          "baseName": "data-field",
+          "baseName": "data-field-model",
           "code": "import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
 
-      import type { BelongsToReference, HasManyReference, Errors } from '@warp-drive/legacy/model/-private';
-
-      const DataFieldTraitSchema = {
+      const DataFieldModelTraitSchema = {
+        'name': 'data-field-model',
+        'mode': 'legacy',
         'fields': [
           {
             'kind': 'attribute',
@@ -138,11 +151,19 @@ export default class DataFieldModel extends Model {
         ]
       } satisfies LegacyResourceSchema;
 
-      export default DataFieldTraitSchema;
+      export default DataFieldModelTraitSchema;
+      ",
+          "name": "DataFieldModelTraitSchema",
+          "suggestedFileName": "data-field-model.schema.ts",
+          "type": "trait",
+        },
+        {
+          "baseName": "data-field-model",
+          "code": "import type { BelongsToReference, HasManyReference, Errors } from '@warp-drive/legacy/model/-private';
 
       /**
        * This type represents the full set schema derived fields of
-       * the 'data-field' trait, without any of the legacy mode features
+       * the 'data-field-model' trait, without any of the legacy mode features
        * and without any extensions.
        *
        * > [!TIP]
@@ -155,26 +176,15 @@ export default class DataFieldModel extends Model {
        * > For those cases, you can create a more specific type that derives
        * > from this type to ensure that your type definitions stay consistent
        * > with the schema. For more details read about {@link https://warp-drive.io/api/@warp-drive/core/types/record/type-aliases/Mask | Masking}
-       *
-       * See also {@link DataField} for fields + legacy mode features
        */
-      export interface DataFieldTrait {
+      export interface DataFieldModelTrait {
         id: string | null;
         fieldName: string | null;
       }
-
-      /**
-       * This type represents the full set schema derived fields of
-       * the 'data-field' trait, including all legacy mode features but
-       * without any extensions.
-       *
-       * See also {@link DataFieldTrait} for fields + legacy mode features
-       */
-      export interface DataField extends WithLegacy<DataFieldTrait> {}
       ",
-          "name": "DataFieldTraitSchema",
-          "suggestedFileName": "data-field.schema.ts",
-          "type": "trait",
+          "name": "DataFieldModelTrait",
+          "suggestedFileName": "data-field-model.type.ts",
+          "type": "trait-type",
         },
       ]
     `);

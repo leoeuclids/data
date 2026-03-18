@@ -905,6 +905,7 @@ export default class TestModel extends Model.extend(WorkstreamableMixin) {
         import type { Type } from '@warp-drive/core-types/symbols';
         import type { WithLegacy } from '@ember-data/model/migration-support';
         import type { Workstreamable } from 'test-app/data/resources/workstreamable.schema.ts';
+        import type { WorkstreamableTrait } from 'test-app/data/traits/workstreamable.schema';
 
         const TestModelSchema = {
           'type': 'test-model',
@@ -959,7 +960,7 @@ export default class TestModel extends Model.extend(WorkstreamableMixin) {
          * the 'test-model' resource, including all legacy mode features but
          * without any extensions.
          *
-         * See also {@link TestModelResource} for fields + legacy mode features
+         * See also {@link TestModelResource} for just the fields
          */
         export interface TestModel extends WithLegacy<TestModelResource> {}
         "
@@ -1217,7 +1218,12 @@ export default class Translatable extends Model {
                     })
         }
 
-        export default TestModelExtension;",
+        const Registration = {
+          kind: 'object',
+          name: 'test-model',
+          features: TestModelExtension,
+        };
+        export default Registration;",
           "name": "TestModelExtension",
           "suggestedFileName": "test-model.ext.js",
           "type": "resource-extension",
@@ -1278,7 +1284,7 @@ export default class Translatable extends Model {
          * the 'test-model' resource, including all legacy mode features but
          * without any extensions.
          *
-         * See also {@link TestModelResource} for fields + legacy mode features
+         * See also {@link TestModelResource} for just the fields
          */
         export interface TestModel extends WithLegacy<TestModelResource> {}
         ",
@@ -1338,7 +1344,12 @@ export default class Amendment extends Model {
             }
         }
 
-        export default AmendmentExtension;"
+        const Registration = {
+          kind: 'object',
+          name: 'amendment',
+          features: AmendmentExtension,
+        };
+        export default Registration;"
       `);
     });
 
@@ -1420,7 +1431,12 @@ export default class Task extends Model {
             }
         }
 
-        export default TaskExtension;"
+        const Registration = {
+          kind: 'object',
+          name: 'task',
+          features: TaskExtension,
+        };
+        export default Registration;"
       `);
     });
   });

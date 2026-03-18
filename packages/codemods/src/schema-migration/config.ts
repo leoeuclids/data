@@ -1,5 +1,3 @@
-import type { SchemaArtifactRegistry } from './utils/artifact';
-
 export const DEFAULT_RESOURCES_DIR = './app/data/resources';
 export const DEFAULT_TRAITS_DIR = './app/data/traits';
 
@@ -111,6 +109,8 @@ export interface TransformOptions {
   combineSchemasAndTypes?: boolean;
   /** By default, schemas will be output in TS files even when generated from untyped models. */
   disableTypescriptSchemas?: boolean;
+  /** Force all output files to be TypeScript (.ts) even when input files are JavaScript (.js). */
+  forceTypeScript?: boolean;
   /**
    * By default, the codemod will attempt to generate TypeScript types for models that don't
    * have them by analyzing the model file and various transforms that are in use.
@@ -197,9 +197,8 @@ export interface TransformOptions {
     import: string;
     extension?: string;
     trait?: string;
+    sourcePath?: string;
   }>;
-  /** Registry of SchemaArtifact instances keyed by file path */
-  entityRegistry?: SchemaArtifactRegistry;
 }
 
 export interface MigrateOptions extends Partial<TransformOptions> {

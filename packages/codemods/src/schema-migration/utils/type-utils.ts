@@ -40,6 +40,8 @@ export interface ExtractedType {
   imports?: PackageImport[];
   /** Type declarations needed for this type */
   declarations?: string[];
+  /** Names of type alias and interface declarations collected for the type file */
+  declarationNames?: string[];
 }
 
 /**
@@ -55,19 +57,17 @@ export function getTypeScriptTypeForAttribute(
 ): { tsType: string; imports?: string[] } {
   // Handle enum types specially
   if (attrType === 'enum' && fieldOptions?.allowedValues) {
-    const allowedValues = fieldOptions.allowedValues as string;
+    const rawValue = fieldOptions.allowedValues as string;
+    // Strip __ref__: prefix used by schema field options for identifier references
+    const allowedValues = rawValue.startsWith('__ref__:') ? rawValue.slice('__ref__:'.length) : rawValue;
 
-    // Check if this is a complex expression (contains function calls, operators, etc.)
-    // If so, fall back to a simple string type instead of trying to generate complex types
-    if (!/^[a-z][0-9]\.$/.test(allowedValues)) {
-      // For complex expressions, just use string type
+    // Check if this is a simple identifier (enum name like FrameworkUpdateStatus)
+    // If not, fall back to a simple string type instead of trying to generate complex types
+    if (!/^[A-Za-z_]\w*$/.test(allowedValues)) {
       const tsType = allowNull ? 'string | null' : 'string';
       return { tsType };
     }
 
-    // For simple enum types, we need to generate a union type
-    // The allowedValues should be the enum name (e.g., "FrameworkUpdateStatus")
-    // We'll generate a union type like: (typeof FrameworkUpdateStatus)[keyof typeof FrameworkUpdateStatus]
     const tsType = allowNull
       ? `(typeof ${allowedValues})[keyof typeof ${allowedValues}] | null`
       : `(typeof ${allowedValues})[keyof typeof ${allowedValues}]`;
@@ -84,13 +84,7 @@ export function getTypeScriptTypeForAttribute(
   // Check built-in type mappings
   const builtInMapping = BUILT_IN_TYPE_MAPPINGS[attrType];
   if (builtInMapping) {
-    let tsType: string;
-    if (attrType === 'boolean') {
-      // Special handling for boolean nullability
-      tsType = allowNull ? 'boolean | null' : 'boolean';
-    } else {
-      tsType = hasDefaultValue || !allowNull ? builtInMapping : `${builtInMapping} | null`;
-    }
+    const tsType = hasDefaultValue || !allowNull ? builtInMapping : `${builtInMapping} | null`;
     return { tsType };
   }
 
@@ -262,9 +256,11 @@ function extractTypesForField(
 ): {
   imports: PackageImport[];
   declarations: string[];
+  declarationNames: string[];
 } {
   const imports: PackageImport[] = [];
   const declarations: string[] = [];
+  const declarationNames: string[] = [];
 
   // Walk up to the file root
   const ancestors = typeNode.ancestors();
@@ -301,11 +297,13 @@ function extractTypesForField(
     }
   }
 
-  // Build map: typeName -> SgNode for locally declared type aliases
+  // Build map: typeName -> SgNode for locally declared type aliases and interfaces
   const localTypeMap = new Map<string, SgNode>();
-  for (const alias of root.findAll({ rule: { kind: 'type_alias_declaration' } })) {
-    const nameNode = alias.field('name');
-    if (nameNode) localTypeMap.set(nameNode.text(), alias);
+  for (const decl of root.findAll({
+    rule: { any: [{ kind: 'type_alias_declaration' }, { kind: 'interface_declaration' }] },
+  })) {
+    const nameNode = decl.field('name');
+    if (nameNode) localTypeMap.set(nameNode.text(), decl);
   }
 
   // Build map: valueName -> export statement text for locally declared const/let/var exports.
@@ -326,7 +324,19 @@ function extractTypesForField(
   const addedImports = new Set<string>();
   const addedDeclarations = new Set<string>();
 
+  const typeofIdentifierRule = { kind: 'identifier', inside: { kind: 'type_query', stopBy: 'end' } } as const;
+
   function processNode(node: SgNode): void {
+    // Collect value imports from typeof expressions (e.g. typeof TimesheetableType.REGION)
+    for (const valueId of node.findAll({ rule: typeofIdentifierRule })) {
+      const valueName = valueId.text();
+      if (!addedImports.has(valueName) && importMap.has(valueName)) {
+        const { imported, source } = importMap.get(valueName)!;
+        imports.push({ imported, local: valueName, source, isType: false });
+        addedImports.add(valueName);
+      }
+    }
+
     for (const id of node.findAll({ rule: { kind: 'type_identifier' } })) {
       const name = id.text();
       if (PRIMITIVE_TYPES.has(name) || visited.has(name)) continue;
@@ -342,15 +352,14 @@ function extractTypesForField(
         if (!addedDeclarations.has(name)) {
           const decl = localTypeMap.get(name)!;
 
-          // Collect value declarations referenced via `typeof X` in this alias first,
-          // so they appear before the type alias in the output (required for valid TS).
-          for (const typeQuery of decl.findAll({ rule: { kind: 'type_query' } })) {
-            for (const valueId of typeQuery.findAll({ rule: { kind: 'identifier' } })) {
-              const valueName = valueId.text();
-              if (!addedDeclarations.has(valueName) && localValueMap.has(valueName)) {
-                declarations.push(localValueMap.get(valueName)!);
-                addedDeclarations.add(valueName);
-              }
+          // Collect local value declarations referenced via typeof before the
+          // type declaration text (required for valid TS ordering).
+          // Imported typeof references are handled by the top-level scan via recursion.
+          for (const valueId of decl.findAll({ rule: typeofIdentifierRule })) {
+            const valueName = valueId.text();
+            if (!addedDeclarations.has(valueName) && localValueMap.has(valueName)) {
+              declarations.push(localValueMap.get(valueName)!);
+              addedDeclarations.add(valueName);
             }
           }
 
@@ -358,6 +367,7 @@ function extractTypesForField(
           const withExport = text.startsWith('export ') ? text : `export ${text}`;
           const withSemi = withExport.endsWith(';') ? withExport : `${withExport};`;
           declarations.push(withSemi);
+          declarationNames.push(name);
           addedDeclarations.add(name);
           // Recurse to collect dependencies of this local type
           processNode(decl);
@@ -368,7 +378,7 @@ function extractTypesForField(
 
   processNode(typeNode);
 
-  return { imports, declarations };
+  return { imports, declarations, declarationNames };
 }
 
 /**
@@ -400,7 +410,7 @@ export function extractTypeFromDeclaration(propertyNode: SgNode, options: Transf
     const optional = propertyNode.text().includes('?:');
 
     // Extract import dependencies from the type
-    const { imports, declarations } = extractTypesForField(options, typeNode);
+    const { imports, declarations, declarationNames } = extractTypesForField(options, typeNode);
 
     return {
       type: typeText,
@@ -408,6 +418,7 @@ export function extractTypeFromDeclaration(propertyNode: SgNode, options: Transf
       optional,
       imports,
       declarations,
+      declarationNames,
     };
   } catch (error) {
     log.debug(`Error extracting type: ${String(error)}`);
@@ -444,7 +455,7 @@ function parseDecoratorOptions(optionsNode: SgNode | undefined): ParsedDecorator
     const parsedOptions = parseObjectLiteralFromNode(optionsNode);
     return {
       hasDefaultValue: 'defaultValue' in parsedOptions,
-      allowNull: parsedOptions.allowNull !== 'false',
+      allowNull: parsedOptions.allowNull !== false && parsedOptions.allowNull !== 'false',
       async: parsedOptions.async === 'true' || parsedOptions.async === true,
     };
   } catch {
@@ -460,7 +471,8 @@ function extractTypeFromDecoratorCore(
   decoratorType: string,
   firstArg: string | undefined,
   parsedOptions: ParsedDecoratorOptions,
-  options?: TransformOptions
+  options?: TransformOptions,
+  fieldOptions?: Record<string, unknown>
 ): ExtractedType | null {
   switch (decoratorType) {
     case 'attr': {
@@ -469,7 +481,8 @@ function extractTypeFromDecoratorCore(
         attrType,
         parsedOptions.hasDefaultValue,
         parsedOptions.allowNull,
-        options
+        options,
+        fieldOptions
       );
 
       return {
@@ -537,8 +550,10 @@ export function extractTypeFromDecorator(
     const firstArg = args.text[0];
     const optionsNode = args.nodes[1];
     const parsedOptions = parseDecoratorOptions(optionsNode);
+    const fieldOptions =
+      optionsNode && optionsNode.kind() === 'object' ? parseObjectLiteralFromNode(optionsNode) : undefined;
 
-    return extractTypeFromDecoratorCore(decoratorType, firstArg, parsedOptions, options);
+    return extractTypeFromDecoratorCore(decoratorType, firstArg, parsedOptions, options, fieldOptions);
   } catch (error) {
     log.debug(`Error extracting type from decorator: ${String(error)}`);
     return null;

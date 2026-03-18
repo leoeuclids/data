@@ -128,6 +128,8 @@ export interface ParsedFile {
   path: string;
   /** Original file extension (.ts or .js) */
   extension: '.ts' | '.js';
+  /** Whether the file should be treated as TypeScript (extension is .ts or forceTypeScript is enabled) */
+  readonly isTypeScript: boolean;
   /** All imports in the file */
   imports: ParsedFileImport[];
   /** EmberData schema fields (@attr, @hasMany, @belongsTo, fragment, etc.) */
@@ -157,6 +159,10 @@ export interface ParsedFile {
    * This is used to preserve file-level comments during transformation.
    */
   comment?: string;
+  /** Names of type alias and interface declarations found in field type annotations.
+   * These declarations are collected for the type/schema file and should be
+   * removed from extensions to avoid duplication. */
+  readonly typeDeclarationNames: ReadonlySet<string>;
 }
 
 // ============================================================================
@@ -190,11 +196,17 @@ function classifyImport(importPath: string, options: TransformOptions): ParsedFi
     return 'mixin';
   }
 
-  if (options.mixinImportSource && importPath.startsWith(options.mixinImportSource)) {
+  if (
+    options.mixinImportSource &&
+    (importPath === options.mixinImportSource || importPath.startsWith(options.mixinImportSource + '/'))
+  ) {
     return 'mixin';
   }
 
-  if (options.modelImportSource && importPath.startsWith(options.modelImportSource)) {
+  if (
+    options.modelImportSource &&
+    (importPath === options.modelImportSource || importPath.startsWith(options.modelImportSource + '/'))
+  ) {
     return 'model';
   }
 
@@ -204,6 +216,24 @@ function classifyImport(importPath: string, options: TransformOptions): ParsedFi
 
   if (importPath.includes('/mixins/')) {
     return 'mixin';
+  }
+
+  if (options.additionalModelSources) {
+    for (const source of options.additionalModelSources) {
+      const prefix = source.pattern.endsWith('/') ? source.pattern : source.pattern + '/';
+      if (importPath === source.pattern || importPath.startsWith(prefix)) {
+        return 'model';
+      }
+    }
+  }
+
+  if (options.additionalMixinSources) {
+    for (const source of options.additionalMixinSources) {
+      const prefix = source.pattern.endsWith('/') ? source.pattern : source.pattern + '/';
+      if (importPath === source.pattern || importPath.startsWith(prefix)) {
+        return 'mixin';
+      }
+    }
   }
 
   if (importPath.startsWith('@') || !importPath.startsWith('.')) {
@@ -361,7 +391,12 @@ interface ExtractedModelData {
   comment?: string;
 }
 
-function extractModelData(root: SgNode, filePath: string, options: TransformOptions): ExtractedModelData {
+function extractModelData(
+  root: SgNode,
+  filePath: string,
+  options: TransformOptions,
+  isTypeScript: boolean
+): ExtractedModelData {
   const fields: ParsedField[] = [];
   const behaviors: ParsedBehavior[] = [];
   const traits: string[] = [];
@@ -369,38 +404,33 @@ function extractModelData(root: SgNode, filePath: string, options: TransformOpti
   const heritageLocalNames: string[] = [];
   let baseClass: string | undefined;
 
-  const isJavaScript = filePath.endsWith('.js');
-
   const classDeclaration = findClassDeclarationInRoot(root, options);
   if (!classDeclaration) {
     return { fields, behaviors, traits, heritageLocalNames, baseClass, comment };
   }
 
-  // there must be a defaultExport if we found a class declaration
   const defaultExport = findDefaultExport(root, options);
-  comment = extractLeadingComment(defaultExport!);
+  if (defaultExport) {
+    comment = extractLeadingComment(defaultExport);
+  }
 
   // Extract base class and traits from heritage clause
   const heritageClause = classDeclaration.find({ rule: { kind: NODE_KIND_CLASS_HERITAGE } });
   if (heritageClause) {
     const mixinImports = getMixinImports(root, options);
 
-    // Find base class (first identifier before .extend())
-    const heritageText = heritageClause.text();
-    const extendMatch = heritageText.match(/^(\w+)(?:\.extend)?/);
-    if (extendMatch) {
-      baseClass = extendMatch[1];
+    // Find base class (first identifier in the heritage clause)
+    const heritageIdentifiers = heritageClause.findAll({ rule: { kind: NODE_KIND_IDENTIFIER } });
+    if (heritageIdentifiers.length > 0) {
+      baseClass = heritageIdentifiers[0].text();
     }
 
-    // Extract mixin traits from .extend() arguments
+    // Extract mixin traits from .extend() arguments using AST identifier matching
+    const heritageIdentifierNames = new Set(heritageIdentifiers.map((id) => id.text()));
     for (const [localName, importPath] of mixinImports) {
-      if (heritageText.includes(localName)) {
+      if (heritageIdentifierNames.has(localName)) {
         heritageLocalNames.push(localName);
-        const traitName =
-          importPath
-            .split('/')
-            .pop()
-            ?.replace(/\.(?:js|ts)$/, '') || localName;
+        const traitName = extractBaseName(importPath) || localName;
         traits.push(traitName);
       }
     }
@@ -436,7 +466,7 @@ function extractModelData(root: SgNode, filePath: string, options: TransformOpti
 
     // Extract TypeScript type
     let typeInfo: ExtractedType | null = null;
-    if (!isJavaScript) {
+    if (isTypeScript) {
       try {
         typeInfo = extractTypeFromDeclaration(property, options) ?? null;
       } catch {
@@ -522,7 +552,7 @@ function extractModelData(root: SgNode, filePath: string, options: TransformOpti
     const methodText = preamble.length > 0 ? preamble.join('\n') + '\n' + method.text() : method.text();
 
     let typeInfo: ExtractedType | null = null;
-    if (!isJavaScript) {
+    if (isTypeScript) {
       try {
         typeInfo = extractTypeFromMethod(method, options) ?? null;
       } catch {
@@ -570,14 +600,17 @@ function findMixinCreateCalls(root: SgNode, mixinLocalName: string): SgNode[] {
   return calls;
 }
 
-function extractMixinData(root: SgNode, filePath: string, options: TransformOptions): ExtractedMixinData {
+function extractMixinData(
+  root: SgNode,
+  filePath: string,
+  options: TransformOptions,
+  isTypeScript: boolean
+): ExtractedMixinData {
   const fields: ParsedField[] = [];
   const behaviors: ParsedBehavior[] = [];
   const traits: string[] = [];
 
-  const isJavaScript = filePath.endsWith('.js');
-
-  const mixinImportLocal = findEmberImportLocalName(root, [DEFAULT_MIXIN_SOURCE], options, filePath, process.cwd());
+  const mixinImportLocal = findEmberImportLocalName(root, [DEFAULT_MIXIN_SOURCE], options);
 
   if (!mixinImportLocal) {
     return { fields, behaviors, traits };
@@ -647,7 +680,7 @@ function extractMixinData(root: SgNode, filePath: string, options: TransformOpti
       fieldName = keyNode?.text() || '';
       originalKey = fieldName;
 
-      if (!isJavaScript) {
+      if (isTypeScript) {
         try {
           typeInfo = extractTypeFromMethod(property, options) ?? null;
         } catch {
@@ -720,13 +753,13 @@ function detectFileType(root: SgNode, filePath: string, options: TransformOption
   }
 
   // Check for mixin pattern first
-  const mixinImportLocal = findEmberImportLocalName(root, [DEFAULT_MIXIN_SOURCE], options, filePath, process.cwd());
+  const mixinImportLocal = findEmberImportLocalName(root, [DEFAULT_MIXIN_SOURCE], options);
   if (mixinImportLocal) {
     return 'mixin';
   }
 
   // Check for fragment
-  const fragmentImportLocal = findEmberImportLocalName(root, [FRAGMENT_BASE_SOURCE], options, filePath, process.cwd());
+  const fragmentImportLocal = findEmberImportLocalName(root, [FRAGMENT_BASE_SOURCE], options);
   if (fragmentImportLocal) {
     const defaultExport = findDefaultExport(root, options);
     if (defaultExport) {
@@ -794,6 +827,9 @@ export function parseFile(filePath: string, code: string, options: TransformOpti
   const camelName = extractCamelCaseName(filePath);
   const extension: '.ts' | '.js' = filePath.endsWith('.ts') ? '.ts' : '.js';
 
+  const forceTypeScript = !!options.forceTypeScript;
+  const isTypeScript = extension === '.ts' || forceTypeScript;
+
   const imports = parseImports(root, options);
   const fileType = detectFileType(root, filePath, options);
 
@@ -805,7 +841,7 @@ export function parseFile(filePath: string, code: string, options: TransformOpti
   let comment: string | undefined;
 
   if (fileType === 'model' || fileType === 'fragment') {
-    const modelData = extractModelData(root, filePath, options);
+    const modelData = extractModelData(root, filePath, options, isTypeScript);
     fields = modelData.fields;
     behaviors = modelData.behaviors;
     traits = modelData.traits;
@@ -813,7 +849,7 @@ export function parseFile(filePath: string, code: string, options: TransformOpti
     baseClass = modelData.baseClass;
     comment = modelData.comment;
   } else if (fileType === 'mixin') {
-    const mixinData = extractMixinData(root, filePath, options);
+    const mixinData = extractMixinData(root, filePath, options, isTypeScript);
     fields = mixinData.fields;
     behaviors = mixinData.behaviors;
     traits = mixinData.traits;
@@ -821,6 +857,15 @@ export function parseFile(filePath: string, code: string, options: TransformOpti
   }
 
   const hasExtension = behaviors.length > 0;
+
+  const typeDeclarationNames = new Set<string>();
+  for (const field of fields) {
+    if (field.typeInfo?.declarationNames) {
+      for (const name of field.typeInfo.declarationNames) {
+        typeDeclarationNames.add(name);
+      }
+    }
+  }
 
   log.debug(
     `Parsed ${filePath}: type=${fileType}, fields=${fields.length}, behaviors=${behaviors.length}, traits=${traits.length}`
@@ -830,6 +875,9 @@ export function parseFile(filePath: string, code: string, options: TransformOpti
     name: baseName,
     path: filePath,
     extension,
+    get isTypeScript() {
+      return this.extension === '.ts' || forceTypeScript;
+    },
     imports,
     fields,
     behaviors,
@@ -843,6 +891,7 @@ export function parseFile(filePath: string, code: string, options: TransformOpti
     baseName,
     source: code,
     comment,
+    typeDeclarationNames,
   };
 }
 
@@ -851,9 +900,16 @@ export function parseFile(filePath: string, code: string, options: TransformOpti
  * if one exists as the previous sibling in the class body.
  */
 export function extractLeadingComment(node: SgNode): string | undefined {
-  const prev = node.prev();
-  if (prev && prev.kind() === 'comment') {
-    return prev.text();
+  let current = node.prev();
+  while (current) {
+    if (current.kind() === 'comment') {
+      return current.text();
+    }
+    if (current.text().trim() === '') {
+      current = current.prev();
+      continue;
+    }
+    break;
   }
   return undefined;
 }

@@ -10,6 +10,23 @@ import { MIXIN_SUFFIX_REGEX } from './string.js';
 const log = logger.for('ast-helpers');
 
 /**
+ * Find the export_specifier with `alias === 'default'` inside an export node's export_clause.
+ * Returns the specifier node, or null if not found.
+ */
+function findDefaultReexportSpecifier(node: SgNode): SgNode | null {
+  const exportClause = node.find({ rule: { kind: 'export_clause' } });
+  if (!exportClause) return null;
+
+  for (const specifier of exportClause.findAll({ rule: { kind: 'export_specifier' } })) {
+    const alias = specifier.field('alias');
+    if (alias && alias.text() === 'default') {
+      return specifier;
+    }
+  }
+  return null;
+}
+
+/**
  * Find all export statements
  */
 function findExportStatements(root: SgNode, options?: TransformOptions) {
@@ -35,6 +52,12 @@ export function findDefaultExport(root: SgNode, options?: TransformOptions): SgN
       log.debug('Found default export');
       return exportStatement;
     }
+
+    // Check for `export { X as default }` pattern
+    if (findDefaultReexportSpecifier(exportStatement)) {
+      log.debug('Found re-export as default');
+      return exportStatement;
+    }
   }
 
   log.debug('No default export found');
@@ -55,6 +78,16 @@ export function getExportedIdentifier(exportNode: SgNode, options?: TransformOpt
           .map((c) => `${c.kind()}: ${c.text()}`)
           .join(', ')
     );
+  }
+
+  // Check for `export { X as default }` pattern
+  const reexportSpecifier = findDefaultReexportSpecifier(exportNode);
+  if (reexportSpecifier) {
+    const name = reexportSpecifier.field('name');
+    if (name) {
+      log.debug(`Found re-exported identifier: ${name.text()}`);
+      return name.text();
+    }
   }
 
   // Look for an identifier being exported (not a call expression)
@@ -80,8 +113,9 @@ export function getExportedIdentifier(exportNode: SgNode, options?: TransformOpt
  * This is the single source of truth for class declaration finding across the codebase.
  */
 export function findClassDeclaration(exportNode: SgNode, root: SgNode, options?: TransformOptions): SgNode | null {
-  // Look for a class declaration in the export
-  let classDeclaration = exportNode.find({ rule: { kind: 'class_declaration' } });
+  // Look for a class declaration in the export (named or anonymous)
+  let classDeclaration =
+    exportNode.find({ rule: { kind: 'class_declaration' } }) || exportNode.find({ rule: { kind: 'class' } });
 
   // If no class declaration found in export, check if export references a class by name
   if (!classDeclaration) {
@@ -309,30 +343,21 @@ export function getEmberDataImports(
 
     log.debug(`Found EmberData import from: ${cleanSourceText}`);
 
-    // Get the import clause to find named imports
     const importClause = importNode.children().find((child) => child.kind() === 'import_clause');
     if (!importClause) continue;
 
-    // Look for named imports within the import clause
-    const namedImports = importClause.findAll({ rule: { kind: 'named_imports' } });
-    for (const namedImportNode of namedImports) {
-      // Get all import specifiers
-      const importSpecifiers = namedImportNode.findAll({ rule: { kind: 'import_specifier' } });
+    const namedImports = importClause.find({ rule: { kind: 'named_imports' } });
+    if (!namedImports) continue;
 
-      for (const specifier of importSpecifiers) {
-        // Get the imported name and local name
-        const nameNode = specifier.field('name'); // The original name from the module
-        const aliasNode = specifier.field('alias'); // The local alias (if any)
+    for (const specifier of namedImports.findAll({ rule: { kind: 'import_specifier' } })) {
+      const nameNode = specifier.field('name');
+      if (!nameNode) continue;
 
-        if (!nameNode) continue;
+      const originalName = nameNode.text();
+      const localName = specifier.field('alias')?.text() ?? originalName;
 
-        const originalName = nameNode.text();
-        const localName = aliasNode ? aliasNode.text() : originalName;
-
-        log.debug(`Found EmberData decorator: ${originalName} as ${localName}`);
-
-        emberDataImports.set(localName, originalName);
-      }
+      log.debug(`Found EmberData decorator: ${originalName} as ${localName}`);
+      emberDataImports.set(localName, originalName);
     }
   }
 
@@ -384,37 +409,28 @@ export function getMixinImports(root: SgNode, options?: TransformOptions): Map<s
       }
     }
 
-    // Check for default imports
     const importClause = importNode.children().find((child) => child.kind() === 'import_clause');
     if (!importClause) continue;
 
-    // Look for default import
-    const identifierNodes = importClause.findAll({ rule: { kind: 'identifier' } });
-    for (const identifierNode of identifierNodes) {
-      const localName = identifierNode.text();
-      // Skip 'from' keyword
-      if (localName === 'from') continue;
-
-      log.debug(`Found mixin import: ${localName} from ${actualImportPath}`);
-      mixinImports.set(localName, actualImportPath);
-      break; // Only take the first identifier for default imports
+    // Check for default import (first direct identifier child of import_clause)
+    for (const child of importClause.children()) {
+      if (child.kind() === 'identifier') {
+        log.debug(`Found mixin import: ${child.text()} from ${actualImportPath}`);
+        mixinImports.set(child.text(), actualImportPath);
+        break;
+      }
     }
 
     // Also look for named imports
-    const namedImports = importClause.findAll({ rule: { kind: 'named_imports' } });
-    for (const namedImportNode of namedImports) {
-      const importSpecifiers = namedImportNode.findAll({ rule: { kind: 'import_specifier' } });
-
-      for (const specifier of importSpecifiers) {
+    const namedImports = importClause.find({ rule: { kind: 'named_imports' } });
+    if (namedImports) {
+      for (const specifier of namedImports.findAll({ rule: { kind: 'import_specifier' } })) {
         const nameNode = specifier.field('name');
-        const aliasNode = specifier.field('alias');
-
         if (!nameNode) continue;
 
-        const originalName = nameNode.text();
-        const localName = aliasNode ? aliasNode.text() : originalName;
+        const localName = specifier.field('alias')?.text() ?? nameNode.text();
 
-        log.debug(`Found named mixin import: ${originalName} as ${localName} from ${actualImportPath}`);
+        log.debug(`Found named mixin import: ${nameNode.text()} as ${localName} from ${actualImportPath}`);
         mixinImports.set(localName, actualImportPath);
       }
     }

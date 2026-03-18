@@ -4,20 +4,20 @@ import { join } from 'path';
 import { logger } from '../../../utils/logger.js';
 import type { TransformerResult } from '../codemod.js';
 import type { TransformOptions } from '../config.js';
-import type { SchemaArtifact } from '../utils/artifact.js';
+import type { SchemaArtifact, SchemaArtifactRegistry } from '../utils/artifact.js';
 import { createTraitArtifactConfig, isConnectedToModel as isConnectedToModelInRegistry } from '../utils/artifact.js';
 import type { PropertyInfo, SchemaField, TransformArtifact } from '../utils/ast-utils.js';
 import {
+  buildTraitArtifacts,
   buildTraitSchemaObject,
   collectTraitImports,
   DEFAULT_EMBER_DATA_SOURCE,
   generateMergedSchemaCode,
-  getFileExtension,
   mapFieldsToTypeProperties,
   toPascalCase,
 } from '../utils/ast-utils.js';
 import { createExtensionFromOriginalFile } from '../utils/extension-generation.js';
-import { getResourcesImport } from '../utils/import-utils.js';
+import { getResourcesImport, resolveTraitImportPath, transformModelToResourceImport } from '../utils/import-utils.js';
 import { pascalToKebab } from '../utils/string.js';
 
 const log = logger.for('mixin-processor');
@@ -79,7 +79,11 @@ export interface ${typeName} {
  * This does not modify the original source. The CLI can use this to write
  * files to the requested output directories.
  */
-export function toArtifacts(entity: SchemaArtifact, options: TransformOptions): TransformerResult {
+export function toArtifacts(
+  entity: SchemaArtifact,
+  options: TransformOptions,
+  registry: SchemaArtifactRegistry = new Map()
+): TransformerResult {
   const parsedFile = entity.parsedFile;
   const { path: filePath, source, baseName, camelName: mixinName } = parsedFile;
 
@@ -106,7 +110,7 @@ export function toArtifacts(entity: SchemaArtifact, options: TransformOptions): 
   const extendedTraits = [...parsedFile.traits];
 
   // Check if this mixin is connected to models (directly or transitively)
-  const isConnected = options?.entityRegistry ? isConnectedToModelInRegistry(options.entityRegistry, filePath) : false;
+  const isConnected = isConnectedToModelInRegistry(registry, filePath);
 
   if (!isConnected) {
     log.debug(`Skipping ${mixinName}: not connected to any models`);
@@ -123,7 +127,8 @@ export function toArtifacts(entity: SchemaArtifact, options: TransformOptions): 
       traitFields,
       extensionProperties,
       extendedTraits,
-      options
+      options,
+      registry
     ),
   };
 }
@@ -140,11 +145,11 @@ function generateMixinArtifacts(
   traitFields: Array<{ name: string; kind: string; type?: string; options?: Record<string, unknown> }>,
   extensionProperties: PropertyInfo[],
   extendedTraits: string[],
-  options: TransformOptions
+  options: TransformOptions,
+  registry: SchemaArtifactRegistry
 ): TransformArtifact[] {
   const artifacts: TransformArtifact[] = [];
-  const fileExtension = getFileExtension(filePath);
-  const isTypeScript = fileExtension === '.ts';
+  const isTypeScript = entity.parsedFile.isTypeScript;
 
   const traitFieldTypes = mapFieldsToTypeProperties(traitFields as SchemaField[], options);
 
@@ -176,7 +181,7 @@ function generateMixinArtifacts(
         ensureResourceTypeFileExists(modelType, options, artifacts);
       }
 
-      imports.add(`type { ${pascalCaseType} } from '${getResourcesImport(options)}/${modelType}.schema'`);
+      imports.add(transformModelToResourceImport(modelType, pascalCaseType, options, registry));
     }
   }
 
@@ -207,27 +212,10 @@ function generateMixinArtifacts(
     options,
   });
 
-  const traitCode = [
-    mergedSchemaCode.schemaImports,
-    mergedSchemaCode.typeImports,
-    mergedSchemaCode.schemaDeclaration,
-    mergedSchemaCode.interfaceDeclaration,
-  ]
-    .filter(Boolean)
-    .join('\n');
-
-  artifacts.push({
-    type: 'trait',
-    name: traitConfig.identifiers.schema,
-    code: traitCode,
-    baseName,
-    suggestedFileName: `${baseName}.schema${options.disableTypescriptSchemas ? '.js' : '.ts'}`,
-  });
+  artifacts.push(...buildTraitArtifacts(mergedSchemaCode, traitConfig, baseName, options));
 
   if (extensionProperties.length > 0) {
-    const traitImportPath = options?.traitsImport
-      ? `${options.traitsImport}/${baseName}.schema`
-      : `../traits/${baseName}.schema`;
+    const traitImportPath = resolveTraitImportPath(baseName, options, traitConfig.hasTypes);
     const extensionArtifact = createExtensionFromOriginalFile(
       traitConfig,
       filePath,

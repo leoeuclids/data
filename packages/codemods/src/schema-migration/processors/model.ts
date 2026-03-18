@@ -5,11 +5,12 @@ import { dirname, join, resolve } from 'path';
 import { logger } from '../../../utils/logger.js';
 import type { TransformerResult } from '../codemod.js';
 import { getConfiguredImport, type TransformOptions } from '../config.js';
-import type { SchemaArtifact } from '../utils/artifact.js';
-import { createResourceArtifactConfig, createTraitArtifactConfig } from '../utils/artifact.js';
+import type { SchemaArtifactRegistry } from '../utils/artifact.js';
+import { createResourceArtifactConfig, createTraitArtifactConfig, SchemaArtifact } from '../utils/artifact.js';
 import type { ExtractedType, SchemaField, TransformArtifact } from '../utils/ast-utils.js';
 import {
   buildLegacySchemaObject,
+  buildTraitArtifacts,
   buildTraitSchemaObject,
   collectRelationshipImports,
   collectTraitImports,
@@ -19,8 +20,6 @@ import {
   FRAGMENT_BASE_SOURCE,
   generateMergedSchemaCode,
   getEmberDataImports,
-  getExportedIdentifier,
-  getFileExtension,
   getLanguageFromPath,
   getMixinImports,
   getModelImportSources,
@@ -44,18 +43,12 @@ import {
   NODE_KIND_PROPERTY_IDENTIFIER,
 } from '../utils/code-processing.js';
 import { createExtensionFromOriginalFile } from '../utils/extension-generation.js';
+import { resolveTraitImportPath } from '../utils/import-utils.js';
 import type { ParsedFile } from '../utils/file-parser.js';
 import { parseFile } from '../utils/file-parser.js';
-import { removeQuotes, replaceWildcardPattern } from '../utils/path-utils.js';
+import { extractBaseName, removeQuotes, replaceWildcardPattern } from '../utils/path-utils.js';
 import type { FieldTypeInfo } from '../utils/schema-generation.js';
-import {
-  MODEL_NAME_SUFFIX_REGEX,
-  normalizePath,
-  pascalToKebab,
-  removeFileExtension,
-  toKebabCase,
-  TRAILING_MODEL_SUFFIX_REGEX,
-} from '../utils/string.js';
+import { normalizePath, pascalToKebab, removeFileExtension, toKebabCase } from '../utils/string.js';
 
 /**
  * Find and return the source text of export declarations (e.g. `export const BIRTHAGE = 0;`)
@@ -159,7 +152,7 @@ function validateModelAST(filePath: string, source: string, options: TransformOp
   const modelImportLocal = findEmberImportLocalName(root, expectedSources, options, filePath, process.cwd());
   log.debug(`DEBUG: Model import local: ${modelImportLocal}`);
 
-  const fragmentImportLocal = findEmberImportLocalName(root, [FRAGMENT_BASE_SOURCE], options, filePath, process.cwd());
+  const fragmentImportLocal = findEmberImportLocalName(root, [FRAGMENT_BASE_SOURCE], options);
   log.debug(`DEBUG: Fragment import local: ${fragmentImportLocal}`);
 
   const defaultExportNode = findDefaultExport(root, options);
@@ -227,7 +220,8 @@ function validateModelAST(filePath: string, source: string, options: TransformOp
 function extractHeritageInfo(
   root: SgNode,
   filePath: string,
-  options?: TransformOptions
+  options: TransformOptions,
+  registry: SchemaArtifactRegistry
 ): { mixinTraits: string[]; mixinExtensions: string[] } {
   const mixinTraits: string[] = [];
   const mixinExtensions: string[] = [];
@@ -239,7 +233,7 @@ function extractHeritageInfo(
     const mixinImports = getMixinImports(root, options);
     mixinTraits.push(...extractMixinTraits(heritageClause, root, mixinImports, options));
 
-    const mixinExts = extractMixinExtensions(filePath, options);
+    const mixinExts = extractMixinExtensions(filePath, registry);
     mixinExtensions.push(...mixinExts);
 
     if (options?.intermediateModelPaths && options.intermediateModelPaths.length > 0) {
@@ -247,7 +241,8 @@ function extractHeritageInfo(
         heritageClause,
         root,
         options.intermediateModelPaths,
-        options
+        options,
+        filePath
       );
       mixinTraits.push(...intermediateTraits);
     }
@@ -255,7 +250,7 @@ function extractHeritageInfo(
     if (options?.importSubstitutes) {
       for (const substitute of options.importSubstitutes) {
         const localName = findEmberImportLocalName(root, [substitute.import], options, undefined, process.cwd());
-        if (localName && heritageClause.text().includes(localName)) {
+        if (localName && extendsLocalName(heritageClause, localName)) {
           if (substitute.trait) {
             mixinTraits.push(substitute.trait);
           }
@@ -313,7 +308,8 @@ export function processIntermediateModelsToTraits(
   intermediateModelPaths: string[],
   additionalModelSources: Array<{ pattern: string; dir: string }> | undefined,
   additionalMixinSources: Array<{ pattern: string; dir: string }> | undefined,
-  options: TransformOptions
+  options: TransformOptions,
+  registry: SchemaArtifactRegistry
 ): { artifacts: TransformArtifact[]; errors: string[] } {
   const artifacts: TransformArtifact[] = [];
   const errors: string[] = [];
@@ -394,12 +390,17 @@ export function processIntermediateModelsToTraits(
       log.debug(`Processing intermediate model: ${modelPath}`);
 
       // Process the intermediate model to generate trait artifacts
-      const traitArtifacts = generateIntermediateModelTraitArtifacts(
+      const { artifacts: traitArtifacts, entity } = generateIntermediateModelTraitArtifacts(
         modelInfo.filePath,
         modelInfo.source,
         modelPath,
-        options
+        options,
+        registry
       );
+
+      if (entity) {
+        registry.set(modelInfo.filePath, entity);
+      }
 
       // If we have a traitsDir or resourcesDir, write the artifacts immediately so subsequent models can reference them
       // Extensions are now co-located with their schemas
@@ -466,7 +467,8 @@ export function processIntermediateModelsToTraits(
 function generateRegularModelArtifacts(
   entity: SchemaArtifact,
   analysis: ModelAnalysisResult,
-  options: TransformOptions
+  options: TransformOptions,
+  registry: SchemaArtifactRegistry
 ): TransformArtifact[] {
   const filePath = entity.path;
   const source = entity.parsedFile.source;
@@ -474,9 +476,7 @@ function generateRegularModelArtifacts(
     analysis;
   const artifacts: TransformArtifact[] = [];
 
-  // Determine the file extension based on the original model file
-  const originalExtension = getFileExtension(filePath);
-  const isTypeScript = originalExtension === '.ts';
+  const isTypeScript = entity.parsedFile.isTypeScript;
   const resourceConfig = createResourceArtifactConfig(options, analysis, isTypeScript);
 
   // Collect imports needed for schema interface
@@ -508,8 +508,17 @@ function generateRegularModelArtifacts(
   schemaImports.add(`import type { Type } from '${typeImport.source}'`);
   const WithLegacyImport = getConfiguredImport(options, 'WithLegacy');
   schemaImports.add(`import type { WithLegacy } from '${WithLegacyImport.source}'`);
-  collectRelationshipImports(filePath, schemaFields, baseName, schemaImports, typeDeclarations, options);
-  // collectTraitImports(mixinTraits, schemaImports, options);
+  collectRelationshipImports(
+    filePath,
+    schemaFields,
+    baseName,
+    schemaImports,
+    typeDeclarations,
+    options,
+    registry,
+    entity.relationshipTypes
+  );
+  collectTraitImports(mixinTraits, schemaImports, options);
 
   // Build the schema object
   const schemaName = entity.schemaName;
@@ -584,7 +593,8 @@ function generateRegularModelArtifacts(
         undefined,
         'resource',
         undefined,
-        heritageLocalNames
+        heritageLocalNames,
+        entity.parsedFile.typeDeclarationNames
       )
     : null;
 
@@ -596,15 +606,132 @@ function generateRegularModelArtifacts(
   return artifacts;
 }
 
-export function toArtifacts(entity: SchemaArtifact, options: TransformOptions): TransformerResult {
+export function toArtifacts(
+  entity: SchemaArtifact,
+  options: TransformOptions,
+  registry: SchemaArtifactRegistry = new Map()
+): TransformerResult {
   log.debug(`=== DEBUG: Processing ${entity.path} ===`);
 
-  const analysis = analyzeModelFromParsed(entity.parsedFile, options);
+  const analysis = analyzeModelFromParsed(entity.parsedFile, options, registry);
   if (!analysis.isValid) {
     log.debug('Model analysis failed, skipping artifact generation');
     return { artifacts: [], skipReason: 'invalid-model' };
   }
-  return { artifacts: generateRegularModelArtifacts(entity, analysis, options) };
+
+  if (entity.isUsedAsTrait) {
+    log.debug(`Model ${entity.path} is used as a trait by another model, generating trait artifacts`);
+    return { artifacts: generateModelAsTraitArtifacts(entity, analysis, options, registry) };
+  }
+
+  return { artifacts: generateRegularModelArtifacts(entity, analysis, options, registry) };
+}
+
+/**
+ * Generate trait artifacts for a model that extends an import substitute.
+ * These models are conceptually "derived base models" and should produce
+ * trait schemas rather than resource schemas.
+ */
+function generateModelAsTraitArtifacts(
+  entity: SchemaArtifact,
+  analysis: ModelAnalysisResult,
+  options: TransformOptions,
+  registry: SchemaArtifactRegistry
+): TransformArtifact[] {
+  const { schemaFields, mixinTraits, extensionProperties, baseName } = analysis;
+  const filePath = entity.path;
+  const source = entity.parsedFile.source;
+  const artifacts: TransformArtifact[] = [];
+
+  const traitName = baseName;
+  const traitPascalName = toPascalCase(traitName);
+
+  const isTypeScript = entity.parsedFile.isTypeScript;
+
+  const traitFieldTypes = mapFieldsToTypeProperties(schemaFields, options);
+
+  const hasId = traitFieldTypes.some((f) => f.name === 'id');
+  if (!hasId) {
+    traitFieldTypes.unshift({
+      name: 'id',
+      transformInferredType: 'unknown',
+      typeInfo: { type: 'string | null', readonly: false },
+    });
+  }
+
+  if (!traitFieldTypes.some((f) => f.name === 'store') && options?.storeType) {
+    const storeTypeName = options.storeType.name || 'Store';
+    traitFieldTypes.push({
+      name: 'store',
+      transformInferredType: 'unknown',
+      typeInfo: { type: storeTypeName, readonly: true },
+    });
+  }
+
+  const traitImports = new Set<string>();
+  const declarations = new Set<string>();
+
+  traitImports.add(`type { BelongsToReference, HasManyReference, Errors } from '@warp-drive/legacy/model/-private'`);
+  collectRelationshipImports(
+    filePath,
+    schemaFields,
+    traitName,
+    traitImports,
+    declarations,
+    options,
+    registry,
+    entity.relationshipTypes
+  );
+  collectTraitImports(mixinTraits, traitImports, options, true);
+
+  if (options?.storeType) {
+    const storeTypeName = options.storeType.name || 'Store';
+    traitImports.add(`type { ${storeTypeName} } from '${options.storeType.import}'`);
+  }
+
+  const traitSchemaObject = buildTraitSchemaObject(schemaFields, mixinTraits, {
+    name: traitName,
+    mode: 'legacy',
+    legacyFieldOrder: true,
+  });
+
+  const traitConfig = createTraitArtifactConfig(
+    options,
+    traitName,
+    traitPascalName,
+    mixinTraits,
+    extensionProperties.length > 0,
+    isTypeScript
+  );
+
+  const mergedSchemaCode = generateMergedSchemaCode({
+    config: traitConfig,
+    schemaObject: traitSchemaObject,
+    properties: traitFieldTypes,
+    traits: mixinTraits,
+    imports: traitImports,
+    options,
+  });
+
+  artifacts.push(...buildTraitArtifacts(mergedSchemaCode, traitConfig, traitName, options));
+
+  if (extensionProperties.length > 0) {
+    const traitImportPath = resolveTraitImportPath(traitName, options, traitConfig.hasTypes);
+    const extensionArtifact = createExtensionFromOriginalFile(
+      traitConfig,
+      filePath,
+      source,
+      extensionProperties,
+      options,
+      traitImportPath,
+      'model'
+    );
+    if (extensionArtifact) {
+      artifacts.push(extensionArtifact);
+    }
+  }
+
+  return artifacts;
 }
 
 /**
@@ -612,7 +739,11 @@ export function toArtifacts(entity: SchemaArtifact, options: TransformOptions): 
  * Still uses AST for validation (isModelClass, isFragment, intermediate models)
  * and mixin trait/extension extraction from heritage clause.
  */
-function analyzeModelFromParsed(parsedFile: ParsedFile, options: TransformOptions): ModelAnalysisResult {
+function analyzeModelFromParsed(
+  parsedFile: ParsedFile,
+  options: TransformOptions,
+  registry: SchemaArtifactRegistry
+): ModelAnalysisResult {
   const filePath = parsedFile.path;
   const modelName = parsedFile.pascalName;
   const baseName = parsedFile.baseName;
@@ -639,7 +770,7 @@ function analyzeModelFromParsed(parsedFile: ParsedFile, options: TransformOption
       }));
 
     // Extract heritage info (mixin traits and extensions)
-    const { mixinTraits, mixinExtensions } = extractHeritageInfo(root, filePath, options);
+    const { mixinTraits, mixinExtensions } = extractHeritageInfo(root, filePath, options, registry);
 
     return {
       isValid: true,
@@ -673,31 +804,26 @@ export function generateIntermediateModelTraitArtifacts(
   filePath: string,
   source: string,
   modelPath: string,
-  options: TransformOptions
-): TransformArtifact[] {
+  options: TransformOptions,
+  registry: SchemaArtifactRegistry = new Map()
+): { artifacts: TransformArtifact[]; entity: SchemaArtifact | null } {
   const artifacts: TransformArtifact[] = [];
 
-  // Extract the trait name from the model path
-  // e.g., "my-app/core/data-field-model" -> "data-field"
-  const traitBaseName = modelPath.split('/').pop()?.replace(MODEL_NAME_SUFFIX_REGEX, '') || modelPath;
-  const traitName = pascalToKebab(traitBaseName);
-
+  const parsedFile = parseFile(filePath, source, options);
+  const entity = SchemaArtifact.fromParsedFile(parsedFile, 'intermediate-model');
+  const traitName = entity.baseName;
   const traitPascalName = toPascalCase(traitName);
 
-  // Analyze the intermediate model file to extract fields
-  const parsedFile = parseFile(filePath, source, options);
-  const analysis = analyzeModelFromParsed(parsedFile, options);
+  const analysis = analyzeModelFromParsed(parsedFile, options, registry);
 
   if (!analysis.isValid) {
     log.debug(`Intermediate model ${modelPath} analysis failed, skipping trait generation`);
-    return [];
+    return { artifacts: [], entity: null };
   }
 
   const { schemaFields, mixinTraits, extensionProperties } = analysis;
 
-  // Determine the file extension based on the original model file
-  const originalExtension = getFileExtension(filePath);
-  const isTypeScript = originalExtension === '.ts';
+  const isTypeScript = entity.parsedFile.isTypeScript;
 
   // Generate trait type interface
   const traitFieldTypes = mapFieldsToTypeProperties(schemaFields, options);
@@ -741,7 +867,16 @@ export function generateIntermediateModelTraitArtifacts(
   const declarations = new Set<string>();
 
   traitImports.add(`type { BelongsToReference, HasManyReference, Errors } from '@warp-drive/legacy/model/-private'`);
-  collectRelationshipImports(filePath, schemaFields, traitName, traitImports, declarations, options);
+  collectRelationshipImports(
+    filePath,
+    schemaFields,
+    traitName,
+    traitImports,
+    declarations,
+    options,
+    registry,
+    entity.relationshipTypes
+  );
   collectTraitImports(mixinTraits, traitImports, options, true);
 
   if (options?.storeType) {
@@ -752,7 +887,11 @@ export function generateIntermediateModelTraitArtifacts(
   }
 
   // Build the trait schema object
-  const traitSchemaObject = buildTraitSchemaObject(schemaFields, mixinTraits, { legacyFieldOrder: true });
+  const traitSchemaObject = buildTraitSchemaObject(schemaFields, mixinTraits, {
+    name: traitName,
+    mode: 'legacy',
+    legacyFieldOrder: true,
+  });
 
   const traitConfig = createTraitArtifactConfig(
     options,
@@ -772,27 +911,10 @@ export function generateIntermediateModelTraitArtifacts(
     options,
   });
 
-  const traitCode = [
-    mergedSchemaCode.schemaImports,
-    mergedSchemaCode.typeImports,
-    mergedSchemaCode.schemaDeclaration,
-    mergedSchemaCode.interfaceDeclaration,
-  ]
-    .filter(Boolean)
-    .join('\n');
-
-  artifacts.push({
-    type: 'trait',
-    name: traitConfig.identifiers.schema,
-    code: traitCode,
-    baseName: traitName,
-    suggestedFileName: `${traitName}.schema${options.disableTypescriptSchemas ? '.js' : '.ts'}`,
-  });
+  artifacts.push(...buildTraitArtifacts(mergedSchemaCode, traitConfig, traitName, options));
 
   if (extensionProperties.length > 0) {
-    const traitImportPath = options?.traitsImport
-      ? `${options.traitsImport}/${traitName}.schema`
-      : `../traits/${traitName}.schema`;
+    const traitImportPath = resolveTraitImportPath(traitName, options, traitConfig.hasTypes);
     const extensionArtifact = createExtensionFromOriginalFile(
       traitConfig,
       filePath,
@@ -807,7 +929,7 @@ export function generateIntermediateModelTraitArtifacts(
     }
   }
 
-  return artifacts;
+  return { artifacts, entity };
 }
 
 /**
@@ -818,12 +940,13 @@ function getIntermediateModelLocalNames(
   intermediateModelPaths: string[],
   options?: TransformOptions,
   fromFile?: string
-): string[] {
-  const localNames: string[] = [];
+): Map<string, string> {
+  const localNameToPath = new Map<string, string>();
+  const substitutePaths = options?.importSubstitutes?.map((s) => s.import).filter(Boolean) ?? [];
 
-  for (const modelPath of intermediateModelPaths) {
-    // First try direct matching
-    let localName = findEmberImportLocalName(root, [modelPath], options, fromFile, process.cwd());
+  for (const modelPath of [...intermediateModelPaths, ...substitutePaths]) {
+    // First try direct matching (without fromFile to avoid loose relative-import fallback)
+    let localName = findEmberImportLocalName(root, [modelPath], options, undefined, process.cwd());
 
     // If no direct match, try to find imports that resolve to the expected intermediate model
     // This handles cases where the configured path doesn't match the actual import path
@@ -844,7 +967,7 @@ function getIntermediateModelLocalNames(
 
             // Check if the resolved path corresponds to the configured intermediate model path
             // by checking if it ends with the same pattern as the configured path
-            const expectedFilePath = modelPath.split('/').slice(-1)[0]; // e.g., "-auditboard-model"
+            const expectedFilePath = extractBaseName(modelPath);
             const possiblePaths = [
               `${resolvedPath}${FILE_EXTENSION_TS}`,
               `${resolvedPath}${FILE_EXTENSION_JS}`,
@@ -888,12 +1011,12 @@ function getIntermediateModelLocalNames(
     }
 
     if (localName) {
-      localNames.push(localName);
+      localNameToPath.set(localName, modelPath);
       log.debug(`DEBUG: Found intermediate model local name: ${localName} for path: ${modelPath}`);
     }
   }
 
-  return localNames;
+  return localNameToPath;
 }
 
 /**
@@ -1032,41 +1155,17 @@ function isClassExtendingFragment(
   options?: TransformOptions,
   filePath?: string
 ): boolean {
-  // Look for a class declaration in the export
-  let classDeclaration = exportNode.find({ rule: { kind: NODE_KIND_CLASS_DECLARATION } });
-
-  // If no class declaration found in export, check if export references a class by name
-  if (!classDeclaration) {
-    const exportedIdentifier = getExportedIdentifier(exportNode, undefined);
-    if (exportedIdentifier) {
-      classDeclaration = root.find({
-        rule: {
-          kind: NODE_KIND_CLASS_DECLARATION,
-          has: {
-            kind: NODE_KIND_IDENTIFIER,
-            regex: exportedIdentifier,
-          },
-        },
-      });
-    }
-  }
-
+  const classDeclaration = findClassDeclaration(exportNode, root, options);
   if (!classDeclaration) {
     return false;
   }
 
-  // Check if the class has a heritage clause (extends)
   const heritageClause = classDeclaration.find({ rule: { kind: NODE_KIND_CLASS_HERITAGE } });
   if (!heritageClause) {
     return false;
   }
 
-  // Check if it extends the Fragment local name
-  const extendsText = heritageClause.text();
-  const extendsFragmentDirectly =
-    extendsText.includes(fragmentLocalName) || extendsText.includes(`${fragmentLocalName}.extend(`);
-
-  if (extendsFragmentDirectly) {
+  if (extendsLocalName(heritageClause, fragmentLocalName)) {
     return true;
   }
 
@@ -1074,7 +1173,7 @@ function isClassExtendingFragment(
   if (options?.intermediateFragmentPaths && filePath) {
     const intermediateLocalNames = getIntermediateFragmentLocalNames(root, options, filePath);
     for (const localName of intermediateLocalNames) {
-      if (extendsText.includes(localName) || extendsText.includes(`${localName}.extend(`)) {
+      if (extendsLocalName(heritageClause, localName)) {
         return true;
       }
     }
@@ -1084,10 +1183,11 @@ function isClassExtendingFragment(
 }
 
 /**
- * Check if the heritage clause extends a specific local name (either directly or via .extend())
+ * Check if the heritage clause extends a specific local name (either directly or via .extend()).
+ * Uses AST identifier matching to avoid false positives from substring matches.
  */
-function extendsLocalName(extendsText: string, localName: string): boolean {
-  return extendsText.includes(localName) || extendsText.includes(`${localName}.extend(`);
+function extendsLocalName(heritageNode: SgNode, localName: string): boolean {
+  return heritageNode.findAll({ rule: { kind: NODE_KIND_IDENTIFIER } }).some((id) => id.text() === localName);
 }
 
 /**
@@ -1128,15 +1228,14 @@ function isModelClass(
   }
 
   // Check if it extends our model local name or calls .extend() on it
-  const extendsText = heritageClause.text();
-  log.debug(`DEBUG: Heritage clause: ${extendsText}`);
+  log.debug(`DEBUG: Heritage clause: ${heritageClause.text()}`);
 
   // Check for direct Model extension
-  const isDirectExtension = modelLocalName ? extendsLocalName(extendsText, modelLocalName) : false;
+  const isDirectExtension = modelLocalName ? extendsLocalName(heritageClause, modelLocalName) : false;
 
   // Check for custom base model or Fragment extension
   const isBaseModelExtension = fragmentOrBaseModelLocalName
-    ? extendsLocalName(extendsText, fragmentOrBaseModelLocalName)
+    ? extendsLocalName(heritageClause, fragmentOrBaseModelLocalName)
     : false;
 
   // Check for chained extends through configured intermediate classes
@@ -1148,10 +1247,12 @@ function isModelClass(
       options,
       filePath
     );
-    isChainedExtension = intermediateLocalNames.some((localName) => extendsText.includes(localName));
+    isChainedExtension = [...intermediateLocalNames.keys()].some((localName) =>
+      extendsLocalName(heritageClause, localName)
+    );
     if (isChainedExtension) {
       log.debug(
-        `DEBUG: Found chained extension through intermediate model: ${intermediateLocalNames.find((name) => extendsText.includes(name))}`
+        `DEBUG: Found chained extension through intermediate model: ${[...intermediateLocalNames.keys()].find((name) => extendsLocalName(heritageClause, name))}`
       );
     }
   }
@@ -1170,32 +1271,20 @@ function extractIntermediateModelTraits(
   heritageClause: SgNode,
   root: SgNode,
   intermediateModelPaths: string[],
-  options?: TransformOptions
+  options?: TransformOptions,
+  filePath?: string
 ): string[] {
   const intermediateTraits: string[] = [];
-  const extendsText = heritageClause.text();
 
-  // Get local names for all intermediate models
-  const intermediateLocalNames = getIntermediateModelLocalNames(root, intermediateModelPaths, options);
+  // Get local names for all intermediate models (maps localName → modelPath)
+  const intermediateLocalNames = getIntermediateModelLocalNames(root, intermediateModelPaths, options, filePath);
 
-  for (const localName of intermediateLocalNames) {
-    if (extendsText.includes(localName)) {
-      // Convert the import path to a trait name
-      const modelPath = intermediateModelPaths.find((path) => {
-        const pathLocalName = findEmberImportLocalName(root, [path], options, undefined, process.cwd());
-        return pathLocalName === localName;
-      });
+  for (const [localName, modelPath] of intermediateLocalNames) {
+    if (extendsLocalName(heritageClause, localName)) {
+      const traitName = extractBaseName(modelPath);
 
-      if (modelPath) {
-        // Convert path like "my-app/core/data-field-model" to "data-field-model"
-        let traitName = modelPath.split('/').pop() || modelPath;
-        // Strip any file extension (.js, .ts)
-        traitName = removeFileExtension(traitName);
-        const dasherizedName = pascalToKebab(traitName).replace(TRAILING_MODEL_SUFFIX_REGEX, ''); // Remove trailing -model or model
-
-        intermediateTraits.push(dasherizedName);
-        log.debug(`DEBUG: Found intermediate model trait: ${dasherizedName} from ${modelPath}`);
-      }
+      intermediateTraits.push(traitName);
+      log.debug(`DEBUG: Found intermediate model trait: ${traitName} from ${modelPath}`);
       break; // Only process the first match since a class can only extend one parent
     }
   }
@@ -1314,10 +1403,7 @@ function extractMixinTraits(
 /**
  * Get mixin extension names using the entity registry.
  */
-function extractMixinExtensions(filePath: string, options?: TransformOptions): string[] {
-  const registry = options?.entityRegistry;
-  if (!registry) return [];
-
+function extractMixinExtensions(filePath: string, registry: SchemaArtifactRegistry): string[] {
   const entity = registry.get(filePath);
   if (!entity) return [];
 

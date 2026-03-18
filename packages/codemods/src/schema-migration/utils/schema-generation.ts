@@ -4,9 +4,10 @@ import { join } from 'path';
 
 import { logger } from '../../../utils/logger.js';
 import { getConfiguredImport, type TransformOptions } from '../config.js';
-import type { ArtifactConfig } from './artifact.js';
-import type { ExtensionContext } from './extension-generation.js';
-import { generateTraitImport, transformModelToResourceImport } from './import-utils.js';
+import type { ArtifactConfig, SchemaArtifactRegistry } from './artifact.js';
+import { deriveResourceExtensionName, deriveTraitExtensionName } from './artifact.js';
+import { type ExtensionContext, generateRegistrationBlock } from './extension-generation.js';
+import { generateTraitImport, isModelImportPath, transformModelToResourceImport } from './import-utils.js';
 import { normalizeClassicImport, removeQuotes, toPascalCase } from './path-utils.js';
 import type { ExtractedType } from './type-utils.js';
 import { schemaFieldToTypeScriptType } from './type-utils.js';
@@ -152,6 +153,31 @@ export const SCHEMA_OPTION_REF_PREFIX = '__ref__:';
  * Identifier values (e.g. `BIRTHAGE`) are preserved as code references
  * using the `__ref__:` sentinel prefix so they can be emitted unquoted.
  */
+function parseSchemaFieldValue(valueNode: SgNode): unknown {
+  const kind = valueNode.kind();
+  if (kind === 'string') {
+    return valueNode.text().slice(1, -1);
+  } else if (kind === 'true') {
+    return true;
+  } else if (kind === 'false') {
+    return false;
+  } else if (kind === 'number') {
+    return parseFloat(valueNode.text());
+  } else if (kind === 'null') {
+    return null;
+  } else if (kind === 'identifier') {
+    return SCHEMA_OPTION_REF_PREFIX + valueNode.text();
+  } else if (kind === 'object') {
+    return parseSchemaFieldOptions(valueNode);
+  } else if (kind === 'array') {
+    return valueNode
+      .children()
+      .filter((child) => child.isNamed() && child.kind() !== ',')
+      .map((child) => parseSchemaFieldValue(child));
+  }
+  return valueNode.text();
+}
+
 function parseSchemaFieldOptions(optionsNode: SgNode | undefined): Record<string, unknown> {
   if (!optionsNode || optionsNode.kind() !== 'object') {
     return {};
@@ -170,24 +196,7 @@ function parseSchemaFieldOptions(optionsNode: SgNode | undefined): Record<string
       key = key.slice(1, -1);
     }
 
-    let value: unknown;
-    const kind = valueNode.kind();
-    if (kind === 'string') {
-      value = valueNode.text().slice(1, -1);
-    } else if (kind === 'true') {
-      value = true;
-    } else if (kind === 'false') {
-      value = false;
-    } else if (kind === 'number') {
-      value = parseFloat(valueNode.text());
-    } else if (kind === 'null') {
-      value = null;
-    } else if (kind === 'identifier') {
-      // Preserve identifier references (e.g. BIRTHAGE) as code refs, not strings
-      value = SCHEMA_OPTION_REF_PREFIX + valueNode.text();
-    } else {
-      value = valueNode.text();
-    }
+    const value = parseSchemaFieldValue(valueNode);
 
     result[key] = value;
   }
@@ -385,18 +394,20 @@ export function createExtensionArtifactWithTypes(
     return { extensionArtifact: null, typeArtifact: null };
   }
 
-  const extensionName = entityName.endsWith('Extension') ? entityName : `${entityName}Extension`;
+  const extensionName =
+    context === 'trait' ? deriveTraitExtensionName(baseName) : deriveResourceExtensionName(baseName);
 
   // Use provided generator or create a simple fallback
   const generator =
     generateExtensionCode ||
     ((name, props, format) => {
+      const registration = '\n\n' + generateRegistrationBlock(baseName, name);
       if (format === 'class') {
         const methods = props.map((p) => `  ${p.value}`).join('\n\n');
-        return `export class ${name} {\n${methods}\n}`;
+        return `export class ${name} {\n${methods}\n}` + registration;
       }
       const properties = props.map((p) => `  ${p.originalKey}: ${p.value}`).join(',\n');
-      return `export const ${name} = {\n${properties}\n};`;
+      return `export const ${name} = {\n${properties}\n};` + registration;
     });
 
   // Create the extension artifact (JavaScript code)
@@ -418,10 +429,6 @@ export function createExtensionArtifactWithTypes(
   return { extensionArtifact, typeArtifact: null };
 }
 
-function modelImportFor(modelName: string, options: TransformOptions): string {
-  return `${options.projectName}/models/${modelName}`;
-}
-
 /**
  * Collect relationship imports (belongsTo/hasMany) for schema fields.
  * Shared between model and mixin artifact generation.
@@ -433,14 +440,41 @@ export function collectRelationshipImports(
   selfName: string,
   imports: Set<string>,
   declarations: Set<string>,
-  options: TransformOptions
+  options: TransformOptions,
+  registry: SchemaArtifactRegistry,
+  relationshipTypes: Set<string>
 ): void {
   const asyncHasManyImport = getConfiguredImport(options, 'AsyncHasMany');
   const hasManyImport = getConfiguredImport(options, 'HasMany');
   let hasAsyncHasMany = false;
   let hasHasMany = false;
-  const newImports = new Map<string, Map<string, string>>();
+  const newImports = new Map<string, Map<string, { local: string; isType: boolean }>>();
   const finalImports = new Set<string>();
+
+  function addImport(imp: { imported: string; local?: string; source: string; isType?: boolean }): void {
+    if (!newImports.has(imp.source)) {
+      newImports.set(imp.source, new Map());
+    }
+    const existing = newImports.get(imp.source)!;
+    const entry = existing.get(imp.imported);
+    existing.set(imp.imported, {
+      local: imp.local ?? imp.imported,
+      isType: entry ? entry.isType && imp.isType !== false : imp.isType !== false,
+    });
+  }
+
+  const defaultModelPrefix = `${options.projectName}/models/`;
+
+  function resolveModelName(imp: { source: string }): string | null {
+    const resolved = normalizeClassicImport(options, imp.source, currentFilePath);
+    const isModel =
+      isModelImportPath(imp.source, options) ||
+      (resolved && isModelImportPath(resolved, options)) ||
+      imp.source.startsWith(defaultModelPrefix) ||
+      (resolved && resolved.startsWith(defaultModelPrefix));
+    if (!isModel) return null;
+    return (resolved ?? imp.source).split('/').pop()!;
+  }
 
   for (const field of fields) {
     if (field.typeInfo?.declarations) {
@@ -448,25 +482,16 @@ export function collectRelationshipImports(
     }
     if (field.kind === 'belongsTo' || field.kind === 'hasMany') {
       if (field.typeInfo?.imports) {
-        const relatedModelImport = modelImportFor(field.type!, options);
         for (const imp of field.typeInfo.imports) {
-          // check if the source is perhaps a Model from before, and if so don't
-          // add it.
-          // to do this we check for local imports, app prefixed imports and relative imports
-          // that match the related model type.
           if (!imp.source) {
             throw new Error(`Import information is missing source for field ${field.name}`);
           }
-          const resolved = normalizeClassicImport(options, imp.source, currentFilePath);
-          if (resolved === relatedModelImport) {
+          const modelName = resolveModelName(imp);
+          if (modelName && (modelName === field.type || relationshipTypes.has(modelName))) {
             continue;
           }
 
-          if (!newImports.has(imp.source)) {
-            newImports.set(imp.source, new Map<string, string>());
-          }
-          const existingImport = newImports.get(imp.source)!;
-          existingImport.set(imp.imported, imp.local ?? imp.imported);
+          addImport(imp);
         }
       } else if (field.kind === 'hasMany') {
         const isAsync = field.options && field.options.async === true;
@@ -477,17 +502,17 @@ export function collectRelationshipImports(
         }
       }
 
-      if (field.type !== selfName) {
-        const typeName = toPascalCase(field.type!);
-        finalImports.add(transformModelToResourceImport(field.type!, typeName, options));
+      if (field.type && field.type !== selfName) {
+        const typeName = toPascalCase(field.type);
+        finalImports.add(transformModelToResourceImport(field.type, typeName, options, registry));
       }
     } else if (field.typeInfo?.imports) {
       for (const imp of field.typeInfo.imports) {
-        if (!newImports.has(imp.source)) {
-          newImports.set(imp.source, new Map<string, string>());
+        const modelName = imp.source ? resolveModelName(imp) : null;
+        if (modelName && relationshipTypes.has(modelName)) {
+          continue;
         }
-        const existingImport = newImports.get(imp.source)!;
-        existingImport.set(imp.imported, imp.local ?? imp.imported);
+        addImport(imp);
       }
     }
   }
@@ -508,11 +533,18 @@ export function collectRelationshipImports(
   }
 
   for (const [source, tokens] of newImports) {
-    const importsList = [...tokens.entries()].map(([imported, local]) =>
-      imported === local ? imported : `${imported} as ${local}`
-    );
-    const importStatement = `import type { ${importsList.join(', ')} } from '${source}'`;
-    imports.add(importStatement);
+    const typeTokens: string[] = [];
+    const valueTokens: string[] = [];
+    for (const [imported, { local, isType }] of tokens) {
+      const specifier = imported === local ? imported : `${imported} as ${local}`;
+      (isType ? typeTokens : valueTokens).push(specifier);
+    }
+    if (typeTokens.length > 0) {
+      imports.add(`import type { ${typeTokens.join(', ')} } from '${source}'`);
+    }
+    if (valueTokens.length > 0) {
+      imports.add(`import { ${valueTokens.join(', ')} } from '${source}'`);
+    }
   }
 
   for (const importStatement of finalImports) {
@@ -532,10 +564,11 @@ export function collectTraitImports(
 ): void {
   for (const trait of traits) {
     if (checkExistence && options?.traitsDir) {
-      const traitFilePath = join(options.traitsDir, `${trait}.schema.ts`);
-      const traitFilePathJs = join(options.traitsDir, `${trait}.schema.js`);
-      if (!existsSync(traitFilePath) && !existsSync(traitFilePathJs)) {
-        log.debug(`Skipping trait import for '${trait}' - file does not exist at ${traitFilePath}`);
+      const traitSchemaTs = join(options.traitsDir, `${trait}.schema.ts`);
+      const traitSchemaJs = join(options.traitsDir, `${trait}.schema.js`);
+      const traitTypeTs = join(options.traitsDir, `${trait}.type.ts`);
+      if (!existsSync(traitSchemaTs) && !existsSync(traitSchemaJs) && !existsSync(traitTypeTs)) {
+        log.debug(`Skipping trait import for '${trait}' - file does not exist at ${traitSchemaTs}`);
         continue;
       }
     }
@@ -750,16 +783,19 @@ function generateInterfaceOnly(
   /**
    * Add helpful usage tips if desired.
    */
-  const tipComment = options.disableAddingTypeUsageTips ? ' *' : ' *\n' + ResourceTipComment + '\n *';
+  const tipComment = options.disableAddingTypeUsageTips ? ' *' : ' *\n' + ResourceTipComment;
   /**
    * The documentation for "just the fields"
    */
+  const seeAlso =
+    config.type === 'resource'
+      ? `\n *\n * See also {@link ${config.identifiers.type}} for fields + legacy mode features`
+      : '';
   const fieldsInterfaceComment = `${docComment}
  * This type represents the full set schema derived fields of
  * the '${config.name}' ${config.type}, without any of the legacy mode features
  * and without any extensions.
-${tipComment}
- * See also {@link ${config.identifiers.type}} for fields + legacy mode features
+${tipComment}${seeAlso}
  */`;
   /**
    * The documentation for the "fields + legacy mode features" interface
@@ -771,7 +807,7 @@ ${tipComment}
  * the '${config.name}' ${config.type}, including all legacy mode features but
  * without any extensions.
  *
- * See also {@link ${config.identifiers.fieldsInterface}} for fields + legacy mode features
+ * See also {@link ${config.identifiers.fieldsInterface}} for just the fields
  */`;
 
   const lines: string[] = [fieldsInterfaceComment, interfaceDeclaration];
@@ -795,7 +831,14 @@ ${tipComment}
     lines.push(`${indent}${readonly}${prop.name}${optional}: ${type};`);
   }
 
-  lines.push('}', '', fullInterfaceComment, fullTypeDeclaration, '');
+  lines.push('}');
+
+  // Only resources get the WithLegacy wrapper interface; traits don't use it
+  if (config.type === 'resource') {
+    lines.push('', fullInterfaceComment, fullTypeDeclaration, '');
+  } else {
+    lines.push('');
+  }
 
   return lines.join('\n');
 }
@@ -868,4 +911,50 @@ export function generateMergedSchemaCode(opts: MergedSchemaOptions): GeneratedSc
   }
 
   return parts;
+}
+
+/**
+ * Build the trait schema artifact and (when types are separate) the
+ * trait-type artifact from pre-generated merged schema parts.
+ *
+ * This is the shared logic used by mixin.ts and the two
+ * model-as-trait code paths in model.ts.
+ */
+export function buildTraitArtifacts(
+  mergedSchemaCode: GeneratedSchemaParts,
+  config: ArtifactConfig,
+  baseName: string,
+  options: TransformOptions
+): TransformArtifact[] {
+  const hasType = mergedSchemaCode.interfaceDeclaration && mergedSchemaCode.interfaceDeclaration.trim() !== '';
+  const includeTypesInSchema = options.combineSchemasAndTypes || !hasType;
+
+  const artifacts: TransformArtifact[] = [
+    {
+      type: 'trait',
+      name: config.identifiers.schema,
+      code: [
+        mergedSchemaCode.schemaImports,
+        includeTypesInSchema ? mergedSchemaCode.typeImports : null,
+        mergedSchemaCode.schemaDeclaration,
+        includeTypesInSchema ? mergedSchemaCode.interfaceDeclaration : null,
+      ]
+        .filter(Boolean)
+        .join('\n'),
+      baseName,
+      suggestedFileName: `${baseName}.schema${config.schemaIsTyped ? '.ts' : '.js'}`,
+    },
+  ];
+
+  if (!options.combineSchemasAndTypes && hasType) {
+    artifacts.push({
+      type: 'trait-type',
+      name: config.identifiers.fieldsInterface!,
+      code: [mergedSchemaCode.typeImports, mergedSchemaCode.interfaceDeclaration].filter(Boolean).join('\n'),
+      baseName,
+      suggestedFileName: `${baseName}.type.ts`,
+    });
+  }
+
+  return artifacts;
 }

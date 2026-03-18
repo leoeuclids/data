@@ -1,3 +1,4 @@
+import type { InstanciatedLogger } from '../../../utils/logger.js';
 import type { Filename } from '../codemod.js';
 import type { TransformOptions } from '../config';
 import type { ModelAnalysisResult } from '../processors/model';
@@ -286,10 +287,19 @@ export class SchemaArtifact {
   readonly parsedFile: ParsedFile;
   readonly kind: ArtifactKind;
   private _traits: SchemaArtifact[] = [];
+  private _isUsedAsTrait = false;
 
   constructor(parsedFile: ParsedFile, kind: ArtifactKind) {
     this.parsedFile = parsedFile;
     this.kind = kind;
+  }
+
+  get isUsedAsTrait(): boolean {
+    return this._isUsedAsTrait;
+  }
+
+  markAsUsedAsTrait(): void {
+    this._isUsedAsTrait = true;
   }
 
   get pascalName(): string {
@@ -352,6 +362,16 @@ export class SchemaArtifact {
     return this._traits.filter((t) => t.hasExtension).map((t) => t.extensionName);
   }
 
+  get relationshipTypes(): Set<string> {
+    const types = new Set<string>();
+    for (const field of this.parsedFile.fields) {
+      if ((field.kind === 'belongsTo' || field.kind === 'hasMany') && field.type) {
+        types.add(field.type);
+      }
+    }
+    return types;
+  }
+
   static fromParsedFile(parsed: ParsedFile, kind?: ArtifactKind): SchemaArtifact {
     const resolvedKind = kind ?? (parsed.fileType === 'mixin' ? 'mixin' : 'model');
     return new SchemaArtifact(parsed, resolvedKind);
@@ -382,16 +402,35 @@ export type SchemaArtifactRegistry = Map<string, SchemaArtifact>;
 
 export function buildEntityRegistry(
   parsedModels: Map<Filename, ParsedFile>,
-  parsedMixins: Map<Filename, ParsedFile>
+  parsedMixins: Map<Filename, ParsedFile>,
+  log: InstanciatedLogger | undefined,
+  registry: SchemaArtifactRegistry
 ): SchemaArtifactRegistry {
-  const registry: SchemaArtifactRegistry = new Map();
-
   for (const [filePath, parsed] of parsedModels) {
-    registry.set(filePath, SchemaArtifact.fromParsedFile(parsed, 'model'));
+    const entity = SchemaArtifact.fromParsedFile(parsed, 'model');
+    const existing = findEntityByBaseName(registry, entity.baseName);
+    if (existing) {
+      log?.error(
+        `Output file conflict: "${entity.baseName}" is produced by both "${existing.path}" and "${filePath}". The second write will overwrite the first.`
+      );
+    }
+    registry.set(filePath, entity);
   }
 
   for (const [filePath, parsed] of parsedMixins) {
-    registry.set(filePath, SchemaArtifact.fromParsedFile(parsed, 'mixin'));
+    const entity = SchemaArtifact.fromParsedFile(parsed, 'mixin');
+    const existing = findEntityByBaseName(registry, entity.baseName);
+    if (existing && existing.kind === 'mixin') {
+      log?.error(
+        `Output file conflict: "${entity.baseName}" is produced by both "${existing.path}" and "${filePath}". The second write will overwrite the first.`
+      );
+    }
+    if (existing && existing.kind === 'model') {
+      log?.error(
+        `BaseName collision: mixin "${filePath}" and model "${existing.path}" both resolve to baseName "${entity.baseName}". The mixin trait will shadow the model in import resolution. Consider renaming the mixin file to avoid this collision.`
+      );
+    }
+    registry.set(filePath, entity);
   }
 
   return registry;
@@ -424,6 +463,22 @@ export function linkEntities(registry: SchemaArtifactRegistry, modelToMixinsMap:
       const mixinEntity = registry.get(mixinPath);
       if (mixinEntity) {
         modelEntity.addTrait(mixinEntity);
+      }
+    }
+  }
+
+  // Mark model entities that are referenced as traits by other models.
+  // This happens when a model uses Model.extend(OtherModel) — the OtherModel
+  // should produce trait artifacts so the schema can reference it.
+  // Skip when a mixin with the same baseName exists — in that case the trait
+  // name came from the mixin, not from a model-as-base-class.
+  for (const entity of registry.values()) {
+    if (entity.kind !== 'model') continue;
+    for (const traitName of entity.parsedFile.traits) {
+      if (findEntityByBaseName(registry, traitName, 'mixin')) continue;
+      const traitEntity = findEntityByBaseName(registry, traitName, 'model');
+      if (traitEntity && traitEntity !== entity) {
+        traitEntity.markAsUsedAsTrait();
       }
     }
   }

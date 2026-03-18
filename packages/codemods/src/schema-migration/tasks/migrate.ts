@@ -8,7 +8,9 @@ import type { FinalOptions, MigrateOptions, TransformOptions } from '../config.j
 import { DEFAULT_RESOURCES_DIR, DEFAULT_TRAITS_DIR } from '../config.js';
 import { toArtifacts as mixinToArtifacts } from '../processors/mixin.js';
 import { processIntermediateModelsToTraits, toArtifacts as modelToArtifacts } from '../processors/model.js';
-import type { SchemaArtifact } from '../utils/artifact.js';
+import type { SchemaArtifact, SchemaArtifactRegistry } from '../utils/artifact.js';
+import { findEntityByBaseName } from '../utils/artifact.js';
+import type { TransformArtifact } from '../utils/schema-generation.js';
 
 const migrateLog = logger.for('migrate');
 
@@ -34,7 +36,7 @@ interface ProcessingResult {
   errors: string[];
 }
 
-type ArtifactType = 'schema' | 'type' | 'trait' | 'resource-extension' | 'trait-extension';
+type ArtifactType = 'schema' | 'type' | 'trait' | 'trait-type' | 'resource-extension' | 'trait-extension';
 
 type DirectoryKey = 'resourcesDir' | 'traitsDir' | 'outputDir';
 
@@ -69,6 +71,12 @@ const ARTIFACT_CONFIG: Record<ArtifactType, ArtifactConfig> = {
     useRelativePath: true,
     suffix: '.schema',
     preserveExtension: true,
+  },
+  'trait-type': {
+    directoryKey: 'traitsDir',
+    defaultDir: DEFAULT_TRAITS_DIR,
+    useRelativePath: true,
+    useSuggestedFileName: true,
   },
   'resource-extension': {
     directoryKey: 'resourcesDir',
@@ -267,17 +275,24 @@ function writeArtifact(artifact: Artifact, outputPath: string, { dryRun, verbose
 /**
  * Write intermediate model trait artifacts to disk
  */
-function writeIntermediateArtifacts(artifacts: Artifact[], finalOptions: FinalOptions, log: InstanciatedLogger): void {
+function writeIntermediateArtifacts(
+  artifacts: TransformArtifact[],
+  finalOptions: FinalOptions,
+  log: InstanciatedLogger,
+  registry: SchemaArtifactRegistry
+): void {
   for (const artifact of artifacts) {
-    // For intermediate artifacts, we use the suggested filename directly
     const outputDir = getOutputDirectory(artifact.type, finalOptions);
-    if (!artifact.suggestedFileName) {
-      throw new Error("Couldn't get an artifact `suggestedFileName`");
+    const fileName = artifact.suggestedFileName;
+    const outputPath = join(resolve(outputDir), fileName);
+
+    const conflicting = findEntityByBaseName(registry, artifact.baseName);
+    if (conflicting) {
+      log.error(
+        `Output file conflict: "${artifact.baseName}" is produced by both intermediate model artifact and "${conflicting.path}". The second write will overwrite the first.`
+      );
     }
 
-    const fileName = artifact.suggestedFileName;
-
-    const outputPath = join(resolve(outputDir), fileName);
     writeArtifact(artifact, outputPath, {
       dryRun: finalOptions.dryRun ?? false,
       verbose: finalOptions.verbose ?? false,
@@ -286,31 +301,41 @@ function writeIntermediateArtifacts(artifacts: Artifact[], finalOptions: FinalOp
   }
 }
 
-type ArtifactTransformer = (entity: SchemaArtifact, options: TransformOptions) => TransformerResult;
+type ArtifactTransformer = (
+  entity: SchemaArtifact,
+  options: TransformOptions,
+  registry: SchemaArtifactRegistry
+) => TransformerResult;
+
+const TRANSFORMERS: Record<string, ArtifactTransformer> = {
+  model: modelToArtifacts,
+  mixin: mixinToArtifacts,
+};
 
 interface ProcessFilesOptions {
-  parsedFiles: Map<string, SchemaArtifact>;
-  transformer: ArtifactTransformer;
+  registry: SchemaArtifactRegistry;
   finalOptions: FinalOptions;
   log: InstanciatedLogger;
 }
 
 /**
- * Generic file processor for both models and mixins
- * Uses pre-parsed ParsedFile data for efficient processing
+ * Process all entities in the registry, picking the right transformer per entity kind.
  */
-function processFiles({ parsedFiles, transformer, finalOptions, log }: ProcessFilesOptions): ProcessingResult {
+function processFiles({ registry, finalOptions, log }: ProcessFilesOptions): ProcessingResult {
   let processed = 0;
   const skipped: SkippedFile[] = [];
   const errors: string[] = [];
 
-  for (const [filePath, entity] of parsedFiles) {
+  for (const [filePath, entity] of registry) {
+    const transformer = TRANSFORMERS[entity.kind];
+    if (!transformer) continue;
+
     try {
       if (finalOptions.verbose) {
         log.debug(`🔄 Processing: ${filePath}`);
       }
 
-      const result = transformer(entity, finalOptions);
+      const result = transformer(entity, finalOptions, registry);
 
       if (result.artifacts.length > 0) {
         processed++;
@@ -392,8 +417,6 @@ export async function runMigration(options: MigrateOptions): Promise<void> {
   log.warn(`📋 Skipped ${codemod.input.skipped.length} files total`);
   log.warn(`📋 Errors found while reading files: ${codemod.input.errors.length}`);
 
-  finalOptions.entityRegistry = codemod.entityRegistry;
-
   // Process intermediate models to generate trait artifacts first
   // This must be done before processing regular models that extend these intermediate models
   if (finalOptions.intermediateModelPaths && finalOptions.intermediateModelPaths.length > 0) {
@@ -405,11 +428,12 @@ export async function runMigration(options: MigrateOptions): Promise<void> {
           : [finalOptions.intermediateModelPaths],
         finalOptions.additionalModelSources,
         finalOptions.additionalMixinSources,
-        finalOptions
+        finalOptions,
+        codemod.entityRegistry
       );
 
       // Write intermediate model trait artifacts
-      writeIntermediateArtifacts(intermediateResults.artifacts, finalOptions, log);
+      writeIntermediateArtifacts(intermediateResults.artifacts, finalOptions, log, codemod.entityRegistry);
 
       if (intermediateResults.errors.length > 0) {
         log.error(`⚠️ Errors processing intermediate models:`);
@@ -424,38 +448,23 @@ export async function runMigration(options: MigrateOptions): Promise<void> {
     }
   }
 
-  // Build entity maps from the registry for processFiles
-  const modelEntities = new Map<string, SchemaArtifact>();
-  const mixinEntities = new Map<string, SchemaArtifact>();
-  for (const [filePath, entity] of codemod.entityRegistry) {
-    if (entity.kind === 'model') {
-      modelEntities.set(filePath, entity);
-    } else if (entity.kind === 'mixin') {
-      mixinEntities.set(filePath, entity);
-    }
+  const substituteArtifacts = codemod.resolveImportSubstitutes();
+  if (substituteArtifacts.length > 0) {
+    writeIntermediateArtifacts(substituteArtifacts, finalOptions, log, codemod.entityRegistry);
+    log.info(`✅ Processed ${substituteArtifacts.length} importSubstitute artifacts`);
   }
 
-  // Process model files using pre-parsed data
-  const modelResults = processFiles({
-    parsedFiles: modelEntities,
-    transformer: modelToArtifacts,
-    finalOptions,
-    log,
-  });
-
-  // Process mixin files using pre-parsed data
-  const mixinResults = processFiles({
-    parsedFiles: mixinEntities,
-    transformer: mixinToArtifacts,
+  const results = processFiles({
+    registry: codemod.entityRegistry,
     finalOptions,
     log,
   });
 
   // Aggregate all skipped files from every phase
-  const allSkipped: SkippedFile[] = [...codemod.input.skipped, ...modelResults.skipped, ...mixinResults.skipped];
+  const allSkipped: SkippedFile[] = [...codemod.input.skipped, ...results.skipped];
 
-  const processed = modelResults.processed + mixinResults.processed;
-  const errors = modelResults.errors.length + mixinResults.errors.length;
+  const processed = results.processed;
+  const errors = results.errors.length;
 
   const dtsFiles = allSkipped.filter((s) => s.reason === 'dts-file');
   const nonDtsSkipped = allSkipped.filter((s) => s.reason !== 'dts-file');
