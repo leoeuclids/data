@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`mixin-to-schema transform (artifacts) > TypeScript type artifacts > generates only trait artifact when mixin has only data fields > data-only trait type interface 1`] = `
-"import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+"import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const SimpleTraitSchema = {
   'name': 'simple',
@@ -21,7 +21,7 @@ const SimpleTraitSchema = {
       }
     }
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default SimpleTraitSchema;
 "
@@ -32,6 +32,8 @@ exports[`mixin-to-schema transform (artifacts) > TypeScript type artifacts > gen
 
 import { computed } from '@ember/object';
 
+// TODO: migrate this extension to a class so that TypeScript declaration merging works.
+// Object extensions do not support interface merging.
 export const NameableTraitExtension = {
   displayName: computed('name', function() {
 		return \`Name: \${this.name}\`;
@@ -50,7 +52,7 @@ export default Registration;"
 `;
 
 exports[`mixin-to-schema transform (artifacts) > TypeScript type artifacts > generates trait and extension artifacts when mixin has computed properties and methods > mixin trait type interface 1`] = `
-"import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+"import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const NameableTraitSchema = {
   'name': 'nameable',
@@ -62,14 +64,14 @@ const NameableTraitSchema = {
       'type': 'string'
     }
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default NameableTraitSchema;
 "
 `;
 
 exports[`mixin-to-schema transform (artifacts) > TypeScript type artifacts > generates trait artifact with merged types for basic mixins > basic trait type interface 1`] = `
-"import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+"import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const FileableTraitSchema = {
   'name': 'fileable',
@@ -98,14 +100,14 @@ const FileableTraitSchema = {
       }
     }
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default FileableTraitSchema;
 "
 `;
 
 exports[`mixin-to-schema transform (artifacts) > TypeScript type artifacts > handles custom type mappings in mixin trait type interfaces > mixin custom type mappings interface 1`] = `
-"import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+"import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const TypedTraitSchema = {
   'name': 'typed',
@@ -127,7 +129,7 @@ const TypedTraitSchema = {
       'type': 'json'
     }
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default TypedTraitSchema;
 "
@@ -168,6 +170,8 @@ import { arrayHasLength } from '@auditboard/client-core/core/computed-extensions
 
 import { sortBy } from 'soxhub-client/utils/sort-by';
 
+// TODO: migrate this extension to a class so that TypeScript declaration merging works.
+// Object extensions do not support interface merging.
 export const FileableTraitExtension = {
   sortedFiles: sortBy('files', 'createdAt:desc'),
   hasFiles: arrayHasLength('files'),
@@ -191,7 +195,7 @@ export default Registration;"
 `;
 
 exports[`mixin-to-schema transform (artifacts) > basic functionality > collects the real fileable mixin shape into trait and extension artifacts > trait code 1`] = `
-"import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+"import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const FileableTraitSchema = {
   'name': 'fileable',
@@ -216,7 +220,7 @@ const FileableTraitSchema = {
       }
     }
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default FileableTraitSchema;
 "
@@ -226,6 +230,8 @@ exports[`mixin-to-schema transform (artifacts) > basic functionality > converts 
 "
 import { computed } from '@ember/object';
 
+// TODO: migrate this extension to a class so that TypeScript declaration merging works.
+// Object extensions do not support interface merging.
 export const NoTraitsTraitExtension = {
   complexMethod() { return 'processed'; },
   computedValue: computed(function() { return 'computed'; })
@@ -264,6 +270,8 @@ exports[`mixin-to-schema transform (artifacts) > basic functionality > preserves
 import { computed } from '@ember/object';
 import { service } from '@ember/service';
 
+// TODO: migrate this extension to a class so that TypeScript declaration merging works.
+// Object extensions do not support interface merging.
 export const PlannableTraitExtension = {
   library: service('library'),
   projectPlans: computed('_modelName', 'intId', 'library.projectPlans.[]', function () {
@@ -332,7 +340,7 @@ exports[`mixin-to-schema transform (artifacts) > basic functionality > produces 
 `;
 
 exports[`mixin-to-schema transform (artifacts) > basic functionality > supports alias of Mixin import and still produces a trait artifact > code 1`] = `
-"import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+"import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const AliasedTraitSchema = {
   'name': 'aliased',
@@ -344,7 +352,7 @@ const AliasedTraitSchema = {
       'type': 'string'
     }
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default AliasedTraitSchema;
 "
@@ -382,7 +390,7 @@ export interface File {
   },
   {
     "baseName": "custom-source",
-    "code": "import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+    "code": "import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const CustomSourceTraitSchema = {
   'name': 'custom-source',
@@ -399,7 +407,7 @@ const CustomSourceTraitSchema = {
       'type': 'file'
     }
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default CustomSourceTraitSchema;
 ",
@@ -443,6 +451,8 @@ export interface CustomSourceTrait {
 
 import { computed } from '@ember/object';
 
+// TODO: migrate this extension to a class so that TypeScript declaration merging works.
+// Object extensions do not support interface merging.
 export const CustomSourceTraitExtension = {
   customProp: computed('name', function() { return this.name; })
 };
@@ -477,7 +487,7 @@ export interface File {
   },
   {
     "baseName": "renamed-mixed-sources",
-    "code": "import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+    "code": "import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const RenamedMixedSourcesTraitSchema = {
   'name': 'renamed-mixed-sources',
@@ -489,7 +499,7 @@ const RenamedMixedSourcesTraitSchema = {
       'type': 'file'
     }
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default RenamedMixedSourcesTraitSchema;
 ",
@@ -532,6 +542,8 @@ export interface RenamedMixedSourcesTrait {
 
 import { attr as attribute } from '@unsupported/source';
 
+// TODO: migrate this extension to a class so that TypeScript declaration merging works.
+// Object extensions do not support interface merging.
 export const RenamedMixedSourcesTraitExtension = {
   name: attribute('string')
 };
@@ -553,7 +565,7 @@ exports[`mixin-to-schema transform (artifacts) > import validation > handles CLI
 [
   {
     "baseName": "cli-option",
-    "code": "import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+    "code": "import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const CliOptionTraitSchema = {
   'name': 'cli-option',
@@ -565,7 +577,7 @@ const CliOptionTraitSchema = {
       'type': 'string'
     }
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default CliOptionTraitSchema;
 ",
@@ -632,7 +644,7 @@ export interface User {
   },
   {
     "baseName": "aliased-imports",
-    "code": "import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+    "code": "import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const AliasedImportsTraitSchema = {
   'name': 'aliased-imports',
@@ -654,7 +666,7 @@ const AliasedImportsTraitSchema = {
       'type': 'user'
     }
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default AliasedImportsTraitSchema;
 ",
@@ -701,7 +713,7 @@ exports[`mixin-to-schema transform (artifacts) > import validation > ignores dec
 [
   {
     "baseName": "unsupported-source",
-    "code": "import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+    "code": "import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const UnsupportedSourceTraitSchema = {
   'name': 'unsupported-source',
@@ -713,7 +725,7 @@ const UnsupportedSourceTraitSchema = {
       'type': 'string'
     }
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default UnsupportedSourceTraitSchema;
 ",
@@ -754,6 +766,8 @@ export interface UnsupportedSourceTrait {
 import { hasMany } from '@unsupported/source';
 import { computed } from '@ember/object';
 
+// TODO: migrate this extension to a class so that TypeScript declaration merging works.
+// Object extensions do not support interface merging.
 export const UnsupportedSourceTraitExtension = {
   files: hasMany('file'),
   customProp: computed('name', function() { return this.name; })
@@ -802,7 +816,7 @@ export interface File {
   // Stub: properties will be populated when the actual resource type is generated
 }
 ",
-  "import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+  "import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const DefaultSourceTraitSchema = {
   'name': 'default-source',
@@ -819,7 +833,7 @@ const DefaultSourceTraitSchema = {
       'type': 'file'
     }
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default DefaultSourceTraitSchema;
 ",
@@ -851,6 +865,8 @@ export interface DefaultSourceTrait {
 
 import { computed } from '@ember/object';
 
+// TODO: migrate this extension to a class so that TypeScript declaration merging works.
+// Object extensions do not support interface merging.
 export const DefaultSourceTraitExtension = {
   customProp: computed('name', function() { return this.name; })
 };
@@ -881,7 +897,7 @@ export interface User {
   },
   {
     "baseName": "belongs-to",
-    "code": "import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+    "code": "import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const BelongsToTraitSchema = {
   'name': 'belongs-to',
@@ -896,7 +912,7 @@ const BelongsToTraitSchema = {
       }
     }
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default BelongsToTraitSchema;
 ",
@@ -939,13 +955,13 @@ exports[`mixin-to-schema transform (artifacts) > import validation > produces an
 [
   {
     "baseName": "no-valid-imports",
-    "code": "import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+    "code": "import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const NoValidImportsTraitSchema = {
   'name': 'no-valid-imports',
   'mode': 'legacy',
   'fields': []
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default NoValidImportsTraitSchema;
 ",
@@ -984,6 +1000,8 @@ export interface NoValidImportsTrait {
 import { computed } from '@ember/object';
 import { attr } from '@unsupported/source';
 
+// TODO: migrate this extension to a class so that TypeScript declaration merging works.
+// Object extensions do not support interface merging.
 export const NoValidImportsTraitExtension = {
   name: attr('string'),
   customProp: computed('name', function() { return this.name; })
@@ -1019,7 +1037,7 @@ export interface File {
   },
   {
     "baseName": "auditboard-source",
-    "code": "import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+    "code": "import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const AuditboardSourceTraitSchema = {
   'name': 'auditboard-source',
@@ -1036,7 +1054,7 @@ const AuditboardSourceTraitSchema = {
       'type': 'file'
     }
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default AuditboardSourceTraitSchema;
 ",
@@ -1080,6 +1098,8 @@ export interface AuditboardSourceTrait {
 
 import { computed } from '@ember/object';
 
+// TODO: migrate this extension to a class so that TypeScript declaration merging works.
+// Object extensions do not support interface merging.
 export const AuditboardSourceTraitExtension = {
   customProp: computed('name', function() { return this.name; })
 };
@@ -1118,7 +1138,7 @@ exports[`mixin-to-schema transform (artifacts) > mixin inheritance > produces tr
 `;
 
 exports[`mixin-to-schema transform (artifacts) > mixin inheritance > produces trait with extended traits when using createWithMixins > inheritance trait code 1`] = `
-"import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+"import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const FileableTraitSchema = {
   'name': 'fileable',
@@ -1142,14 +1162,14 @@ const FileableTraitSchema = {
     'base-model',
     'timestamp'
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default FileableTraitSchema;
 "
 `;
 
 exports[`mixin-to-schema transform (artifacts) > mixin inheritance > produces trait with single extended trait > single inheritance trait code 1`] = `
-"import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+"import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const DescribableTraitSchema = {
   'name': 'describable',
@@ -1164,14 +1184,14 @@ const DescribableTraitSchema = {
   'traits': [
     'base-model'
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default DescribableTraitSchema;
 "
 `;
 
 exports[`mixin-to-schema transform (artifacts) > mixin inheritance > produces trait without traits property when no inheritance > no inheritance trait code 1`] = `
-"import type { LegacyResourceSchema } from '@warp-drive/core/types/schema/fields';
+"import type { LegacyTrait } from '@warp-drive/core/types/schema/fields';
 
 const DescribableTraitSchema = {
   'name': 'describable',
@@ -1183,7 +1203,7 @@ const DescribableTraitSchema = {
       'type': 'string'
     }
   ]
-} satisfies LegacyResourceSchema;
+} satisfies LegacyTrait;
 
 export default DescribableTraitSchema;
 "
