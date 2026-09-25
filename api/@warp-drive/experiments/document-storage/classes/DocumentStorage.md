@@ -1,12 +1,13 @@
 ---
-url: /api/@warp-drive/experiments/document-storage/classes/DocumentStorage.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/experiments/document-storage/classes/DocumentStorage.md
 ---
 
 &#x20;
 
 # &#x20;DocumentStorage
 
-Defined in: [document-storage/index.ts:407](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/document-storage/index.ts#L407)
+Defined in: [warp-drive-packages/experiments/src/document-storage/index.ts:407](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/document-storage/index.ts#L407)
 
 DocumentStorage is a wrapper around the StorageManager API that provides
 a simple interface for reading and updating documents and requests.
@@ -33,7 +34,7 @@ optional features:
 new DocumentStorage(options?: Partial<DocumentStorageOptions>): DocumentStorage;
 ```
 
-Defined in: [document-storage/index.ts:410](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/document-storage/index.ts#L410)
+Defined in: [warp-drive-packages/experiments/src/document-storage/index.ts:410](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/document-storage/index.ts#L410)
 
 #### Parameters
 
@@ -53,7 +54,7 @@ Defined in: [document-storage/index.ts:410](https://github.com/leoeuclids/data/b
 clear(reset?: boolean): Promise<void>;
 ```
 
-Defined in: [document-storage/index.ts:448](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/document-storage/index.ts#L448)
+Defined in: [warp-drive-packages/experiments/src/document-storage/index.ts:448](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/document-storage/index.ts#L448)
 
 #### Parameters
 
@@ -73,7 +74,7 @@ Defined in: [document-storage/index.ts:448](https://github.com/leoeuclids/data/b
 getDocument(key: DocumentIdentifier): Promise<CacheDocument | null>;
 ```
 
-Defined in: [document-storage/index.ts:430](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/document-storage/index.ts#L430)
+Defined in: [warp-drive-packages/experiments/src/document-storage/index.ts:430](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/document-storage/index.ts#L430)
 
 #### Parameters
 
@@ -93,7 +94,7 @@ Defined in: [document-storage/index.ts:430](https://github.com/leoeuclids/data/b
 putDocument(document: CacheFileDocument, resourceCollector: (resourceIdentifier: PersistedResourceKey) => ExistingResourceObject): Promise<void>;
 ```
 
-Defined in: [document-storage/index.ts:434](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/document-storage/index.ts#L434)
+Defined in: [warp-drive-packages/experiments/src/document-storage/index.ts:434](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/document-storage/index.ts#L434)
 
 #### Parameters
 
@@ -117,7 +118,7 @@ Defined in: [document-storage/index.ts:434](https://github.com/leoeuclids/data/b
 putResources(document: ResourceDataDocument, resourceCollector: (resourceIdentifier: PersistedResourceKey) => ExistingResourceObject): Promise<void>;
 ```
 
-Defined in: [document-storage/index.ts:441](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/document-storage/index.ts#L441)
+Defined in: [warp-drive-packages/experiments/src/document-storage/index.ts:441](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/document-storage/index.ts#L441)
 
 #### Parameters
 
@@ -141,4 +142,4 @@ Defined in: [document-storage/index.ts:441](https://github.com/leoeuclids/data/b
 readonly _storage: InternalDocumentStorage;
 ```
 
-Defined in: [document-storage/index.ts:408](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/document-storage/index.ts#L408)
+Defined in: [warp-drive-packages/experiments/src/document-storage/index.ts:408](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/document-storage/index.ts#L408)

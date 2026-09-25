@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/utilities/types/QueryUrlOptions.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/utilities/types/QueryUrlOptions.md
 ---
 
 # &#x20;QueryUrlOptions
@@ -14,7 +15,7 @@ interface QueryUrlOptions {
 }
 ```
 
-Defined in: [index.ts:137](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L137)
+Defined in: [index.ts:137](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L137)
 
 [buildBaseURL](../functions/buildBaseURL.md) options for a `query` request.
 
@@ -26,7 +27,7 @@ Defined in: [index.ts:137](https://github.com/leoeuclids/data/blob/7d81741dd2bfc
 optional host?: string;
 ```
 
-Defined in: [index.ts:158](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L158)
+Defined in: [index.ts:158](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L158)
 
 Overrides the globally configured host for this call only.
 
@@ -40,7 +41,7 @@ identifier: {
 };
 ```
 
-Defined in: [index.ts:145](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L145)
+Defined in: [index.ts:145](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L145)
 
 The type of the records to query.
 
@@ -60,7 +61,7 @@ The resource type.
 optional namespace?: string;
 ```
 
-Defined in: [index.ts:162](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L162)
+Defined in: [index.ts:162](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L162)
 
 Overrides the globally configured namespace for this call only.
 
@@ -72,7 +73,7 @@ Overrides the globally configured namespace for this call only.
 op: "query";
 ```
 
-Defined in: [index.ts:141](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L141)
+Defined in: [index.ts:141](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L141)
 
 The request operation this URL is for.
 
@@ -84,6 +85,6 @@ The request operation this URL is for.
 optional resourcePath?: string;
 ```
 
-Defined in: [index.ts:154](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L154)
+Defined in: [index.ts:154](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L154)
 
 The path segment for the resource, defaults to `identifier.type` if not provided.

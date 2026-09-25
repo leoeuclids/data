@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/utilities/string/functions/irregular.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/utilities/string/functions/irregular.md
 ---
 
 # &#x20;irregular()&#x20;
@@ -8,7 +9,7 @@ url: /api/@warp-drive/utilities/string/functions/irregular.md
 function irregular(single: string, plur: string): void;
 ```
 
-Defined in: [-private/string/inflect.ts:55](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/-private/string/inflect.ts#L55)
+Defined in: [-private/string/inflect.ts:55](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/-private/string/inflect.ts#L55)
 
 Marks a word as irregular. Irregular words have unique
 pluralization and singularization rules.

@@ -1,6 +1,6 @@
 ---
 url: >-
-  /api/@warp-drive/core/build-config/deprecations/variables/ENABLE_LEGACY_SCHEMA_SERVICE.md
+  https://canary.warp-drive.io/api/@warp-drive/core/build-config/deprecations/variables/ENABLE_LEGACY_SCHEMA_SERVICE.md
 ---
 
 # &#x20;ENABLE\_LEGACY\_SCHEMA\_SERVICE&#x20;
@@ -9,7 +9,7 @@ url: >-
 const ENABLE_LEGACY_SCHEMA_SERVICE: boolean;
 ```
 
-Defined in: [node\_modules/.pnpm/@warp-d\_25f56f2729dd79700790d78740333f27/node\_modules/@warp-drive/build-config/dist/deprecations.d.ts:433](https://github.com/warp-drive-data/warp-drive/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/node_modules/.pnpm/@warp-d_25f56f2729dd79700790d78740333f27/node_modules/@warp-drive/build-config/dist/deprecations.d.ts#L433)
+Defined in: [node\_modules/.pnpm/@warp-d\_25f56f2729dd79700790d78740333f27/node\_modules/@warp-drive/build-config/dist/deprecations.d.ts:433](https://github.com/warp-drive-data/warp-drive/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/node_modules/.pnpm/@warp-d_25f56f2729dd79700790d78740333f27/node_modules/@warp-drive/build-config/dist/deprecations.d.ts#L433)
 
 When the flag is `true` (default), the legacy schema
 service features will be enabled on the store and

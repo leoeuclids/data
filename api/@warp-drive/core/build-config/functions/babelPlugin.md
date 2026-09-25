@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/build-config/functions/babelPlugin.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/build-config/functions/babelPlugin.md
 ---
 
 # &#x20;babelPlugin()
@@ -11,7 +12,7 @@ function babelPlugin(options: WarpDriveConfig): {
 };
 ```
 
-Defined in: [node\_modules/.pnpm/@warp-d\_25f56f2729dd79700790d78740333f27/node\_modules/@warp-drive/build-config/dist/index.d.ts:41](https://github.com/warp-drive-data/warp-drive/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/node_modules/.pnpm/@warp-d_25f56f2729dd79700790d78740333f27/node_modules/@warp-drive/build-config/dist/index.d.ts#L41)
+Defined in: [node\_modules/.pnpm/@warp-d\_25f56f2729dd79700790d78740333f27/node\_modules/@warp-drive/build-config/dist/index.d.ts:41](https://github.com/warp-drive-data/warp-drive/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/node_modules/.pnpm/@warp-d_25f56f2729dd79700790d78740333f27/node_modules/@warp-drive/build-config/dist/index.d.ts#L41)
 
 Create the Babel plugin for WarpDrive
 

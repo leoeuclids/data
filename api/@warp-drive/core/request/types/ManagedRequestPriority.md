@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/request/types/ManagedRequestPriority.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/request/types/ManagedRequestPriority.md
 ---
 
 # &#x20;ManagedRequestPriority
@@ -10,7 +11,7 @@ type ManagedRequestPriority = {
 };
 ```
 
-Defined in: [warp-drive-packages/core/src/request/-private/types.ts:50](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/request/-private/types.ts#L50)
+Defined in: [warp-drive-packages/core/src/request/-private/types.ts:50](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/request/-private/types.ts#L50)
 
 Describes whether a managed (deduped) request should be treated as
 blocking the caller's promise (e.g. a `fetch`) or as a non-blocking
@@ -25,6 +26,6 @@ waiting on it.
 blocking: boolean;
 ```
 
-Defined in: [warp-drive-packages/core/src/request/-private/types.ts:52](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/request/-private/types.ts#L52)
+Defined in: [warp-drive-packages/core/src/request/-private/types.ts:52](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/request/-private/types.ts#L52)
 
 Whether the request should gate the promise it is associated with.

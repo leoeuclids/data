@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/about.md
+url: https://canary.warp-drive.io/guides/the-manual/about.md
 ---
 
 ## Why WarpDrive?

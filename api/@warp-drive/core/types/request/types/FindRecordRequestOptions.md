@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/request/types/FindRecordRequestOptions.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/request/types/FindRecordRequestOptions.md
 ---
 
 # &#x20;FindRecordRequestOptions\<RT = `unknown`, T = `unknown`>
@@ -15,7 +16,7 @@ type FindRecordRequestOptions<RT = unknown, T = unknown> = {
 };
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:121](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L121)
+Defined in: [warp-drive-packages/core/src/types/request.ts:121](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L121)
 
 The request shape produced by the `findRecord` request builders, for
 use with [Store.request](../../../classes/Store.md#request).
@@ -38,7 +39,7 @@ use with [Store.request](../../../classes/Store.md#request).
 optional cacheOptions?: CacheOptions;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:137](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L137)
+Defined in: [warp-drive-packages/core/src/types/request.ts:137](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L137)
 
 see [CacheOptions](CacheOptions.md)
 
@@ -50,7 +51,7 @@ see [CacheOptions](CacheOptions.md)
 headers: Headers;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:133](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L133)
+Defined in: [warp-drive-packages/core/src/types/request.ts:133](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L133)
 
 the headers to send with the request
 
@@ -62,7 +63,7 @@ the headers to send with the request
 method: "GET";
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:129](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L129)
+Defined in: [warp-drive-packages/core/src/types/request.ts:129](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L129)
 
 the HTTP method to use
 
@@ -74,7 +75,7 @@ the HTTP method to use
 op: "findRecord";
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:141](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L141)
+Defined in: [warp-drive-packages/core/src/types/request.ts:141](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L141)
 
 the name of the request operation
 
@@ -86,7 +87,7 @@ the name of the request operation
 records: [ResourceIdentifierObject<TypeFromInstanceOrString<T>>];
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:145](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L145)
+Defined in: [warp-drive-packages/core/src/types/request.ts:145](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L145)
 
 the resource being requested
 
@@ -98,6 +99,6 @@ the resource being requested
 url: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:125](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L125)
+Defined in: [warp-drive-packages/core/src/types/request.ts:125](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L125)
 
 the url to request

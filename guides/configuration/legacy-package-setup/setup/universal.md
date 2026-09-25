@@ -1,5 +1,6 @@
 ---
-url: /guides/configuration/legacy-package-setup/setup/universal.md
+url: >-
+  https://canary.warp-drive.io/guides/configuration/legacy-package-setup/setup/universal.md
 ---
 
 ::: tip Boilerplate Sucks 👎🏽

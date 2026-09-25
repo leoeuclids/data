@@ -1,5 +1,6 @@
 ---
-url: /guides/the-manual/experiments/storage-resources.md
+url: >-
+  https://canary.warp-drive.io/guides/the-manual/experiments/storage-resources.md
 ---
 
 # Storage Resources

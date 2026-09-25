@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/build-config/debugging/variables/LOG_REQUEST_STATUS.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/build-config/debugging/variables/LOG_REQUEST_STATUS.md
 ---
 
 # &#x20;LOG\_REQUEST\_STATUS
@@ -8,7 +9,7 @@ url: /api/@warp-drive/core/build-config/debugging/variables/LOG_REQUEST_STATUS.m
 const LOG_REQUEST_STATUS: boolean;
 ```
 
-Defined in: [node\_modules/.pnpm/@warp-d\_25f56f2729dd79700790d78740333f27/node\_modules/@warp-drive/build-config/dist/debugging.d.ts:82](https://github.com/warp-drive-data/warp-drive/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/node_modules/.pnpm/@warp-d_25f56f2729dd79700790d78740333f27/node_modules/@warp-drive/build-config/dist/debugging.d.ts#L82)
+Defined in: [node\_modules/.pnpm/@warp-d\_25f56f2729dd79700790d78740333f27/node\_modules/@warp-drive/build-config/dist/debugging.d.ts:82](https://github.com/warp-drive-data/warp-drive/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/node_modules/.pnpm/@warp-d_25f56f2729dd79700790d78740333f27/node_modules/@warp-drive/build-config/dist/debugging.d.ts#L82)
 
 log updates to requests the store has issued to
 the network (adapter) to fulfill.

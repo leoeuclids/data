@@ -1,5 +1,5 @@
 ---
-url: /api/@warp-drive/schema-dsl/functions/trait.md
+url: https://canary.warp-drive.io/api/@warp-drive/schema-dsl/functions/trait.md
 ---
 
 # &#x20;trait()&#x20;
@@ -8,7 +8,7 @@ url: /api/@warp-drive/schema-dsl/functions/trait.md
 function trait(..._traits: AnyConstructor[]): (target: AnyConstructor) => void;
 ```
 
-Defined in: [entities/compose-trait.ts:46](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/schema-dsl/src/entities/compose-trait.ts#L46)
+Defined in: [entities/compose-trait.ts:46](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/schema-dsl/src/entities/compose-trait.ts#L46)
 
 **`Class Decorator`**
 

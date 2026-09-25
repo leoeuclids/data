@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/request/functions/withReactiveResponse.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/request/functions/withReactiveResponse.md
 ---
 
 # &#x20;withReactiveResponse()
@@ -10,7 +11,7 @@ function withReactiveResponse<T, M extends ObjectValue | undefined = ObjectValue
 };
 ```
 
-Defined in: [warp-drive-packages/core/src/request.ts:74](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/request.ts#L74)
+Defined in: [warp-drive-packages/core/src/request.ts:74](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/request.ts#L74)
 
 Brands the supplied object with the supplied response type
 wrapped in [ReactiveDataDocument](../../reactive/types/ReactiveDataDocument.md). This is a convenience for

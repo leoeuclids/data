@@ -1,5 +1,5 @@
 ---
-url: /guides/contributing/setting-up-the-project.md
+url: https://canary.warp-drive.io/guides/contributing/setting-up-the-project.md
 ---
 # Setting Up The Project
 

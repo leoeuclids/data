@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/requests/builders-advanced.md
+url: https://canary.warp-drive.io/guides/the-manual/requests/builders-advanced.md
 ---
 
 ### Builders That Follow General API Patterns

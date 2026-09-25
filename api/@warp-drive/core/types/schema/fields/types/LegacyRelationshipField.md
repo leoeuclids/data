@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/schema/fields/types/LegacyRelationshipField.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/schema/fields/types/LegacyRelationshipField.md
 ---
 
 # &#x20;LegacyRelationshipField
@@ -12,7 +13,7 @@ type LegacyRelationshipField =
   | LinksModeHasManyField;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2581](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L2581)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2587](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L2587)
 
 A union of all legacy relationship field schemas, i.e. [LegacyField](LegacyField.md)
 excluding [LegacyAttributeField](LegacyAttributeField.md).

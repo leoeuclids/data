@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/request/types/ImmutableRequestInfo.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/request/types/ImmutableRequestInfo.md
 ---
 
 # &#x20;ImmutableRequestInfo\<RT = `unknown`>
@@ -14,7 +15,7 @@ type ImmutableRequestInfo<RT = unknown> = Readonly<Omit<RequestInfo<RT>, "contro
 };
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:701](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L701)
+Defined in: [warp-drive-packages/core/src/types/request.ts:701](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L701)
 
 Immutable version of [RequestInfo](RequestInfo.md). This is what is passed to handlers.
 

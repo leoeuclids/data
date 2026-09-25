@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/requests/handlers-builtin.md
+url: https://canary.warp-drive.io/guides/the-manual/requests/handlers-builtin.md
 ---
 
 ## What Is A Handler

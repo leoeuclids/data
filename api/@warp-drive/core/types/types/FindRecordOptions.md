@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/types/FindRecordOptions.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/types/FindRecordOptions.md
 ---
 
 # &#x20;FindRecordOptions
@@ -14,7 +15,7 @@ interface FindRecordOptions extends BaseFinderOptions {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/store/-types/q/store.ts:42](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/store/-types/q/store.ts#L42)
+Defined in: [warp-drive-packages/core/src/store/-types/q/store.ts:42](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/store/-types/q/store.ts#L42)
 
 Options for `store.findRecord()`.
 
@@ -30,7 +31,7 @@ Options for `store.findRecord()`.
 optional adapterOptions?: Record<string, unknown>;
 ```
 
-Defined in: [warp-drive-packages/core/src/store/-types/q/store.ts:37](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/store/-types/q/store.ts#L37)
+Defined in: [warp-drive-packages/core/src/store/-types/q/store.ts:37](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/store/-types/q/store.ts#L37)
 
 Arbitrary options made available to the adapter via the request's
 snapshot (`snapshot.adapterOptions`). The store does not interpret
@@ -48,7 +49,7 @@ this value itself.
 optional backgroundReload?: boolean;
 ```
 
-Defined in: [warp-drive-packages/core/src/store/-types/q/store.ts:23](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/store/-types/q/store.ts#L23)
+Defined in: [warp-drive-packages/core/src/store/-types/q/store.ts:23](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/store/-types/q/store.ts#L23)
 
 If `true` or `false`, forces or prevents a background reload of the
 cached resource(s) after resolving with the cached data. If omitted,
@@ -67,7 +68,7 @@ hook decides whether to reload in the background.
 optional include?: string | string[];
 ```
 
-Defined in: [warp-drive-packages/core/src/store/-types/q/store.ts:30](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/store/-types/q/store.ts#L30)
+Defined in: [warp-drive-packages/core/src/store/-types/q/store.ts:30](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/store/-types/q/store.ts#L30)
 
 The names of relationships to load along with this request, used to
 build the `include` query parameter for adapters (such as the
@@ -85,7 +86,7 @@ JSON:API adapter) that support it.
 optional preload?: Record<string, Value>;
 ```
 
-Defined in: [warp-drive-packages/core/src/store/-types/q/store.ts:58](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/store/-types/q/store.ts#L58)
+Defined in: [warp-drive-packages/core/src/store/-types/q/store.ts:58](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/store/-types/q/store.ts#L58)
 
 Data to preload into the store before the request is made.
 This feature is *highly* discouraged and has no corresponding
@@ -108,7 +109,7 @@ will be extracted.
 optional reload?: boolean;
 ```
 
-Defined in: [warp-drive-packages/core/src/store/-types/q/store.ts:15](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/store/-types/q/store.ts#L15)
+Defined in: [warp-drive-packages/core/src/store/-types/q/store.ts:15](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/store/-types/q/store.ts#L15)
 
 If `true`, forces the request to go to the adapter even if a cached
 copy of the requested resource(s) already exists in the store. If

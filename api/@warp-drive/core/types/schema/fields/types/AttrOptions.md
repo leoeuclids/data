@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/schema/fields/types/AttrOptions.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/schema/fields/types/AttrOptions.md
 ---
 
 # &#x20;AttrOptions
@@ -16,7 +17,7 @@ interface AttrOptions {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:10](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L10)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:10](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L10)
 
 Options signature for Legacy Attributes.
 
@@ -39,6 +40,6 @@ optional defaultValue?:
   | (() => Value);
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:14](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L14)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:14](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L14)
 
 A primitive value or a function which produces a value.

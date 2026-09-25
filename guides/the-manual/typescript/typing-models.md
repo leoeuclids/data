@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/typescript/typing-models.md
+url: https://canary.warp-drive.io/guides/the-manual/typescript/typing-models.md
 ---
 # Typing Models & Transforms
 
@@ -77,7 +77,7 @@ export default class User extends Model {
 
 `belongsTo` relationships will have their resource type and options config validated against the passed in type.
 
-Once we move to stage-3 decorators, explicitly setting the generic would not be required as it could be infered from the field's type.
+Once we move to stage-3 decorators, explicitly setting the generic would not be required as it could be inferred from the field's type.
 
 ```ts
 import Model, { belongsTo } from '@warp-drive/legacy/model';
@@ -96,7 +96,7 @@ export default class User extends Model {
 
 `belongsTo` relationships will have their resource type and options config validated against the passed in type.
 
-Once we move to stage-3 decorators, explicitly setting the generic would not be required as it could be infered from the field's type.
+Once we move to stage-3 decorators, explicitly setting the generic would not be required as it could be inferred from the field's type.
 
 ```ts
 import Model, { belongsTo, AsyncBelongsTo } from '@warp-drive/legacy/model';
@@ -117,7 +117,7 @@ If you don't need access to meta or links on relationships, you can type the rel
 
 `hasMany` relationships will have their resource type and options config validated against the passed in type.
 
-Once we move to stage-3 decorators, explicitly setting the generic would not be required as it could be infered from the field's type.
+Once we move to stage-3 decorators, explicitly setting the generic would not be required as it could be inferred from the field's type.
 
 ```ts
 import Model, { hasMany } from '@warp-drive/legacy/model';
@@ -136,7 +136,7 @@ export default class User extends Model {
 
 `hasMany` relationships will have their resource type and options config validated against the passed in type.
 
-Once we move to stage-3 decorators, explicitly setting the generic would not be required as it could be infered from the field's type.
+Once we move to stage-3 decorators, explicitly setting the generic would not be required as it could be inferred from the field's type.
 
 ```ts
 import Model, { hasMany, HasMany } from '@warp-drive/legacy/model';
@@ -158,7 +158,7 @@ will always be awaited before iteration.
 
 `hasMany` relationships will have their resource type and options config validated against the passed in type.
 
-Once we move to stage-3 decorators, explicitly setting the generic would not be required as it could be infered from the field's type.
+Once we move to stage-3 decorators, explicitly setting the generic would not be required as it could be inferred from the field's type.
 
 ```ts
 import Model, { hasMany, AsyncHasMany } from '@warp-drive/legacy/model';
@@ -179,7 +179,7 @@ export default class User extends Model {
 
 `hasMany` relationships will have their resource type and options config validated against the passed in type.
 
-Once we move to stage-3 decorators, explicitly setting the generic would not be required as it could be infered from the field's type.
+Once we move to stage-3 decorators, explicitly setting the generic would not be required as it could be inferred from the field's type.
 
 ```ts
 import Model, { hasMany, AsyncHasMany } from '@warp-drive/legacy/model';

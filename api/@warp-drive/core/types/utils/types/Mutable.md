@@ -1,5 +1,5 @@
 ---
-url: /api/@warp-drive/core/types/utils/types/Mutable.md
+url: https://canary.warp-drive.io/api/@warp-drive/core/types/utils/types/Mutable.md
 ---
 
 # &#x20;Mutable\<T>
@@ -8,7 +8,7 @@ url: /api/@warp-drive/core/types/utils/types/Mutable.md
 type Mutable<T> = { -readonly [P in keyof T]: T[P] };
 ```
 
-Defined in: [warp-drive-packages/core/src/types/utils.ts:21](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/utils.ts#L21)
+Defined in: [warp-drive-packages/core/src/types/utils.ts:21](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/utils.ts#L21)
 
 Removes `readonly` from every property of `T`.
 

@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/legacy/model/functions/modelFor.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/legacy/model/functions/modelFor.md
 ---
 
 &#x20;
@@ -17,7 +18,7 @@ function modelFor(type: string): void | typeof Model;
 function modelFor<T>(type: TypeFromInstance<T>): void | typeof Model;
 ```
 
-Defined in: [warp-drive-packages/legacy/src/model/-private/hooks.ts:71](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/model/-private/hooks.ts#L71)
+Defined in: [warp-drive-packages/legacy/src/model/-private/hooks.ts:71](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/model/-private/hooks.ts#L71)
 
 The `modelFor` implementation for use with `Model`, exposed on the store
 as `store.modelFor(type)` when the store is configured to use `Model`.
@@ -45,7 +46,7 @@ Returns the `Model` subclass registered for the given type, if any.
 function modelFor(type: string): void | typeof Model;
 ```
 
-Defined in: [warp-drive-packages/legacy/src/model/-private/hooks.ts:77](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/model/-private/hooks.ts#L77)
+Defined in: [warp-drive-packages/legacy/src/model/-private/hooks.ts:77](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/model/-private/hooks.ts#L77)
 
 Overload accepting a raw type string instead of a typed record instance.
 

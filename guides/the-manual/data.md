@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/data.md
+url: https://canary.warp-drive.io/guides/the-manual/data.md
 ---
 
 ## Data

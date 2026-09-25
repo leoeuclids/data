@@ -1,6 +1,6 @@
 ---
 url: >-
-  /api/@warp-drive/build-config/canary-features/variables/JSON_API_CACHE_VALIDATION_ERRORS.md
+  https://canary.warp-drive.io/api/@warp-drive/build-config/canary-features/variables/JSON_API_CACHE_VALIDATION_ERRORS.md
 ---
 
 # &#x20;JSON\_API\_CACHE\_VALIDATION\_ERRORS&#x20;
@@ -9,7 +9,7 @@ url: >-
 const JSON_API_CACHE_VALIDATION_ERRORS: boolean | null = false;
 ```
 
-Defined in: [canary-features.ts:138](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/build-config/src/canary-features.ts#L138)
+Defined in: [canary-features.ts:138](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/build-config/src/canary-features.ts#L138)
 
 This upcoming feature adds a validation step to payloads received
 by the JSONAPICache implementation.

@@ -1,5 +1,5 @@
 ---
-url: /api/@warp-drive/holodeck/functions/mock.md
+url: https://canary.warp-drive.io/api/@warp-drive/holodeck/functions/mock.md
 ---
 
 # &#x20;mock()
@@ -7,12 +7,14 @@ url: /api/@warp-drive/holodeck/functions/mock.md
 ```ts
 function mock(
    owner: object, 
-   generate: ScaffoldGenerator, 
+   generate: 
+  | LazyScaffold
+  | ScaffoldGenerator, 
    isRecording?: boolean
 ): Promise<void>;
 ```
 
-Defined in: [index.ts:351](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/packages/holodeck/src/index.ts#L351)
+Defined in: [index.ts:452](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/packages/holodeck/src/index.ts#L452)
 
 Mock a request by sending the scaffold to the mock server.
 
@@ -24,7 +26,8 @@ Mock a request by sending the scaffold to the mock server.
 
 ### generate
 
-[`ScaffoldGenerator`](../mock/types/ScaffoldGenerator.md)
+| [`LazyScaffold`](../mock/types/LazyScaffold.md)
+| [`ScaffoldGenerator`](../mock/types/ScaffoldGenerator.md)
 
 ### isRecording?
 

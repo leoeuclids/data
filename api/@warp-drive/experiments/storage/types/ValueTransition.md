@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/experiments/storage/types/ValueTransition.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/experiments/storage/types/ValueTransition.md
 ---
 
 &#x20;
@@ -14,7 +15,7 @@ interface ValueTransition<T = unknown> {
 }
 ```
 
-Defined in: [storage/-private/storage-infra.ts:11](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/storage/-private/storage-infra.ts#L11)
+Defined in: [warp-drive-packages/experiments/src/storage/-private/storage-infra.ts:11](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/storage/-private/storage-infra.ts#L11)
 
 ## Type Parameters
 
@@ -30,7 +31,7 @@ Defined in: [storage/-private/storage-infra.ts:11](https://github.com/leoeuclids
 from: T;
 ```
 
-Defined in: [storage/-private/storage-infra.ts:13](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/storage/-private/storage-infra.ts#L13)
+Defined in: [warp-drive-packages/experiments/src/storage/-private/storage-infra.ts:13](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/storage/-private/storage-infra.ts#L13)
 
 ***
 
@@ -40,7 +41,7 @@ Defined in: [storage/-private/storage-infra.ts:13](https://github.com/leoeuclids
 key: string;
 ```
 
-Defined in: [storage/-private/storage-infra.ts:12](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/storage/-private/storage-infra.ts#L12)
+Defined in: [warp-drive-packages/experiments/src/storage/-private/storage-infra.ts:12](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/storage/-private/storage-infra.ts#L12)
 
 ***
 
@@ -50,4 +51,4 @@ Defined in: [storage/-private/storage-infra.ts:12](https://github.com/leoeuclids
 to: T;
 ```
 
-Defined in: [storage/-private/storage-infra.ts:14](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/storage/-private/storage-infra.ts#L14)
+Defined in: [warp-drive-packages/experiments/src/storage/-private/storage-infra.ts:14](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/storage/-private/storage-infra.ts#L14)

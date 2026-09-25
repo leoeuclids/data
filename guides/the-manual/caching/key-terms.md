@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/caching/key-terms.md
+url: https://canary.warp-drive.io/guides/the-manual/caching/key-terms.md
 ---
 # Key Terminology
 

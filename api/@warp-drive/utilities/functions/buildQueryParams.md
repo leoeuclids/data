@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/utilities/functions/buildQueryParams.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/utilities/functions/buildQueryParams.md
 ---
 
 # &#x20;buildQueryParams()
@@ -8,7 +9,7 @@ url: /api/@warp-drive/utilities/functions/buildQueryParams.md
 function buildQueryParams(params: QueryParamsSource, options?: QueryParamsSerializationOptions): string;
 ```
 
-Defined in: [index.ts:746](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L746)
+Defined in: [index.ts:746](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L746)
 
 Sorts query params by both key and value, returning a query params string
 

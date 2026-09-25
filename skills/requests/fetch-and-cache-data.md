@@ -1,5 +1,5 @@
 ---
-url: /skills/requests/fetch-and-cache-data.md
+url: https://canary.warp-drive.io/skills/requests/fetch-and-cache-data.md
 ---
 # Fetch and Cache Data
 

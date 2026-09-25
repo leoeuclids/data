@@ -1,12 +1,13 @@
 ---
-url: /api/@warp-drive/legacy/serializer/transform/classes/Transform.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/legacy/serializer/transform/classes/Transform.md
 ---
 
 &#x20;
 
 # &#x20;Transform
 
-Defined in: [warp-drive-packages/legacy/src/serializer/-private/transforms/transform.ts:5](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/serializer/-private/transforms/transform.ts#L5)
+Defined in: [warp-drive-packages/legacy/src/serializer/-private/transforms/transform.ts:5](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/serializer/-private/transforms/transform.ts#L5)
 
 The `Transform` class is used to serialize and deserialize model
 attributes when they are saved or loaded from an
@@ -91,7 +92,7 @@ Transform
 new Transform(owner?: Owner): Transform;
 ```
 
-Defined in: [node\_modules/.pnpm/ember-source@7.3.0/node\_modules/ember-source/types/stable/@ember/object/index.d.ts:28](https://github.com/warp-drive-data/warp-drive/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/node_modules/.pnpm/ember-source@7.3.0/node_modules/ember-source/types/stable/@ember/object/index.d.ts#L28)
+Defined in: [node\_modules/.pnpm/ember-source@7.3.0/node\_modules/ember-source/types/stable/@ember/object/index.d.ts:28](https://github.com/warp-drive-data/warp-drive/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/node_modules/.pnpm/ember-source@7.3.0/node_modules/ember-source/types/stable/@ember/object/index.d.ts#L28)
 
 #### Parameters
 

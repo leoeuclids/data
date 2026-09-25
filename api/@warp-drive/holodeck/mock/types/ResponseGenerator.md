@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/holodeck/mock/types/ResponseGenerator.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/holodeck/mock/types/ResponseGenerator.md
 ---
 
 # &#x20;ResponseGenerator
@@ -8,7 +9,7 @@ url: /api/@warp-drive/holodeck/mock/types/ResponseGenerator.md
 type ResponseGenerator = () => Record<string, unknown>;
 ```
 
-Defined in: [mock.ts:24](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/packages/holodeck/src/mock.ts#L24)
+Defined in: [mock.ts:38](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/packages/holodeck/src/mock.ts#L38)
 
 ## Returns
 

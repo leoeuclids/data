@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/requests/using-the-response.md
+url: https://canary.warp-drive.io/guides/the-manual/requests/using-the-response.md
 ---
 # Using The Response
 

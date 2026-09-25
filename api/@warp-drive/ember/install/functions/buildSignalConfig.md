@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/ember/install/functions/buildSignalConfig.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/ember/install/functions/buildSignalConfig.md
 ---
 
 # &#x20;buildSignalConfig()
@@ -12,7 +13,7 @@ function buildSignalConfig(options: {
 }): SignalHooks<Tag | [Tag, Tag, Tag]>;
 ```
 
-Defined in: [warp-drive-packages/ember/dist/install.d.ts:12](https://github.com/warp-drive-data/warp-drive/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/ember/dist/install.d.ts#L12)
+Defined in: [warp-drive-packages/ember/dist/install.d.ts:13](https://github.com/warp-drive-data/warp-drive/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/ember/dist/install.d.ts#L13)
 
 Builds the [SignalHooks](../../../core/configure/types/SignalHooks.md) implementation backed by Ember's
 `@glimmer/validator` tags, used to wire WarpDrive's reactivity

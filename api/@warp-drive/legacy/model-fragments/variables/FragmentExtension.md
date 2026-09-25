@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/legacy/model-fragments/variables/FragmentExtension.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/legacy/model-fragments/variables/FragmentExtension.md
 ---
 
 &#x20;
@@ -14,7 +15,7 @@ const FragmentExtension: {
 };
 ```
 
-Defined in: [warp-drive-packages/legacy/src/model-fragments/extensions/fragment.ts:73](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/model-fragments/extensions/fragment.ts#L73)
+Defined in: [warp-drive-packages/legacy/src/model-fragments/extensions/fragment.ts:73](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/model-fragments/extensions/fragment.ts#L73)
 
 A schema extension that adds the [Fragment](../classes/Fragment.md) API to migrated
 `ModelFragments` object resources.

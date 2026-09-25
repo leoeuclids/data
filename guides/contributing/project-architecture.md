@@ -1,5 +1,5 @@
 ---
-url: /guides/contributing/project-architecture.md
+url: https://canary.warp-drive.io/guides/contributing/project-architecture.md
 ---
 ## Architectural Diagram
 

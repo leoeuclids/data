@@ -1,5 +1,5 @@
 ---
-url: /api/@warp-drive/schema-dsl/functions/alias.md
+url: https://canary.warp-drive.io/api/@warp-drive/schema-dsl/functions/alias.md
 ---
 
 # &#x20;alias()&#x20;
@@ -8,7 +8,7 @@ url: /api/@warp-drive/schema-dsl/functions/alias.md
 function alias(options: AliasOptions): (target: object, key: string) => void;
 ```
 
-Defined in: [fields/alias.ts:78](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/schema-dsl/src/fields/alias.ts#L78)
+Defined in: [fields/alias.ts:78](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/schema-dsl/src/fields/alias.ts#L78)
 
 **`Decorator`**
 

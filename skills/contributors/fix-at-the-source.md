@@ -1,5 +1,5 @@
 ---
-url: /skills/contributors/fix-at-the-source.md
+url: https://canary.warp-drive.io/skills/contributors/fix-at-the-source.md
 ---
 # Fix at the Source
 
@@ -31,6 +31,10 @@ never just "where do I stop the crash" — it's "where does 'x changed' fail to 
    a fix — it silently produces a plausible-looking wrong result instead of a loud one, and
    doesn't restore the "x changed → y updated" correctness that was actually broken. Prefer a
    guard that skips unnecessary work over a fallback that fabricates an input for it.
+6. If the fix changes behavior that is documented — a TSDoc comment, a guide, or an upgrade
+   page now says something untrue — update that documentation in the same PR. Follow
+   [Write Documentation](./write-documentation.md); its checklist has a bug-fix row for exactly
+   this case, and a fix that leaves the docs describing the old behavior isn't finished.
 
 ## Example
 

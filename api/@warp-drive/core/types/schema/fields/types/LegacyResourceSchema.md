@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/schema/fields/types/LegacyResourceSchema.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/schema/fields/types/LegacyResourceSchema.md
 ---
 
 # &#x20;LegacyResourceSchema
@@ -15,7 +16,7 @@ interface LegacyResourceSchema {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2258](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L2258)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2264](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L2264)
 
 Represents a schema for a primary resource in LegacyMode
 
@@ -31,7 +32,7 @@ response documents.
 fields: LegacyModeFieldSchema[];
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2302](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L2302)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2308](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L2308)
 
 The fields that make up the shape of the resource
 
@@ -43,7 +44,7 @@ The fields that make up the shape of the resource
 identity: IdentityField;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2275](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L2275)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2281](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L2281)
 
 This should be an IdentityField.
 
@@ -59,7 +60,7 @@ for records in legacy mode, but this is not required.
 legacy: true;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2264](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L2264)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2270](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L2270)
 
 A flag indicating that this is a legacy resource schema
 
@@ -71,7 +72,7 @@ A flag indicating that this is a legacy resource schema
 optional objectExtensions?: string[];
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2329](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L2329)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2335](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L2335)
 
 ::: warning ⚠️ Dangerous Feature Ahead
 :::
@@ -93,7 +94,7 @@ like custom getters, computeds, and methods
 optional traits?: string[];
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2314](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L2314)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2320](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L2320)
 
 A list of traits that this resource implements. The fields for these
 traits should still be defined in the fields array.
@@ -110,7 +111,7 @@ type that is never defined as a schema.
 type: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2295](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L2295)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2301](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L2301)
 
 The name of the schema
 

@@ -1,4 +1,4 @@
 ---
-url: /contributors.md
+url: https://canary.warp-drive.io/contributors.md
 ---
 

@@ -1,5 +1,5 @@
 ---
-url: /guides/contributing/rfc-process.md
+url: https://canary.warp-drive.io/guides/contributing/rfc-process.md
 ---
 
 ### Requesting Features or Deprecations

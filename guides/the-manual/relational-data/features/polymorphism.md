@@ -1,5 +1,6 @@
 ---
-url: /guides/the-manual/relational-data/features/polymorphism.md
+url: >-
+  https://canary.warp-drive.io/guides/the-manual/relational-data/features/polymorphism.md
 ---
 # Relationship Polymorphism
 

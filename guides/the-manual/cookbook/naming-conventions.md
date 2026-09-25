@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/cookbook/naming-conventions.md
+url: https://canary.warp-drive.io/guides/the-manual/cookbook/naming-conventions.md
 ---
 # Model Name: singular or plural? What to choose? Why is that?
 

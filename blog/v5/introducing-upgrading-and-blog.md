@@ -1,5 +1,5 @@
 ---
-url: /blog/v5/introducing-upgrading-and-blog.md
+url: https://canary.warp-drive.io/blog/v5/introducing-upgrading-and-blog.md
 ---
 
 # Introducing Upgrading & Blog

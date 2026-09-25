@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/legacy/types/LegacyStoreSetupOptions.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/legacy/types/LegacyStoreSetupOptions.md
 ---
 
 &#x20;
@@ -13,7 +14,7 @@ type LegacyStoreSetupOptions<T extends Cache = Cache> =
 | LegacyModelAndNetworkAndRequestStoreSetupOptions<T>;
 ```
 
-Defined in: [warp-drive-packages/legacy/src/index.ts:154](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/index.ts#L154)
+Defined in: [warp-drive-packages/legacy/src/index.ts:154](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/index.ts#L154)
 
 The available options when setting up the legacy store,
 one of:

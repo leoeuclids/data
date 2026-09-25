@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/typescript/typing-includes.md
+url: https://canary.warp-drive.io/guides/the-manual/typescript/typing-includes.md
 ---
 # Typing Includes
 

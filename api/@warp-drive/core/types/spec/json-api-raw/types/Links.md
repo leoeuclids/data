@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/spec/json-api-raw/types/Links.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/spec/json-api-raw/types/Links.md
 ---
 
 # &#x20;Links
@@ -11,7 +12,7 @@ interface Links {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/types/spec/json-api-raw.ts:48](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/spec/json-api-raw.ts#L48)
+Defined in: [warp-drive-packages/core/src/types/spec/json-api-raw.ts:48](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/spec/json-api-raw.ts#L48)
 
 The `links` member of a {json:api} resource or document.
 
@@ -29,7 +30,7 @@ The `links` member of a {json:api} resource or document.
 optional related?: Link | null;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/spec/json-api-raw.ts:52](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/spec/json-api-raw.ts#L52)
+Defined in: [warp-drive-packages/core/src/types/spec/json-api-raw.ts:52](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/spec/json-api-raw.ts#L52)
 
 a link for retrieving the related resource(s)
 
@@ -41,6 +42,6 @@ a link for retrieving the related resource(s)
 optional self?: Link | null;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/spec/json-api-raw.ts:56](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/spec/json-api-raw.ts#L56)
+Defined in: [warp-drive-packages/core/src/types/spec/json-api-raw.ts:56](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/spec/json-api-raw.ts#L56)
 
 a link for retrieving the resource or document itself

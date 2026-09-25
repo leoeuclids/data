@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/requests/typing-requests.md
+url: https://canary.warp-drive.io/guides/the-manual/requests/typing-requests.md
 ---
 # Typing Requests
 
@@ -25,7 +25,7 @@ const result = await store.request(
 result.content.data.firstName; // will have type string
 ```
 
-When using the component API, if the templating syntax does not allow typescript
+When using the component API, if the templating syntax does not allow TypeScript
 generics, create a [builder](./builders.md) function.
 
 ```glimmer-ts
@@ -57,7 +57,7 @@ export default <template>
 
 Requests that return reactive responses wrap the primary resource data in a [ReactiveDocument](/api/@warp-drive/core/reactive/types/ReactiveDocument). In the case of an error, this will be a [ReactiveErrorDocument](/api/@warp-drive/core/reactive/types/ReactiveErrorDocument) and in the case of success it will be a [ReactiveDataDocument](/api/@warp-drive/core/reactive/types/ReactiveDataDocument)
 
-A conventient utility is available for [typing these reactive responses](/api/@warp-drive/core/request/functions/withReactiveResponse).
+A convenient utility is available for [typing these reactive responses](/api/@warp-drive/core/request/functions/withReactiveResponse).
 
 :::tabs key:return-type
 

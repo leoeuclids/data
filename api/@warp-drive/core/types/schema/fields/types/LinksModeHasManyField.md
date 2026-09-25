@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/schema/fields/types/LinksModeHasManyField.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/schema/fields/types/LinksModeHasManyField.md
 ---
 
 # &#x20;LinksModeHasManyField
@@ -14,7 +15,7 @@ interface LinksModeHasManyField {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:1858](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L1858)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:1861](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L1861)
 
 > \[!CAUTION]
 > This Field is LEGACY
@@ -32,7 +33,7 @@ This is the legacy version of the `CollectionField`.
 kind: "hasMany";
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:1864](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L1864)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:1867](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L1867)
 
 The kind of field this is.
 
@@ -44,7 +45,7 @@ The kind of field this is.
 name: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:1871](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L1871)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:1874](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L1874)
 
 The name of the field.
 
@@ -63,7 +64,7 @@ options: {
 };
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:1912](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L1912)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:1915](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L1915)
 
 Options for hasMany are mandatory.
 
@@ -115,7 +116,10 @@ resources are loaded together with this resource,
 and that the cache data for this field will
 contain the full list of pointers.
 
-hasMany relationships do not support pagination.
+hasMany relationships do not support pagination. To page through a
+large collection, request it as its own document and use the
+experimental pagination primitives; see the
+[Pagination guide](/guides/the-manual/experiments/pagination).
 
 #### inverse
 
@@ -208,7 +212,7 @@ or abstract type specified in `type`.
 optional sourceKey?: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:1895](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L1895)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:1898](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L1898)
 
 The name of the field as returned by the API
 and inserted into the [Cache](../../../cache/types/Cache.md) if it differs
@@ -239,7 +243,7 @@ This option is only needed when the value differs from name.
 type: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:1905](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L1905)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:1908](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L1908)
 
 the name of the resource that this field
 refers to. In the case of a polymorphic

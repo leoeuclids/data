@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/utilities/types/GenericUrlOptions.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/utilities/types/GenericUrlOptions.md
 ---
 
 # &#x20;GenericUrlOptions
@@ -12,7 +13,7 @@ interface GenericUrlOptions {
 }
 ```
 
-Defined in: [index.ts:396](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L396)
+Defined in: [index.ts:396](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L396)
 
 [buildBaseURL](../functions/buildBaseURL.md) options for building a URL directly from a `resourcePath`
 without an associated request operation.
@@ -25,7 +26,7 @@ without an associated request operation.
 optional host?: string;
 ```
 
-Defined in: [index.ts:404](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L404)
+Defined in: [index.ts:404](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L404)
 
 Overrides the globally configured host for this call only.
 
@@ -37,7 +38,7 @@ Overrides the globally configured host for this call only.
 optional namespace?: string;
 ```
 
-Defined in: [index.ts:408](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L408)
+Defined in: [index.ts:408](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L408)
 
 Overrides the globally configured namespace for this call only.
 
@@ -49,6 +50,6 @@ Overrides the globally configured namespace for this call only.
 resourcePath: string;
 ```
 
-Defined in: [index.ts:400](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L400)
+Defined in: [index.ts:400](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L400)
 
 The path segment for the resource.

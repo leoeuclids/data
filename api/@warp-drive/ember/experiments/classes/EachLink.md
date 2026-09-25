@@ -1,22 +1,23 @@
 ---
-url: /api/@warp-drive/ember/experiments/classes/EachLink.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/ember/experiments/classes/EachLink.md
 ---
 
 # &#x20;\<EachLink />&#x20;
 
-Defined in: [warp-drive-packages/ember/dist/experiments.d.ts:319](https://github.com/warp-drive-data/warp-drive/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/ember/dist/experiments.d.ts#L319)
+Defined in: [warp-drive-packages/ember/dist/experiments.d.ts:320](https://github.com/warp-drive-data/warp-drive/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/ember/dist/experiments.d.ts#L320)
 
 The `<EachLink />` component yields the navigation links for a paginated
-collection, derived from the PagedPaginationState a `<Paginate />`
+collection, derived from the [PagedPaginationState](../../../experiments/pagination/types/PagedPaginationState.md) a `<Paginate />`
 component yields to its `content` block.
 
-It renders no markup of its own: it yields a single PaginationLinks
+It renders no markup of its own: it yields a single [PaginationLinks](../../../experiments/pagination/types/PaginationLinks.md)
 object, and the consumer decides which links to render, with what markup,
 and in what order.
 
 The yielded state provides:
 
-* `links` — the numbered links, with PlaceholderPaginationLink
+* `links` — the numbered links, with [PlaceholderPaginationLink](../../../experiments/pagination/types/PlaceholderPaginationLink.md)
   placeholders standing in for gaps of not-yet-loaded pages. Discriminate
   with `isReal`. Empty for cursor-based collections, which have no page
   numbers to render.
@@ -90,7 +91,7 @@ new EachLink<RT, E>(owner: Owner, args: {
 }): EachLink<RT, E>;
 ```
 
-Defined in: [node\_modules/.pnpm/@glimmer+component@2.1.1/node\_modules/@glimmer/component/dist/index.d.ts:389](https://github.com/warp-drive-data/warp-drive/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/node_modules/.pnpm/@glimmer+component@2.1.1/node_modules/@glimmer/component/dist/index.d.ts#L389)
+Defined in: [node\_modules/.pnpm/@glimmer+component@2.1.1/node\_modules/@glimmer/component/dist/index.d.ts:389](https://github.com/warp-drive-data/warp-drive/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/node_modules/.pnpm/@glimmer+component@2.1.1/node_modules/@glimmer/component/dist/index.d.ts#L389)
 
 #### Parameters
 
@@ -102,7 +103,7 @@ Defined in: [node\_modules/.pnpm/@glimmer+component@2.1.1/node\_modules/@glimmer
 
 ###### pages
 
-`PagedPaginationState`<`RT`, `E`>
+[`PagedPaginationState`](../../../experiments/pagination/types/PagedPaginationState.md)<`RT`, `E`>
 
 The paged pagination state (yielded by `<Paginate />`) to derive the
 navigation links from.
@@ -125,7 +126,7 @@ Component<EachLinkSignature<RT, E>>.constructor
 willDestroy(): void;
 ```
 
-Defined in: [warp-drive-packages/ember/dist/experiments.d.ts:322](https://github.com/warp-drive-data/warp-drive/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/ember/dist/experiments.d.ts#L322)
+Defined in: [warp-drive-packages/ember/dist/experiments.d.ts:323](https://github.com/warp-drive-data/warp-drive/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/ember/dist/experiments.d.ts#L323)
 
 Called before the component has been removed from the DOM.
 

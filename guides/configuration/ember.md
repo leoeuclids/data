@@ -1,5 +1,5 @@
 ---
-url: /guides/configuration/ember.md
+url: https://canary.warp-drive.io/guides/configuration/ember.md
 ---
 
 :::warning caution

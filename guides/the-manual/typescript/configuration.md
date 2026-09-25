@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/typescript/configuration.md
+url: https://canary.warp-drive.io/guides/the-manual/typescript/configuration.md
 ---
 # Configuration
 

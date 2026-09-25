@@ -1,5 +1,6 @@
 ---
-url: /guides/the-manual/relational-data/configuration/many-to-one.md
+url: >-
+  https://canary.warp-drive.io/guides/the-manual/relational-data/configuration/many-to-one.md
 ---
 # Many To One Relationships
 

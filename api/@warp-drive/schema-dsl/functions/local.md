@@ -1,5 +1,5 @@
 ---
-url: /api/@warp-drive/schema-dsl/functions/local.md
+url: https://canary.warp-drive.io/api/@warp-drive/schema-dsl/functions/local.md
 ---
 
 # &#x20;local()
@@ -15,7 +15,7 @@ function local(options: LocalOptions): (target: object, key: string) => void;
 function local(target: object, key: string): void;
 ```
 
-Defined in: [fields/local.ts:54](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/schema-dsl/src/fields/local.ts#L54)
+Defined in: [fields/local.ts:54](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/schema-dsl/src/fields/local.ts#L54)
 
 **`Decorator`**
 
@@ -67,7 +67,7 @@ export class User {
 function local(options: LocalOptions): (target: object, key: string) => void;
 ```
 
-Defined in: [fields/local.ts:55](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/schema-dsl/src/fields/local.ts#L55)
+Defined in: [fields/local.ts:55](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/schema-dsl/src/fields/local.ts#L55)
 
 **`Decorator`**
 

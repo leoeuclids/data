@@ -1,5 +1,6 @@
 ---
-url: /guides/configuration/legacy-package-setup/setup/ember.md
+url: >-
+  https://canary.warp-drive.io/guides/configuration/legacy-package-setup/setup/ember.md
 ---
 # Ember.js
 

@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/schema-dsl/types/ArrayFieldOptions.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/schema-dsl/types/ArrayFieldOptions.md
 ---
 
 # &#x20;ArrayFieldOptions
@@ -11,7 +12,7 @@ interface ArrayFieldOptions {
 }
 ```
 
-Defined in: [fields/array.ts:11](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/schema-dsl/src/fields/array.ts#L11)
+Defined in: [fields/array.ts:11](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/schema-dsl/src/fields/array.ts#L11)
 
 Options accepted by the [array](../functions/array.md) decorator.
 
@@ -23,7 +24,7 @@ Options accepted by the [array](../functions/array.md) decorator.
 optional sourceKey?: string;
 ```
 
-Defined in: [fields/array.ts:19](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/schema-dsl/src/fields/array.ts#L19)
+Defined in: [fields/array.ts:19](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/schema-dsl/src/fields/array.ts#L19)
 
 The name of the field as returned by the API, if it differs from the
 decorated property's name. Compiles onto the [ArrayField](../../core/types/schema/fields/types/ArrayField.md)'s
@@ -37,7 +38,7 @@ decorated property's name. Compiles onto the [ArrayField](../../core/types/schem
 optional type?: string;
 ```
 
-Defined in: [fields/array.ts:28](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/schema-dsl/src/fields/array.ts#L28)
+Defined in: [fields/array.ts:28](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/schema-dsl/src/fields/array.ts#L28)
 
 The name of a [Transformation](../../core/types/schema/concepts/types/Transformation.md) to pass each item in the array
 through before displaying or serializing it. Compiles onto the

@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/requests/using-just-fetch.md
+url: https://canary.warp-drive.io/guides/the-manual/requests/using-just-fetch.md
 ---
 
 # Using "Just Fetch"
@@ -90,7 +90,7 @@ const users = userList.content;
 
 ### Making Requests
 
-`RequestManager` has a single asyncronous method as it's API: `request`
+`RequestManager` has a single asynchronous method as its API: `request`
 
 ```ts
 class RequestManager {
@@ -222,7 +222,7 @@ response content before passing along the chunk downstream.
 const FetchHandler = {
   async request(context) {
     const response = await fetch(context.request);
-    context.setResponse(reponse);
+    context.setResponse(response);
     context.setStream(response.clone().body);
 
     return response.json();

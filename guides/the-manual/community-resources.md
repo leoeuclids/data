@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/community-resources.md
+url: https://canary.warp-drive.io/guides/the-manual/community-resources.md
 ---
 # Community Resources
 

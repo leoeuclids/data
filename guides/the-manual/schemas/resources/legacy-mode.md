@@ -1,5 +1,6 @@
 ---
-url: /guides/the-manual/schemas/resources/legacy-mode.md
+url: >-
+  https://canary.warp-drive.io/guides/the-manual/schemas/resources/legacy-mode.md
 ---
 # LegacyMode (recommended)
 

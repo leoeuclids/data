@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/params/types/Serializable.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/params/types/Serializable.md
 ---
 
 # &#x20;Serializable
@@ -10,7 +11,7 @@ type Serializable =
   | SerializablePrimitive[];
 ```
 
-Defined in: [warp-drive-packages/core/src/types/params.ts:14](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/params.ts#L14)
+Defined in: [warp-drive-packages/core/src/types/params.ts:14](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/params.ts#L14)
 
 A JSON-serializable value suitable for use as a query parameter value:
 either a [SerializablePrimitive](SerializablePrimitive.md) or an array of them.

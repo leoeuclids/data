@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/record/types/ExtractSuggestedCacheTypes.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/record/types/ExtractSuggestedCacheTypes.md
 ---
 
 # &#x20;ExtractSuggestedCacheTypes\<T *extends* [`TypedRecordInstance`](TypedRecordInstance.md), MAX\_DEPTH *extends* `_DEPTHCOUNT` = `DEFAULT_MAX_DEPTH`>
@@ -8,7 +9,7 @@ url: /api/@warp-drive/core/types/record/types/ExtractSuggestedCacheTypes.md
 type ExtractSuggestedCacheTypes<T extends TypedRecordInstance, MAX_DEPTH extends _DEPTHCOUNT = DEFAULT_MAX_DEPTH> = ExtractUnion<MAX_DEPTH, T>;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/record.ts:157](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/record.ts#L157)
+Defined in: [warp-drive-packages/core/src/types/record.ts:157](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/record.ts#L157)
 
 A utility that provides the union of all ResourceName for all potential
 includes for the given TypedRecordInstance.

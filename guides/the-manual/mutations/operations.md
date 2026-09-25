@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/mutations/operations.md
+url: https://canary.warp-drive.io/guides/the-manual/mutations/operations.md
 ---
 # Operations
 

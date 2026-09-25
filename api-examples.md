@@ -1,5 +1,5 @@
 ---
-url: /api-examples.md
+url: https://canary.warp-drive.io/api-examples.md
 ---
 
 # Runtime API Examples

@@ -1,5 +1,6 @@
 ---
-url: /rfcs/0001-warp-drive-transactional-notifications.md
+url: >-
+  https://canary.warp-drive.io/rfcs/0001-warp-drive-transactional-notifications.md
 ---
 
 # Transactional Notification Delivery and Reactive Request State&#x20;

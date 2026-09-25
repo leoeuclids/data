@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/request/types/CreateRequestOptions.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/request/types/CreateRequestOptions.md
 ---
 
 # &#x20;CreateRequestOptions\<RT = `unknown`, T = `unknown`>
@@ -20,7 +21,7 @@ type CreateRequestOptions<RT = unknown, T = unknown> = {
 };
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:321](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L321)
+Defined in: [warp-drive-packages/core/src/types/request.ts:321](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L321)
 
 The request shape produced by the `createRecord` request builders, for
 use with [Store.request](../../../classes/Store.md#request).
@@ -46,7 +47,7 @@ optional body?:
   | FormData;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:341](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L341)
+Defined in: [warp-drive-packages/core/src/types/request.ts:341](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L341)
 
 the body to send with the request
 
@@ -60,7 +61,7 @@ data: {
 };
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:345](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L345)
+Defined in: [warp-drive-packages/core/src/types/request.ts:345](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L345)
 
 data for handlers to convert into the request body
 
@@ -80,7 +81,7 @@ the resource being created
 headers: Headers;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:333](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L333)
+Defined in: [warp-drive-packages/core/src/types/request.ts:333](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L333)
 
 the headers to send with the request
 
@@ -92,7 +93,7 @@ the headers to send with the request
 method: "POST";
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:329](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L329)
+Defined in: [warp-drive-packages/core/src/types/request.ts:329](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L329)
 
 the HTTP method to use
 
@@ -104,7 +105,7 @@ the HTTP method to use
 op: "createRecord";
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:337](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L337)
+Defined in: [warp-drive-packages/core/src/types/request.ts:337](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L337)
 
 the name of the request operation
 
@@ -116,7 +117,7 @@ the name of the request operation
 records: [ResourceIdentifierObject<TypeFromInstanceOrString<T>>];
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:354](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L354)
+Defined in: [warp-drive-packages/core/src/types/request.ts:354](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L354)
 
 the resource being created
 
@@ -128,6 +129,6 @@ the resource being created
 url: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:325](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L325)
+Defined in: [warp-drive-packages/core/src/types/request.ts:325](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L325)
 
 the url to request

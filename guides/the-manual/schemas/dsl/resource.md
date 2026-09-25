@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/schemas/dsl/resource.md
+url: https://canary.warp-drive.io/guides/the-manual/schemas/dsl/resource.md
 ---
 
 # Defining Resources

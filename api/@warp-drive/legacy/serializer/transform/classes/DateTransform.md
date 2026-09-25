@@ -1,12 +1,13 @@
 ---
-url: /api/@warp-drive/legacy/serializer/transform/classes/DateTransform.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/legacy/serializer/transform/classes/DateTransform.md
 ---
 
 &#x20;
 
 # &#x20;DateTransform
 
-Defined in: [warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts:6](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts#L6)
+Defined in: [warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts:6](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts#L6)
 
 The `DateTransform` class is used to serialize and deserialize
 date attributes on Ember Data record objects. This transform is used
@@ -46,7 +47,7 @@ deserialize(serialized: string | number | null, _options?: Record<string, unknow
   | null;
 ```
 
-Defined in: [warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts:37](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts#L37)
+Defined in: [warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts:37](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts#L37)
 
 Converts a serialized (raw payload) `ISO 8601` string, epoch number,
 or nullish value into a `Date` (or `null`/`undefined`).
@@ -74,7 +75,7 @@ or nullish value into a `Date` (or `null`/`undefined`).
 serialize(date: Date, _options?: Record<string, unknown>): string | null;
 ```
 
-Defined in: [warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts:61](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts#L61)
+Defined in: [warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts:61](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts#L61)
 
 Converts a `Date` attribute value into an `ISO 8601` string, or `null`
 if the value is not a valid `Date`.
@@ -101,7 +102,7 @@ if the value is not a valid `Date`.
 static create(): DateTransform;
 ```
 
-Defined in: [warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts:73](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts#L73)
+Defined in: [warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts:73](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts#L73)
 
 Creates a new instance of this transform.
 
@@ -117,6 +118,6 @@ Creates a new instance of this transform.
 ___(unique) Symbol($type): "date";
 ```
 
-Defined in: [warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts:10](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts#L10)
+Defined in: [warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts:10](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/serializer/-private/transforms/date.ts#L10)
 
 see [TransformName](../../../../core/types/symbols/variables/TransformName.md)

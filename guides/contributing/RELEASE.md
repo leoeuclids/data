@@ -1,5 +1,5 @@
 ---
-url: /guides/contributing/RELEASE.md
+url: https://canary.warp-drive.io/guides/contributing/RELEASE.md
 ---
 
 # Release

@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/reactivity/misc.md
+url: https://canary.warp-drive.io/guides/the-manual/reactivity/misc.md
 ---
 
 In addition to request and cache management, WarpDrive provides a reactive access

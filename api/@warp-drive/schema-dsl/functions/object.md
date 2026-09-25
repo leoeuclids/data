@@ -1,5 +1,5 @@
 ---
-url: /api/@warp-drive/schema-dsl/functions/object.md
+url: https://canary.warp-drive.io/api/@warp-drive/schema-dsl/functions/object.md
 ---
 
 # &#x20;object()
@@ -15,7 +15,7 @@ function object(options: ObjectFieldOptions): (target: object, key: string) => v
 function object(target: object, key: string): void;
 ```
 
-Defined in: [fields/object.ts:62](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/schema-dsl/src/fields/object.ts#L62)
+Defined in: [fields/object.ts:62](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/schema-dsl/src/fields/object.ts#L62)
 
 **`Decorator`**
 
@@ -66,7 +66,7 @@ export class User {
 function object(options: ObjectFieldOptions): (target: object, key: string) => void;
 ```
 
-Defined in: [fields/object.ts:63](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/schema-dsl/src/fields/object.ts#L63)
+Defined in: [fields/object.ts:63](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/schema-dsl/src/fields/object.ts#L63)
 
 **`Decorator`**
 

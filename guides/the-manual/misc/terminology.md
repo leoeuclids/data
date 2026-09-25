@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/misc/terminology.md
+url: https://canary.warp-drive.io/guides/the-manual/misc/terminology.md
 ---
 
 # Terminology

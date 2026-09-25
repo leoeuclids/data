@@ -1,5 +1,5 @@
 ---
-url: /guides/contributing/become-a-contributor.md
+url: https://canary.warp-drive.io/guides/contributing/become-a-contributor.md
 ---
 # Become A Contributor
 

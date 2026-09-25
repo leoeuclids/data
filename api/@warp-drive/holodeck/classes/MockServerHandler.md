@@ -1,10 +1,11 @@
 ---
-url: /api/@warp-drive/holodeck/classes/MockServerHandler.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/holodeck/classes/MockServerHandler.md
 ---
 
 # &#x20;MockServerHandler
 
-Defined in: [index.ts:209](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/packages/holodeck/src/index.ts#L209)
+Defined in: [index.ts:272](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/packages/holodeck/src/index.ts#L272)
 
 A request handler that intercepts requests and routes them through
 the Holodeck mock server.
@@ -32,7 +33,7 @@ the test context object used to retrieve the test ID.
 new MockServerHandler(owner: object): MockServerHandler;
 ```
 
-Defined in: [index.ts:211](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/packages/holodeck/src/index.ts#L211)
+Defined in: [index.ts:274](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/packages/holodeck/src/index.ts#L274)
 
 #### Parameters
 
@@ -52,7 +53,7 @@ Defined in: [index.ts:211](https://github.com/leoeuclids/data/blob/7d81741dd2bfc
 request<T>(context: RequestContext, next: NextFn<T>): Promise<StructuredDataDocument<T>>;
 ```
 
-Defined in: [index.ts:214](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/packages/holodeck/src/index.ts#L214)
+Defined in: [index.ts:277](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/packages/holodeck/src/index.ts#L277)
 
 Method to implement to handle requests. Receives the request
 context and a nextFn to call to pass-along the request to
@@ -92,4 +93,4 @@ Handler.request
 owner: object;
 ```
 
-Defined in: [index.ts:210](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/packages/holodeck/src/index.ts#L210)
+Defined in: [index.ts:273](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/packages/holodeck/src/index.ts#L273)

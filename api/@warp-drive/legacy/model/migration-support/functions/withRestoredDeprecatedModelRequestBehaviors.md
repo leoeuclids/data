@@ -1,6 +1,6 @@
 ---
 url: >-
-  /api/@warp-drive/legacy/model/migration-support/functions/withRestoredDeprecatedModelRequestBehaviors.md
+  https://canary.warp-drive.io/api/@warp-drive/legacy/model/migration-support/functions/withRestoredDeprecatedModelRequestBehaviors.md
 ---
 
 &#x20;
@@ -11,7 +11,7 @@ url: >-
 function withRestoredDeprecatedModelRequestBehaviors(schema: WithPartial<LegacyResourceSchema, "identity" | "legacy">): LegacyResourceSchema;
 ```
 
-Defined in: [warp-drive-packages/legacy/src/model/migration-support.ts:391](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/model/migration-support.ts#L391)
+Defined in: [warp-drive-packages/legacy/src/model/migration-support.ts:391](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/model/migration-support.ts#L391)
 
 Adds the necessasary fields to the schema for supporting
 the deprecated request methods on LegacyMode schemas.

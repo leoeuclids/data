@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/schemas/simple-fields.md
+url: https://canary.warp-drive.io/guides/the-manual/schemas/simple-fields.md
 ---
 # SimpleFields
 

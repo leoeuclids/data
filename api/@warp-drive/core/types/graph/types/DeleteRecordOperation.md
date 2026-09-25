@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/graph/types/DeleteRecordOperation.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/graph/types/DeleteRecordOperation.md
 ---
 
 # &#x20;DeleteRecordOperation
@@ -12,7 +13,7 @@ interface DeleteRecordOperation {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/types/graph.ts:51](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/graph.ts#L51)
+Defined in: [warp-drive-packages/core/src/types/graph.ts:51](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/graph.ts#L51)
 
 Signals to the Graph that a resource has been deleted, so that
 it can be removed from any relationships that reference it.
@@ -25,7 +26,7 @@ it can be removed from any relationships that reference it.
 isNew: boolean;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/graph.ts:63](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/graph.ts#L63)
+Defined in: [warp-drive-packages/core/src/types/graph.ts:63](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/graph.ts#L63)
 
 Whether the resource was a client-created resource that had not yet been persisted
 
@@ -37,7 +38,7 @@ Whether the resource was a client-created resource that had not yet been persist
 op: "deleteRecord";
 ```
 
-Defined in: [warp-drive-packages/core/src/types/graph.ts:55](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/graph.ts#L55)
+Defined in: [warp-drive-packages/core/src/types/graph.ts:55](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/graph.ts#L55)
 
 The name of the operation
 
@@ -49,6 +50,6 @@ The name of the operation
 record: ResourceKey;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/graph.ts:59](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/graph.ts#L59)
+Defined in: [warp-drive-packages/core/src/types/graph.ts:59](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/graph.ts#L59)
 
 The cache key for the resource that was deleted

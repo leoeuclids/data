@@ -1,5 +1,5 @@
 ---
-url: /guides/configuration/advanced.md
+url: https://canary.warp-drive.io/guides/configuration/advanced.md
 ---
 
 # Advanced Store Configuration

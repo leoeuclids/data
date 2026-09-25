@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/reactive/types/ReactiveDocument.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/reactive/types/ReactiveDocument.md
 ---
 
 # &#x20;ReactiveDocument\<T, M *extends* [`Meta`](../../types/spec/json-api-raw/types/Meta.md) | `undefined` = [`Meta`](../../types/spec/json-api-raw/types/Meta.md) | `undefined`, E *extends* `object` = `object`, EM *extends* [`Meta`](../../types/spec/json-api-raw/types/Meta.md) | `undefined` = `M`>
@@ -10,7 +11,7 @@ type ReactiveDocument<T, M extends Meta | undefined = Meta | undefined, E extend
 | ReactiveErrorDocument<T, EM, E, M>;
 ```
 
-Defined in: [warp-drive-packages/core/src/reactive/-private/document.ts:258](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/reactive/-private/document.ts#L258)
+Defined in: [warp-drive-packages/core/src/reactive/-private/document.ts:258](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/reactive/-private/document.ts#L258)
 
 A Document is a class that wraps the response content from a request to the API
 returned by `Cache.put` or `Cache.peek`, converting ResourceKeys into

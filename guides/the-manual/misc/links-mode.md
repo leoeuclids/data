@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/misc/links-mode.md
+url: https://canary.warp-drive.io/guides/the-manual/misc/links-mode.md
 ---
 
 # LinksMode
@@ -221,7 +221,8 @@ variations of the field but this flag will take on a better meaning.
 
 An `async` relationship represents a POTENTIALLY asynchronous boundary in your API, meaning that even if
 sometimes the data for that relationship is included as a sideload, it may not always be and may require
-its own request. Async collection relationships can be paginated.
+its own request. Async collection relationships can be paginated; the experimental
+[Pagination](../experiments/pagination.md) primitives provide the reactive state for doing so.
 
 A `sync` relationship represents an ALWAYS synchronous boundary, meaning that the full state of the relationship
 is ALWAYS included as a sideload and cannot ever be loaded as its own request. Sync relationships can never be

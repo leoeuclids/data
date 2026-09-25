@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/request/types/ImmutableCreateRequestOptions.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/request/types/ImmutableCreateRequestOptions.md
 ---
 
 # &#x20;ImmutableCreateRequestOptions
@@ -8,6 +9,6 @@ url: /api/@warp-drive/core/types/request/types/ImmutableCreateRequestOptions.md
 type ImmutableCreateRequestOptions = ImmutableRequest<CreateRequestOptions>;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:372](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L372)
+Defined in: [warp-drive-packages/core/src/types/request.ts:372](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L372)
 
 The immutable, handler-facing form of [CreateRequestOptions](CreateRequestOptions.md).

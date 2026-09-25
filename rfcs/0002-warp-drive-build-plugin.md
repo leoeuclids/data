@@ -1,5 +1,5 @@
 ---
-url: /rfcs/0002-warp-drive-build-plugin.md
+url: https://canary.warp-drive.io/rfcs/0002-warp-drive-build-plugin.md
 ---
 
 # A Framework-Agnostic Build Plugin for WarpDrive&#x20;

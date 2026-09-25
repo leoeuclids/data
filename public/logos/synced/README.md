@@ -1,5 +1,5 @@
 ---
-url: /public/logos/synced/README.md
+url: https://canary.warp-drive.io/public/logos/synced/README.md
 ---
 # Autogeneration Notice
 

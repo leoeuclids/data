@@ -1,6 +1,6 @@
 ---
 url: >-
-  /api/@warp-drive/build-config/deprecations/variables/DISABLE_7X_DEPRECATIONS.md
+  https://canary.warp-drive.io/api/@warp-drive/build-config/deprecations/variables/DISABLE_7X_DEPRECATIONS.md
 ---
 
 # &#x20;DISABLE\_7X\_DEPRECATIONS&#x20;
@@ -9,7 +9,7 @@ url: >-
 const DISABLE_7X_DEPRECATIONS: boolean = true;
 ```
 
-Defined in: [deprecations.ts:543](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/build-config/src/deprecations.ts#L543)
+Defined in: [deprecations.ts:543](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/build-config/src/deprecations.ts#L543)
 
 This is a special flag that can be used to opt-in early to receiving deprecations introduced in 6.x
 which have had their infra backported to 5.x versions of ***Warp*Drive**.

@@ -1,5 +1,5 @@
 ---
-url: /api/@warp-drive/react/variables/WatcherContext.md
+url: https://canary.warp-drive.io/api/@warp-drive/react/variables/WatcherContext.md
 ---
 
 # &#x20;WatcherContext
@@ -12,4 +12,4 @@ const WatcherContext: Context<
 | null>;
 ```
 
-Defined in: [-private/reactive-context.tsx:154](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/react/src/-private/reactive-context.tsx#L154)
+Defined in: [-private/reactive-context.tsx:154](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/react/src/-private/reactive-context.tsx#L154)

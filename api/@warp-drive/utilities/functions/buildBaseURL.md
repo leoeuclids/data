@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/utilities/functions/buildBaseURL.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/utilities/functions/buildBaseURL.md
 ---
 
 # &#x20;buildBaseURL()
@@ -8,7 +9,7 @@ url: /api/@warp-drive/utilities/functions/buildBaseURL.md
 function buildBaseURL(urlOptions: UrlOptions): string;
 ```
 
-Defined in: [index.ts:504](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L504)
+Defined in: [index.ts:504](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L504)
 
 Builds a URL for a request based on the provided options.
 Does not include support for building query params (see `buildQueryParams`)

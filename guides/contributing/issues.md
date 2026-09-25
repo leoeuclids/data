@@ -1,5 +1,5 @@
 ---
-url: /guides/contributing/issues.md
+url: https://canary.warp-drive.io/guides/contributing/issues.md
 ---
 
 ### Reporting Bugs

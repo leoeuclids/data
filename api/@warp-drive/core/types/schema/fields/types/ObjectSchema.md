@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/schema/fields/types/ObjectSchema.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/schema/fields/types/ObjectSchema.md
 ---
 
 # &#x20;ObjectSchema
@@ -13,7 +14,7 @@ interface ObjectSchema {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2353](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L2353)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2359](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L2359)
 
 Represents a schema for an object that is not
 a primary resource (has no unique identity of its own).
@@ -28,7 +29,7 @@ ObjectSchemas may not currently contain relationships.
 fields: ObjectFieldSchema[];
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2387](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L2387)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2393](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L2393)
 
 The fields that make up the shape of the object
 
@@ -40,7 +41,7 @@ The fields that make up the shape of the object
 identity: HashField | null;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2363](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L2363)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2369](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L2369)
 
 Either a HashField from which to calculate an identity or null
 
@@ -56,7 +57,7 @@ when an identity is needed.
 optional objectExtensions?: string[];
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2402](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L2402)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2408](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L2408)
 
 ::: warning ⚠️ Dangerous Feature Ahead
 :::
@@ -78,7 +79,7 @@ like custom getters, computeds, and methods
 type: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2380](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L2380)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:2386](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L2386)
 
 The name of the schema
 

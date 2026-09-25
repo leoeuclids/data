@@ -1,5 +1,5 @@
 ---
-url: /guides/migrating/codemods.md
+url: https://canary.warp-drive.io/guides/migrating/codemods.md
 ---
 
 :::danger **We've moved!**

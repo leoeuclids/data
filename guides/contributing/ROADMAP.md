@@ -1,5 +1,5 @@
 ---
-url: /guides/contributing/ROADMAP.md
+url: https://canary.warp-drive.io/guides/contributing/ROADMAP.md
 ---
 
 # WarpDrive Roadmap
@@ -24,21 +24,21 @@ section.
 > what we need in a broader scope long before we dive into the
 > specifics.
 
-* [Editions](#-editions)
-  * [Polaris](#-polaris)
-* [Releases](#-releases)
-  * [5.x Series](#-5x-series)
+* [Editions](#editions)
+  * [Polaris](#polaris)
+* [Releases](#releases)
+  * [5.x Series](#5x-series)
 
 ***
 
-## 💜 Editions
+## 💜 Editions {#editions}
 
 Each Edition encompasses a set of main themes that together we feel presents a distinct holistic
 picture for how to think about and utilize WarpDrive.
 
-### 🔸 Polaris
+### 🔸 Polaris {#polaris}
 
-Polaris is an upcomming edition of Ember and related projects (embroider, WarpDrive, EmberCLI).
+Polaris is an upcoming edition of Ember and related projects (embroider, WarpDrive, EmberCLI).
 
 Our primary goal for Polaris is to evolve WarpDrive to being flexible and powerful enough to be the best-in-class data management solution for every Ember application.
 
@@ -53,7 +53,7 @@ We loosely define this to mean three things.
 
 Our stretch goal (and ultimate north star) is to achieve this for all frontend JavaScript applications, not just Ember applications.
 
-To help achieve this we're targetting the following goals. Goals which have been achieved on at *least* the main
+To help achieve this we're targeting the following goals. Goals which have been achieved on at *least* the main
 branch when using the project *without a legacy-support configuration* are marked with ✅. Those still needing work
 are marked with ⚠️. Those we'd love to see more polishing work on are also marked with 🩵
 
@@ -79,7 +79,9 @@ are marked with ⚠️. Those we'd love to see more polishing work on are also m
 
 Our stretch goals for Polaris are:
 
-* Pagination Primitives (components, state utils, and upgrade to RecordArrays/document storage)
+* Pagination Primitives (components, state utils, and upgrade to RecordArrays/document storage);
+  the components and state utils have shipped as an experiment, see
+  [Pagination](../the-manual/experiments/pagination.md)
 * Paginated Relationships (collection field schema impl)
 * Tree/LinkedList Utilities
 * Custom Field Schemas
@@ -130,7 +132,7 @@ This would enable applications to pre-fetch the data for routes more optimally, 
 
 See the [experiment](/api/@warp-drive/experiments/document-storage/)
 
-Support for persiting the cache into on-device storage.
+Support for persisting the cache into on-device storage.
 
 5. DataWorker
 
@@ -192,9 +194,9 @@ const MyRoute = <template>
 
 ***
 
-## 💜 Releases
+## 💜 Releases {#releases}
 
-### 🔸 5.x Series
+### 🔸 5.x Series {#5x-series}
 
 Features (non-exhaustive):
 
@@ -224,7 +226,7 @@ Deprecations:
 * <:idle> state for requests
 * @ember/string and ember-inflector removal
 * Vite support / setConfig
-* Typescript Support
+* TypeScript Support
 * Improved CachePolicy
 
 ### 🔸 5.3 - 08/18/2023

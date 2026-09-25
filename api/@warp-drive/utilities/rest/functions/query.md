@@ -1,5 +1,5 @@
 ---
-url: /api/@warp-drive/utilities/rest/functions/query.md
+url: https://canary.warp-drive.io/api/@warp-drive/utilities/rest/functions/query.md
 ---
 
 # &#x20;query()
@@ -35,7 +35,7 @@ function query<T, M extends
 ): QueryRequestOptions<ReactiveDataDocument<T[], M, E>>;
 ```
 
-Defined in: [-private/rest/query.ts:58](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/-private/rest/query.ts#L58)
+Defined in: [-private/rest/query.ts:58](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/-private/rest/query.ts#L58)
 
 Builds request options to query for resources, usually by a primary
 type, configured for the url and header expectations of most REST APIs.
@@ -124,7 +124,7 @@ function query(
 ): QueryRequestOptions;
 ```
 
-Defined in: [-private/rest/query.ts:63](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/-private/rest/query.ts#L63)
+Defined in: [-private/rest/query.ts:63](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/-private/rest/query.ts#L63)
 
 Builds request options to query for resources, usually by a primary
 type, configured for the url and header expectations of most REST APIs.

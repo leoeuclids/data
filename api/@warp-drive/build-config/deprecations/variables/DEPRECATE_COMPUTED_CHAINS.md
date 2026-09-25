@@ -1,6 +1,6 @@
 ---
 url: >-
-  /api/@warp-drive/build-config/deprecations/variables/DEPRECATE_COMPUTED_CHAINS.md
+  https://canary.warp-drive.io/api/@warp-drive/build-config/deprecations/variables/DEPRECATE_COMPUTED_CHAINS.md
 ---
 
 # &#x20;DEPRECATE\_COMPUTED\_CHAINS&#x20;
@@ -9,7 +9,7 @@ url: >-
 const DEPRECATE_COMPUTED_CHAINS: boolean = true;
 ```
 
-Defined in: [deprecations.ts:129](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/build-config/src/deprecations.ts#L129)
+Defined in: [deprecations.ts:129](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/build-config/src/deprecations.ts#L129)
 
 This is a planned deprecation which will trigger when observer or computed
 chains are used to watch for changes on any WarpDrive LiveArray, CollectionRecordArray,

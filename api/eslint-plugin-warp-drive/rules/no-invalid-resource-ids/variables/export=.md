@@ -1,6 +1,6 @@
 ---
 url: >-
-  /api/eslint-plugin-warp-drive/rules/no-invalid-resource-ids/variables/export=.md
+  https://canary.warp-drive.io/api/eslint-plugin-warp-drive/rules/no-invalid-resource-ids/variables/export=.md
 ---
 
 # &#x20;export=
@@ -9,4 +9,4 @@ url: >-
 export=: RuleModule;
 ```
 
-Defined in: [rules/no-invalid-resource-ids.js:36](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/packages/eslint-plugin-warp-drive/src/rules/no-invalid-resource-ids.js#L36)
+Defined in: [rules/no-invalid-resource-ids.js:36](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/packages/eslint-plugin-warp-drive/src/rules/no-invalid-resource-ids.js#L36)

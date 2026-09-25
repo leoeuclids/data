@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/legacy/functions/useLegacyStore.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/legacy/functions/useLegacyStore.md
 ---
 
 &#x20;
@@ -18,7 +19,7 @@ function useLegacyStore<T extends Cache>(options: LegacyModelAndNetworkAndReques
 function useLegacyStore<T extends Cache>(options: LegacyModelStoreSetupOptions<T>, StoreKlass?: typeof Store$1): typeof ConfiguredStore;
 ```
 
-Defined in: [warp-drive-packages/legacy/src/index.ts:285](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/index.ts#L285)
+Defined in: [warp-drive-packages/legacy/src/index.ts:285](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/index.ts#L285)
 
 Use the legacy store with the given options.
 
@@ -159,7 +160,7 @@ explicitly, so a handler relying on it should treat it as optional (as
 function useLegacyStore<T extends Cache>(options: LegacyModelAndNetworkStoreSetupOptions<T>, StoreKlass?: typeof Store$1): typeof ConfiguredStore;
 ```
 
-Defined in: [warp-drive-packages/legacy/src/index.ts:289](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/index.ts#L289)
+Defined in: [warp-drive-packages/legacy/src/index.ts:289](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/index.ts#L289)
 
 Use the legacy store with the given options.
 
@@ -300,7 +301,7 @@ explicitly, so a handler relying on it should treat it as optional (as
 function useLegacyStore<T extends Cache>(options: LegacyModelAndNetworkAndRequestStoreSetupOptions<T>, StoreKlass?: typeof Store$1): typeof ConfiguredStore;
 ```
 
-Defined in: [warp-drive-packages/legacy/src/index.ts:293](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/index.ts#L293)
+Defined in: [warp-drive-packages/legacy/src/index.ts:293](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/index.ts#L293)
 
 Use the legacy store with the given options.
 

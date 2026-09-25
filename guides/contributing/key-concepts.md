@@ -1,13 +1,13 @@
 ---
-url: /guides/contributing/key-concepts.md
+url: https://canary.warp-drive.io/guides/contributing/key-concepts.md
 ---
 # Key Concepts
 
-* [Identity](#-identity)
+* [Identity](#identity)
 
 ***
 
-## 🔸 Identity
+## 🔸 Identity {#identity}
 
 ### Working with Identifiers and TypeScript
 

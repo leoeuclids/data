@@ -1,5 +1,6 @@
 ---
-url: /api/eslint-plugin-warp-drive/rules/no-legacy-imports/variables/export=.md
+url: >-
+  https://canary.warp-drive.io/api/eslint-plugin-warp-drive/rules/no-legacy-imports/variables/export=.md
 ---
 
 # &#x20;export=
@@ -8,4 +9,4 @@ url: /api/eslint-plugin-warp-drive/rules/no-legacy-imports/variables/export=.md
 export=: RuleModule;
 ```
 
-Defined in: [rules/no-legacy-imports.js:217](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/packages/eslint-plugin-warp-drive/src/rules/no-legacy-imports.js#L217)
+Defined in: [rules/no-legacy-imports.js:217](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/packages/eslint-plugin-warp-drive/src/rules/no-legacy-imports.js#L217)

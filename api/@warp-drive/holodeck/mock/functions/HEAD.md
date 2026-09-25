@@ -1,5 +1,5 @@
 ---
-url: /api/@warp-drive/holodeck/mock/functions/HEAD.md
+url: https://canary.warp-drive.io/api/@warp-drive/holodeck/mock/functions/HEAD.md
 ---
 
 # &#x20;HEAD()
@@ -15,7 +15,7 @@ function HEAD(
 ): Promise<void>;
 ```
 
-Defined in: [mock.ts:260](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/packages/holodeck/src/mock.ts#L260)
+Defined in: [mock.ts:298](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/packages/holodeck/src/mock.ts#L298)
 
 Sets up Mocking for a HEAD request on the mock server
 for the supplied url.
@@ -27,7 +27,9 @@ Available options:
 * status: the status code to return (default: 200)
 * headers: the headers to return (default: {})
 * body: the body to match against for the request (default: null)
-* RECORD: whether to record the request (default: false)
+* RECORD: record this request even when the suite is replaying, such as under CI (default: false).
+  A local override for re-recording one request. Do not commit it; a committed RECORD means
+  that request is never replayed against its fixture.
 
 ## Parameters
 
@@ -53,7 +55,7 @@ a function which generates the response to return
 `RECORD?`: `boolean`;
 }
 
-status, headers for the response, body to match against for the request, and whether to record the request
+status, headers for the response, body to match against for the request, and whether to force recording
 
 ## Returns
 

@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/utilities/types/FindRelatedCollectionUrlOptions.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/utilities/types/FindRelatedCollectionUrlOptions.md
 ---
 
 # &#x20;FindRelatedCollectionUrlOptions
@@ -15,7 +16,7 @@ interface FindRelatedCollectionUrlOptions {
 }
 ```
 
-Defined in: [index.ts:206](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L206)
+Defined in: [index.ts:206](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L206)
 
 [buildBaseURL](../functions/buildBaseURL.md) options for a `findRelatedCollection` request.
 
@@ -27,7 +28,7 @@ Defined in: [index.ts:206](https://github.com/leoeuclids/data/blob/7d81741dd2bfc
 fieldPath: string;
 ```
 
-Defined in: [index.ts:227](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L227)
+Defined in: [index.ts:227](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L227)
 
 The relationship field name, appended to the resource path.
 
@@ -39,7 +40,7 @@ The relationship field name, appended to the resource path.
 optional host?: string;
 ```
 
-Defined in: [index.ts:235](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L235)
+Defined in: [index.ts:235](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L235)
 
 Overrides the globally configured host for this call only.
 
@@ -54,7 +55,7 @@ identifier: {
 };
 ```
 
-Defined in: [index.ts:214](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L214)
+Defined in: [index.ts:214](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L214)
 
 The type and id of the record whose relationship is being fetched.
 
@@ -82,7 +83,7 @@ The resource type.
 optional namespace?: string;
 ```
 
-Defined in: [index.ts:239](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L239)
+Defined in: [index.ts:239](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L239)
 
 Overrides the globally configured namespace for this call only.
 
@@ -94,7 +95,7 @@ Overrides the globally configured namespace for this call only.
 op: "findRelatedCollection";
 ```
 
-Defined in: [index.ts:210](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L210)
+Defined in: [index.ts:210](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L210)
 
 The request operation this URL is for.
 
@@ -106,6 +107,6 @@ The request operation this URL is for.
 optional resourcePath?: string;
 ```
 
-Defined in: [index.ts:231](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L231)
+Defined in: [index.ts:231](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L231)
 
 The path segment for the resource, defaults to `identifier.type` if not provided.

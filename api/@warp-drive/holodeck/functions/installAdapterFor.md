@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/holodeck/functions/installAdapterFor.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/holodeck/functions/installAdapterFor.md
 ---
 
 # &#x20;installAdapterFor()
@@ -8,7 +9,7 @@ url: /api/@warp-drive/holodeck/functions/installAdapterFor.md
 function installAdapterFor(owner: object, store: Store$1): void;
 ```
 
-Defined in: [index.ts:312](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/packages/holodeck/src/index.ts#L312)
+Defined in: [index.ts:413](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/packages/holodeck/src/index.ts#L413)
 
 Creates an adapterFor function that wraps the provided adapterFor function
 to override the adapter's \_fetchRequest method to route requests through

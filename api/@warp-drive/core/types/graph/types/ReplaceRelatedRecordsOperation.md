@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/graph/types/ReplaceRelatedRecordsOperation.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/graph/types/ReplaceRelatedRecordsOperation.md
 ---
 
 # &#x20;ReplaceRelatedRecordsOperation
@@ -15,7 +16,7 @@ interface ReplaceRelatedRecordsOperation {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/types/graph.ts:142](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/graph.ts#L142)
+Defined in: [warp-drive-packages/core/src/types/graph.ts:142](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/graph.ts#L142)
 
 Replaces the state of a `to-many` relationship on the Graph with a
 new set of values.
@@ -28,7 +29,7 @@ new set of values.
 field: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/graph.ts:154](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/graph.ts#L154)
+Defined in: [warp-drive-packages/core/src/types/graph.ts:154](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/graph.ts#L154)
 
 The name of the relationship to replace
 
@@ -40,7 +41,7 @@ The name of the relationship to replace
 optional index?: number;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/graph.ts:168](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/graph.ts#L168)
+Defined in: [warp-drive-packages/core/src/types/graph.ts:168](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/graph.ts#L168)
 
 If this is a "splice", the index to start from
 
@@ -52,7 +53,7 @@ If this is a "splice", the index to start from
 op: "replaceRelatedRecords";
 ```
 
-Defined in: [warp-drive-packages/core/src/types/graph.ts:146](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/graph.ts#L146)
+Defined in: [warp-drive-packages/core/src/types/graph.ts:146](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/graph.ts#L146)
 
 The name of the operation
 
@@ -64,7 +65,7 @@ The name of the operation
 optional prior?: ResourceKey[];
 ```
 
-Defined in: [warp-drive-packages/core/src/types/graph.ts:164](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/graph.ts#L164)
+Defined in: [warp-drive-packages/core/src/types/graph.ts:164](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/graph.ts#L164)
 
 If this is a "splice", the resources expected to be removed
 
@@ -76,7 +77,7 @@ If this is a "splice", the resources expected to be removed
 record: ResourceKey;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/graph.ts:150](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/graph.ts#L150)
+Defined in: [warp-drive-packages/core/src/types/graph.ts:150](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/graph.ts#L150)
 
 The cache key for the resource whose relationship is being updated
 
@@ -88,7 +89,7 @@ The cache key for the resource whose relationship is being updated
 value: ResourceKey[];
 ```
 
-Defined in: [warp-drive-packages/core/src/types/graph.ts:160](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/graph.ts#L160)
+Defined in: [warp-drive-packages/core/src/types/graph.ts:160](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/graph.ts#L160)
 
 The resources to add. If neither [prior](#prior)
 nor [index](#index) is specified, all

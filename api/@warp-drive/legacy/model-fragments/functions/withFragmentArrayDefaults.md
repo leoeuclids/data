@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/legacy/model-fragments/functions/withFragmentArrayDefaults.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/legacy/model-fragments/functions/withFragmentArrayDefaults.md
 ---
 
 &#x20;
@@ -18,7 +19,7 @@ function withFragmentArrayDefaults<FragmentArrayType extends string, FragmentArr
 };
 ```
 
-Defined in: [warp-drive-packages/legacy/src/model-fragments/utilities/with-fragment-array-defaults.ts:11](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/model-fragments/utilities/with-fragment-array-defaults.ts#L11)
+Defined in: [warp-drive-packages/legacy/src/model-fragments/utilities/with-fragment-array-defaults.ts:11](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/model-fragments/utilities/with-fragment-array-defaults.ts#L11)
 
 Used as a helper to setup the relevant parts of a fragment-array
 schema and add extensions etc.

@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/utilities/string/functions/singularize.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/utilities/string/functions/singularize.md
 ---
 
 # &#x20;singularize()&#x20;
@@ -8,7 +9,7 @@ url: /api/@warp-drive/utilities/string/functions/singularize.md
 function singularize(word: string): string;
 ```
 
-Defined in: [-private/string/inflect.ts:133](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/-private/string/inflect.ts#L133)
+Defined in: [-private/string/inflect.ts:133](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/-private/string/inflect.ts#L133)
 
 Singularizes a word.
 

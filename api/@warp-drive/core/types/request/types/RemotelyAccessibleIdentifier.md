@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/request/types/RemotelyAccessibleIdentifier.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/request/types/RemotelyAccessibleIdentifier.md
 ---
 
 # &#x20;RemotelyAccessibleIdentifier\<T *extends* `string` = `string`>
@@ -12,7 +13,7 @@ type RemotelyAccessibleIdentifier<T extends string = string> = {
 };
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:378](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L378)
+Defined in: [warp-drive-packages/core/src/types/request.ts:378](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L378)
 
 A minimal reference to a resource sufficient to build a URL for it,
 as accepted by the request builders.
@@ -31,7 +32,7 @@ as accepted by the request builders.
 id: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:382](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L382)
+Defined in: [warp-drive-packages/core/src/types/request.ts:382](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L382)
 
 the resource's persisted id
 
@@ -43,7 +44,7 @@ the resource's persisted id
 optional lid?: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:390](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L390)
+Defined in: [warp-drive-packages/core/src/types/request.ts:390](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L390)
 
 the local identifier WarpDrive has assigned to the resource, if known
 
@@ -55,6 +56,6 @@ the local identifier WarpDrive has assigned to the resource, if known
 type: T;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:386](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L386)
+Defined in: [warp-drive-packages/core/src/types/request.ts:386](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L386)
 
 the resource's type

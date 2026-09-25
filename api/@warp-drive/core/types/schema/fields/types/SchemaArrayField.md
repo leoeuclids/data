@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/schema/fields/types/SchemaArrayField.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/schema/fields/types/SchemaArrayField.md
 ---
 
 # &#x20;SchemaArrayField
@@ -14,7 +15,7 @@ interface SchemaArrayField {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:772](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L772)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:772](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L772)
 
 Represents a field whose value is an array
 of objects with a well-defined structure
@@ -31,7 +32,7 @@ use 'array' instead.
 kind: "schema-array";
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:778](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L778)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:778](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L778)
 
 The kind of field this is.
 
@@ -43,7 +44,7 @@ The kind of field this is.
 name: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:785](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L785)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:785](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L785)
 
 The name of the field.
 
@@ -62,7 +63,7 @@ optional options?: {
 };
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:855](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L855)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:855](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L855)
 
 Options for configuring the behavior of the
 SchemaArray.
@@ -202,7 +203,7 @@ Valid options are:
 optional sourceKey?: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:809](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L809)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:809](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L809)
 
 The name of the field as returned by the API
 and inserted into the [Cache](../../../cache/types/Cache.md) if it differs
@@ -233,7 +234,7 @@ This option is only needed when the value differs from name.
 type: string | null;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:824](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L824)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:824](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L824)
 
 If the SchemaArray is not polymorphic:
 

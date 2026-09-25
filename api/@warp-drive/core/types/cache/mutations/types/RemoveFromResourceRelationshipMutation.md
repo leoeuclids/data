@@ -1,6 +1,6 @@
 ---
 url: >-
-  /api/@warp-drive/core/types/cache/mutations/types/RemoveFromResourceRelationshipMutation.md
+  https://canary.warp-drive.io/api/@warp-drive/core/types/cache/mutations/types/RemoveFromResourceRelationshipMutation.md
 ---
 
 # &#x20;RemoveFromResourceRelationshipMutation
@@ -17,7 +17,7 @@ interface RemoveFromResourceRelationshipMutation {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:38](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/mutations.ts#L38)
+Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:38](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/mutations.ts#L38)
 
 Removes the specified [ResourceKeys](../../../identifier/types/ResourceKey.md) from a relationship's
 local (uncommitted) state.
@@ -30,7 +30,7 @@ local (uncommitted) state.
 field: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:50](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/mutations.ts#L50)
+Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:50](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/mutations.ts#L50)
 
 The name of the relationship to remove from
 
@@ -42,7 +42,7 @@ The name of the relationship to remove from
 optional index?: number;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:58](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/mutations.ts#L58)
+Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:58](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/mutations.ts#L58)
 
 The index to remove the resource(s) from, if applicable
 
@@ -54,7 +54,7 @@ The index to remove the resource(s) from, if applicable
 op: "remove";
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:42](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/mutations.ts#L42)
+Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:42](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/mutations.ts#L42)
 
 The name of the mutation
 
@@ -66,7 +66,7 @@ The name of the mutation
 record: ResourceKey;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:46](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/mutations.ts#L46)
+Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:46](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/mutations.ts#L46)
 
 The cache key for the resource whose relationship is being updated
 
@@ -80,6 +80,6 @@ value:
   | ResourceKey[];
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:54](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/mutations.ts#L54)
+Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:54](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/mutations.ts#L54)
 
 The resource(s) to remove from the relationship

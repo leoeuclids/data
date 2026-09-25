@@ -1,5 +1,5 @@
 ---
-url: /api/@warp-drive/holodeck/functions/setConfig.md
+url: https://canary.warp-drive.io/api/@warp-drive/holodeck/functions/setConfig.md
 ---
 
 # &#x20;setConfig()
@@ -10,7 +10,7 @@ function setConfig(__namedParameters: {
 }): void;
 ```
 
-Defined in: [index.ts:136](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/packages/holodeck/src/index.ts#L136)
+Defined in: [index.ts:142](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/packages/holodeck/src/index.ts#L142)
 
 ## Parameters
 

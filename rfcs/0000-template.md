@@ -1,5 +1,5 @@
 ---
-url: /rfcs/0000-template.md
+url: https://canary.warp-drive.io/rfcs/0000-template.md
 ---
 
 # RFC title

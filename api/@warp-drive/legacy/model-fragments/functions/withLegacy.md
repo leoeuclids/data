@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/legacy/model-fragments/functions/withLegacy.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/legacy/model-fragments/functions/withLegacy.md
 ---
 
 &#x20;
@@ -10,7 +11,7 @@ url: /api/@warp-drive/legacy/model-fragments/functions/withLegacy.md
 function withLegacy(schema: WithPartial<LegacyResourceSchema, "identity" | "legacy">): ResourceSchema;
 ```
 
-Defined in: [warp-drive-packages/legacy/src/model-fragments/utilities/with-legacy.ts:14](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/model-fragments/utilities/with-legacy.ts#L14)
+Defined in: [warp-drive-packages/legacy/src/model-fragments/utilities/with-legacy.ts:14](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/model-fragments/utilities/with-legacy.ts#L14)
 
 Used as a helper to setup the relevant parts of a legacy resource schema
 migrated from `Model`, applying the `ember-object` and `fragment` object

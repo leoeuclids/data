@@ -1,5 +1,5 @@
 ---
-url: /api/@warp-drive/utilities/types/UrlOptions.md
+url: https://canary.warp-drive.io/api/@warp-drive/utilities/types/UrlOptions.md
 ---
 
 # &#x20;UrlOptions
@@ -17,7 +17,7 @@ type UrlOptions =
   | GenericUrlOptions;
 ```
 
-Defined in: [index.ts:426](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L426)
+Defined in: [index.ts:426](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L426)
 
 The union of all `op`-specific option shapes accepted by [buildBaseURL](../functions/buildBaseURL.md), one of:
 

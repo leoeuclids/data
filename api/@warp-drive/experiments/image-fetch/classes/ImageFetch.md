@@ -1,12 +1,13 @@
 ---
-url: /api/@warp-drive/experiments/image-fetch/classes/ImageFetch.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/experiments/image-fetch/classes/ImageFetch.md
 ---
 
 &#x20;
 
 # &#x20;ImageFetch
 
-Defined in: [image-worker/fetch.ts:32](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/image-worker/fetch.ts#L32)
+Defined in: [warp-drive-packages/experiments/src/image-worker/fetch.ts:32](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/image-worker/fetch.ts#L32)
 
 Main-thread client for an [ImageWorker](../../image-worker/classes/ImageWorker.md). Sends image `load`
 requests to a `Worker` or `SharedWorker` running an `ImageWorker`.
@@ -29,7 +30,7 @@ new ImageFetch(worker:
   | null): ImageFetch;
 ```
 
-Defined in: [image-worker/fetch.ts:44](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/image-worker/fetch.ts#L44)
+Defined in: [warp-drive-packages/experiments/src/image-worker/fetch.ts:44](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/image-worker/fetch.ts#L44)
 
 #### Parameters
 
@@ -55,7 +56,7 @@ in FastBoot/SSR).
 _send(event: RequestEventData): void;
 ```
 
-Defined in: [image-worker/fetch.ts:93](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/image-worker/fetch.ts#L93)
+Defined in: [warp-drive-packages/experiments/src/image-worker/fetch.ts:93](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/image-worker/fetch.ts#L93)
 
 #### Parameters
 
@@ -75,7 +76,7 @@ Defined in: [image-worker/fetch.ts:93](https://github.com/leoeuclids/data/blob/7
 cleanupRequest(url: string): Deferred<string> | undefined;
 ```
 
-Defined in: [image-worker/fetch.ts:86](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/image-worker/fetch.ts#L86)
+Defined in: [warp-drive-packages/experiments/src/image-worker/fetch.ts:86](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/image-worker/fetch.ts#L86)
 
 #### Parameters
 
@@ -95,7 +96,7 @@ Defined in: [image-worker/fetch.ts:86](https://github.com/leoeuclids/data/blob/7
 load(url: string): Promise<string>;
 ```
 
-Defined in: [image-worker/fetch.ts:116](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/image-worker/fetch.ts#L116)
+Defined in: [warp-drive-packages/experiments/src/image-worker/fetch.ts:116](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/image-worker/fetch.ts#L116)
 
 Requests that the given image url be loaded by the connected
 [ImageWorker](../../image-worker/classes/ImageWorker.md), resolving with an object url for the fetched
@@ -130,7 +131,7 @@ resolve.
 cache: Map<string, string>;
 ```
 
-Defined in: [image-worker/fetch.ts:37](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/image-worker/fetch.ts#L37)
+Defined in: [warp-drive-packages/experiments/src/image-worker/fetch.ts:37](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/image-worker/fetch.ts#L37)
 
 ***
 
@@ -140,7 +141,7 @@ Defined in: [image-worker/fetch.ts:37](https://github.com/leoeuclids/data/blob/7
 channel: MessageChannel;
 ```
 
-Defined in: [image-worker/fetch.ts:36](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/image-worker/fetch.ts#L36)
+Defined in: [warp-drive-packages/experiments/src/image-worker/fetch.ts:36](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/image-worker/fetch.ts#L36)
 
 ***
 
@@ -150,7 +151,7 @@ Defined in: [image-worker/fetch.ts:36](https://github.com/leoeuclids/data/blob/7
 pending: Map<string, Deferred<string>>;
 ```
 
-Defined in: [image-worker/fetch.ts:35](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/image-worker/fetch.ts#L35)
+Defined in: [warp-drive-packages/experiments/src/image-worker/fetch.ts:35](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/image-worker/fetch.ts#L35)
 
 ***
 
@@ -160,7 +161,7 @@ Defined in: [image-worker/fetch.ts:35](https://github.com/leoeuclids/data/blob/7
 threadId: string;
 ```
 
-Defined in: [image-worker/fetch.ts:34](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/image-worker/fetch.ts#L34)
+Defined in: [warp-drive-packages/experiments/src/image-worker/fetch.ts:34](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/image-worker/fetch.ts#L34)
 
 ***
 
@@ -172,4 +173,4 @@ worker:
   | SharedWorker;
 ```
 
-Defined in: [image-worker/fetch.ts:33](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/image-worker/fetch.ts#L33)
+Defined in: [warp-drive-packages/experiments/src/image-worker/fetch.ts:33](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/image-worker/fetch.ts#L33)

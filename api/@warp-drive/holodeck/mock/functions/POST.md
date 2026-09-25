@@ -1,5 +1,5 @@
 ---
-url: /api/@warp-drive/holodeck/mock/functions/POST.md
+url: https://canary.warp-drive.io/api/@warp-drive/holodeck/mock/functions/POST.md
 ---
 
 # &#x20;POST()
@@ -15,7 +15,7 @@ function POST(
 ): Promise<void>;
 ```
 
-Defined in: [mock.ts:131](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/packages/holodeck/src/mock.ts#L131)
+Defined in: [mock.ts:151](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/packages/holodeck/src/mock.ts#L151)
 
 Mock a POST request
 

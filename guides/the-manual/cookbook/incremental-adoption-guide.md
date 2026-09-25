@@ -1,5 +1,6 @@
 ---
-url: /guides/the-manual/cookbook/incremental-adoption-guide.md
+url: >-
+  https://canary.warp-drive.io/guides/the-manual/cookbook/incremental-adoption-guide.md
 ---
 # Incremental adoption guide for existing projects
 

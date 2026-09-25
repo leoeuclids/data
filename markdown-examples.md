@@ -1,5 +1,5 @@
 ---
-url: /markdown-examples.md
+url: https://canary.warp-drive.io/markdown-examples.md
 ---
 # Markdown Extension Examples
 

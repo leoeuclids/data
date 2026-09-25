@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/reactive/types/PendingPromise.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/reactive/types/PendingPromise.md
 ---
 
 # &#x20;PendingPromise
@@ -18,7 +19,7 @@ interface PendingPromise {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:14](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/signals/promise-state.ts#L14)
+Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:14](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/signals/promise-state.ts#L14)
 
 The state of a promise in the "pending"
 state. This is the default initial state.
@@ -31,7 +32,7 @@ state. This is the default initial state.
 error: null;
 ```
 
-Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:69](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/signals/promise-state.ts#L69)
+Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:69](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/signals/promise-state.ts#L69)
 
 Once the promise has rejected, this will
 be the error the promise rejected with.
@@ -48,7 +49,7 @@ use `reason` instead
 isError: false;
 ```
 
-Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:46](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/signals/promise-state.ts#L46)
+Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:46](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/signals/promise-state.ts#L46)
 
 Whether the promise has rejected
 with an error.
@@ -61,7 +62,7 @@ with an error.
 isLoading: true;
 ```
 
-Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:32](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/signals/promise-state.ts#L32)
+Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:32](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/signals/promise-state.ts#L32)
 
 Whether the promise is pending.
 
@@ -77,7 +78,7 @@ use `isPending` instead
 isPending: true;
 ```
 
-Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:25](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/signals/promise-state.ts#L25)
+Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:25](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/signals/promise-state.ts#L25)
 
 Whether the promise is pending.
 
@@ -89,7 +90,7 @@ Whether the promise is pending.
 isSuccess: false;
 ```
 
-Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:39](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/signals/promise-state.ts#L39)
+Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:39](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/signals/promise-state.ts#L39)
 
 Whether the promise has resolved
 successfully.
@@ -102,7 +103,7 @@ successfully.
 reason: null;
 ```
 
-Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:76](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/signals/promise-state.ts#L76)
+Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:76](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/signals/promise-state.ts#L76)
 
 Once the promise has rejected, this will
 be the error the promise rejected with.
@@ -115,7 +116,7 @@ be the error the promise rejected with.
 result: null;
 ```
 
-Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:60](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/signals/promise-state.ts#L60)
+Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:60](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/signals/promise-state.ts#L60)
 
 Once the promise has resolved, this will
 be the value the promise resolved to.
@@ -132,7 +133,7 @@ use `value` instead
 status: "pending";
 ```
 
-Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:19](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/signals/promise-state.ts#L19)
+Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:19](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/signals/promise-state.ts#L19)
 
 The status of the promise.
 
@@ -144,7 +145,7 @@ The status of the promise.
 value: null;
 ```
 
-Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:53](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/signals/promise-state.ts#L53)
+Defined in: [warp-drive-packages/core/src/signals/promise-state.ts:53](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/signals/promise-state.ts#L53)
 
 Once the promise has resolved, this will
 be the value the promise resolved to.

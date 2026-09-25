@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/utilities/rest/functions/createRecord.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/utilities/rest/functions/createRecord.md
 ---
 
 # &#x20;createRecord()
@@ -15,7 +16,7 @@ function createRecord(record: unknown, options?: ConstrainedRequestOptions): Cre
 function createRecord<T>(record: T, options?: ConstrainedRequestOptions): CreateRequestOptions<T>;
 ```
 
-Defined in: [-private/rest/save-record.ts:146](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/-private/rest/save-record.ts#L146)
+Defined in: [-private/rest/save-record.ts:146](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/-private/rest/save-record.ts#L146)
 
 Builds request options to create new record for resources,
 configured for the url, method and header expectations of most REST APIs.
@@ -77,7 +78,7 @@ const data = await store.request(options);
 function createRecord(record: unknown, options?: ConstrainedRequestOptions): CreateRequestOptions;
 ```
 
-Defined in: [-private/rest/save-record.ts:147](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/-private/rest/save-record.ts#L147)
+Defined in: [-private/rest/save-record.ts:147](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/-private/rest/save-record.ts#L147)
 
 Builds request options to create new record for resources,
 configured for the url, method and header expectations of most REST APIs.

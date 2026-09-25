@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/cache/operations/types/Op.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/cache/operations/types/Op.md
 ---
 
 # &#x20;Op
@@ -10,7 +11,7 @@ interface Op {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/operations.ts:30](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/operations.ts#L30)
+Defined in: [warp-drive-packages/core/src/types/cache/operations.ts:30](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/operations.ts#L30)
 
 All operations are objects with at least one property,
 `op` which contains a string with the name of the operation
@@ -38,6 +39,6 @@ to perform.
 op: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/operations.ts:34](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/operations.ts#L34)
+Defined in: [warp-drive-packages/core/src/types/cache/operations.ts:34](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/operations.ts#L34)
 
 The name of the operation

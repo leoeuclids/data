@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/build-config/babel-macros/functions/macros.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/build-config/babel-macros/functions/macros.md
 ---
 
 # &#x20;macros()
@@ -8,7 +9,7 @@ url: /api/@warp-drive/build-config/babel-macros/functions/macros.md
 function macros(): BabelPlugin[];
 ```
 
-Defined in: [babel-macros.ts:54](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/build-config/src/babel-macros.ts#L54)
+Defined in: [babel-macros.ts:54](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/build-config/src/babel-macros.ts#L54)
 
 ## Returns
 

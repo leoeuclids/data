@@ -1,6 +1,9 @@
 ---
-url: /api/@warp-drive/build-config/index.md
+url: https://canary.warp-drive.io/api/@warp-drive/build-config.md
 ---
+
+:::warning ⚠️ This package has been merged into [@warp-drive/core](../core/index.md) and is not recommended for new applications
+:::
 
 This package provides a build-plugin that enables configuration of deprecations,
 optional features, development/testing support and debug logging.
@@ -31,9 +34,9 @@ module.exports = async function (defaults) {
 
 Available settings include:
 
-* [debugging](../debugging/index.md)
-* [deprecations](../deprecations/index.md)
-* [features](../canary-features/index.md)
+* [debugging](debugging/index.md)
+* [deprecations](deprecations/index.md)
+* [features](canary-features/index.md)
 * [polyfillUUID](types/WarpDriveConfig.md#polyfilluuid)
 * [includeDataAdapterInProduction](types/WarpDriveConfig.md#includedataadapterinproduction)
 * [compatWith](types/WarpDriveConfig.md#compatwith)

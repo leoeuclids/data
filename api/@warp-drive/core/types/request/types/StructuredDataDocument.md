@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/request/types/StructuredDataDocument.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/request/types/StructuredDataDocument.md
 ---
 
 # &#x20;StructuredDataDocument\<T>
@@ -15,7 +16,7 @@ interface StructuredDataDocument<T> {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:445](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L445)
+Defined in: [warp-drive-packages/core/src/types/request.ts:445](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L445)
 
 When a [Future](../../../request/types/Future.md) resolves, it returns an object
 containing the original [request](RequestInfo.md),
@@ -36,7 +37,7 @@ the processed content.
 content: T;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:461](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L461)
+Defined in: [warp-drive-packages/core/src/types/request.ts:461](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L461)
 
 the processed content of the response
 
@@ -48,7 +49,7 @@ the processed content of the response
 request: ImmutableRequestInfo;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:453](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L453)
+Defined in: [warp-drive-packages/core/src/types/request.ts:453](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L453)
 
 #### See
 
@@ -65,6 +66,6 @@ response:
   | null;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/request.ts:457](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/request.ts#L457)
+Defined in: [warp-drive-packages/core/src/types/request.ts:457](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/request.ts#L457)
 
 the response set by the handler chain, if any

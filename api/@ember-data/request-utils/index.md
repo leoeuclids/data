@@ -1,8 +1,11 @@
 ---
-url: /api/@ember-data/request-utils/index.md
+url: https://canary.warp-drive.io/api/@ember-data/request-utils.md
 ---
 
-Simple utility function to assist in url building,
+:::warning ⚠️ This package has been merged into [@warp-drive/utilities](../../@warp-drive/utilities/index.md) and is not recommended for new applications
+:::
+
+Simple utility functions to assist in url building,
 query params, and other common request operations.
 
 These primitives may be used directly or composed

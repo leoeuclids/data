@@ -1,6 +1,6 @@
 ---
 url: >-
-  /api/@warp-drive/core/types/cache/mutations/types/AddToResourceRelationshipMutation.md
+  https://canary.warp-drive.io/api/@warp-drive/core/types/cache/mutations/types/AddToResourceRelationshipMutation.md
 ---
 
 # &#x20;AddToResourceRelationshipMutation
@@ -17,7 +17,7 @@ interface AddToResourceRelationshipMutation {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:11](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/mutations.ts#L11)
+Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:11](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/mutations.ts#L11)
 
 Adds the specified [ResourceKeys](../../../identifier/types/ResourceKey.md) to a relationship's
 local (uncommitted) state.
@@ -30,7 +30,7 @@ local (uncommitted) state.
 field: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:23](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/mutations.ts#L23)
+Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:23](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/mutations.ts#L23)
 
 The name of the relationship to add to
 
@@ -42,7 +42,7 @@ The name of the relationship to add to
 optional index?: number;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:31](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/mutations.ts#L31)
+Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:31](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/mutations.ts#L31)
 
 The index at which to insert the resource(s), if applicable
 
@@ -54,7 +54,7 @@ The index at which to insert the resource(s), if applicable
 op: "add";
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:15](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/mutations.ts#L15)
+Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:15](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/mutations.ts#L15)
 
 The name of the mutation
 
@@ -66,7 +66,7 @@ The name of the mutation
 record: ResourceKey;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:19](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/mutations.ts#L19)
+Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:19](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/mutations.ts#L19)
 
 The cache key for the resource whose relationship is being updated
 
@@ -80,6 +80,6 @@ value:
   | ResourceKey[];
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:27](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/mutations.ts#L27)
+Defined in: [warp-drive-packages/core/src/types/cache/mutations.ts:27](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/mutations.ts#L27)
 
 The resource(s) to add to the relationship

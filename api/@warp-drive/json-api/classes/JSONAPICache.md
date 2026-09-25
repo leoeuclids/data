@@ -1,10 +1,10 @@
 ---
-url: /api/@warp-drive/json-api/classes/JSONAPICache.md
+url: https://canary.warp-drive.io/api/@warp-drive/json-api/classes/JSONAPICache.md
 ---
 
 # &#x20;JSONAPICache
 
-Defined in: [-private/cache.ts:140](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L140)
+Defined in: [-private/cache.ts:317](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L317)
 
 ```ts
 import { JSONAPICache } from '@warp-drive/json-api';
@@ -24,7 +24,7 @@ A Cache implementation tuned for [{json:api}](https://jsonapi.org/)
 new JSONAPICache(capabilities: CacheCapabilitiesManager$1): JSONAPICache;
 ```
 
-Defined in: [-private/cache.ts:159](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L159)
+Defined in: [-private/cache.ts:336](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L336)
 
 #### Parameters
 
@@ -46,7 +46,7 @@ APIs for primary cache management functionality
 mutate(mutation: LocalRelationshipOperation): void;
 ```
 
-Defined in: [-private/cache.ts:435](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L435)
+Defined in: [-private/cache.ts:632](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L632)
 
 Update the "local" or "current" (unpersisted) state of the Cache
 
@@ -59,6 +59,17 @@ Update the "local" or "current" (unpersisted) state of the Cache
 #### Returns
 
 `void`
+
+#### Example
+
+```ts
+cache.mutate({
+  op: 'replaceRelatedRecord',
+  record: identifier,
+  field: 'author',
+  value: authorIdentifier,
+});
+```
 
 #### Implementation of
 
@@ -76,7 +87,7 @@ patch(op:
   | Operation[]): void;
 ```
 
-Defined in: [-private/cache.ts:407](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L407)
+Defined in: [-private/cache.ts:594](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L594)
 
 Update the "remote" or "canonical" (persisted) state of the Cache
 by merging new information into the existing state.
@@ -93,6 +104,17 @@ the operation or list of operations to perform
 #### Returns
 
 `void`
+
+#### Example
+
+```ts
+cache.patch({
+  op: 'update',
+  record: identifier,
+  field: 'name',
+  value: 'Chris',
+});
+```
 
 #### Implementation of
 
@@ -121,7 +143,7 @@ peek(identifier: ResourceKey):
   | null;
 ```
 
-Defined in: [-private/cache.ts:494](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L494)
+Defined in: [-private/cache.ts:697](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L697)
 
 Peek resource data from the Cache.
 
@@ -142,8 +164,8 @@ blob is generally safer because the record does
 not require retainining connections to the Store
 and Cache to present data on a per-field basis.
 
-This generally takes the place of `getAttr` as
-an API and may even take the place of `getRelationship`
+This generally takes the place of [getAttr](#getattr) as
+an API and may even take the place of [getRelationship](#getrelationship)
 depending on implementation specifics, though this
 latter usage is less recommended due to the advantages
 of the Graph handling necessary entanglements and
@@ -169,6 +191,13 @@ the various internal WarpDrive bookkeeping fields.
 | [`ResourceObject`](../../core/types/spec/json-api-raw/types/ResourceObject.md)
 | `null`
 
+##### Example
+
+```ts
+const resource = cache.peek(identifier);
+const document = cache.peek(requestKey);
+```
+
 ##### Implementation of
 
 ```ts
@@ -183,7 +212,7 @@ peek(identifier: RequestKey):
   | null;
 ```
 
-Defined in: [-private/cache.ts:495](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L495)
+Defined in: [-private/cache.ts:698](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L698)
 
 Peek the Cache for the [document](../../core/types/spec/document/types/ResourceDocument.md) associated with a request.
 
@@ -227,7 +256,7 @@ peekRemoteState(identifier: ResourceKey):
   | null;
 ```
 
-Defined in: [-private/cache.ts:559](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L559)
+Defined in: [-private/cache.ts:768](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L768)
 
 Peek the remote resource data from the Cache.
 
@@ -241,6 +270,13 @@ Peek the remote resource data from the Cache.
 
 | [`ResourceObject`](../../core/types/spec/json-api-raw/types/ResourceObject.md)
 | `null`
+
+##### Example
+
+```ts
+const resource = cache.peekRemoteState(identifier);
+const document = cache.peekRemoteState(requestKey);
+```
 
 ##### Implementation of
 
@@ -256,7 +292,7 @@ peekRemoteState(identifier: RequestKey):
   | null;
 ```
 
-Defined in: [-private/cache.ts:560](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L560)
+Defined in: [-private/cache.ts:769](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L769)
 
 Peek remote [document](../../core/types/spec/document/types/ResourceDocument.md) data for a request from the Cache.
 
@@ -291,14 +327,14 @@ peekRequest(identifier: RequestKey):
   | null;
 ```
 
-Defined in: [-private/cache.ts:627](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L627)
+Defined in: [-private/cache.ts:841](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L841)
 
 Peek the Cache for the existing request data associated with
 a cacheable request.
 
-This is effectively the reverse of `put` for a request in
+This is effectively the reverse of [put](#put) for a request in
 that it will return the the request, response, and content
-whereas `peek` will return just the `content`.
+whereas [peek](#peek) will return just the `content`.
 
 #### Parameters
 
@@ -310,6 +346,12 @@ whereas `peek` will return just the `content`.
 
 | `StructuredDocument`<[`ResourceDocument`](../../core/types/spec/document/types/ResourceDocument.md)>
 | `null`
+
+#### Example
+
+```ts
+const doc = cache.peekRequest(requestKey);
+```
 
 #### Implementation of
 
@@ -334,11 +376,11 @@ put<T extends ResourceMetaDocument>(doc: StructuredDataDocument<T>): ResourceMet
 put<T extends SingleResourceDocument>(doc: StructuredDataDocument<T>): SingleResourceDataDocument;
 ```
 
-Defined in: [-private/cache.ts:209](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L209)
+Defined in: [-private/cache.ts:386](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L386)
 
 Cache the response to a request
 
-Implements `Cache.put`.
+Implements Cache.put | Cache.put.
 
 Expects a StructuredDocument whose `content` member is a JsonApiDocument.
 
@@ -397,11 +439,11 @@ Cache.put
 put<T extends CollectionResourceDocument>(doc: StructuredDataDocument<T>): CollectionResourceDataDocument;
 ```
 
-Defined in: [-private/cache.ts:210](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L210)
+Defined in: [-private/cache.ts:387](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L387)
 
 Cache the response to a request
 
-Implements `Cache.put`.
+Implements Cache.put | Cache.put.
 
 Expects a StructuredDocument whose `content` member is a JsonApiDocument.
 
@@ -460,11 +502,11 @@ Cache.put
 put<T extends ResourceErrorDocument>(doc: StructuredErrorDocument<T>): ResourceErrorDocument;
 ```
 
-Defined in: [-private/cache.ts:211](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L211)
+Defined in: [-private/cache.ts:388](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L388)
 
 Cache the response to a request
 
-Implements `Cache.put`.
+Implements Cache.put | Cache.put.
 
 Expects a StructuredDocument whose `content` member is a JsonApiDocument.
 
@@ -523,11 +565,11 @@ Cache.put
 put<T extends ResourceMetaDocument>(doc: StructuredDataDocument<T>): ResourceMetaDocument;
 ```
 
-Defined in: [-private/cache.ts:212](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L212)
+Defined in: [-private/cache.ts:389](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L389)
 
 Cache the response to a request
 
-Implements `Cache.put`.
+Implements Cache.put | Cache.put.
 
 Expects a StructuredDocument whose `content` member is a JsonApiDocument.
 
@@ -592,7 +634,7 @@ upsert(
 ): void | string[];
 ```
 
-Defined in: [-private/cache.ts:638](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L638)
+Defined in: [-private/cache.ts:863](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L863)
 
 Push resource data from a remote source into the cache for this identifier
 
@@ -614,7 +656,19 @@ Push resource data from a remote source into the cache for this identifier
 
 `void` | `string`\[]
 
-if `calculateChanges` is true then calculated key changes should be returned
+when `calculateChanges` is true, the names of the attributes whose persisted value
+this push changed (the same keys the `'remote'` channel is notified with), or `undefined`
+when none did. Otherwise `void`.
+
+#### Example
+
+```ts
+cache.upsert(identifier, {
+  type: 'user',
+  id: '1',
+  attributes: { name: 'Chris' },
+});
+```
 
 #### Implementation of
 
@@ -632,7 +686,7 @@ APIs that support management of resource data
 clientDidCreate(identifier: ResourceKey, options?: Record<string, Value>): Record<string, unknown>;
 ```
 
-Defined in: [-private/cache.ts:770](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L770)
+Defined in: [-private/cache.ts:1000](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1000)
 
 \[LIFECYCLE] Signal to the cache that a new record has been instantiated on the client
 
@@ -653,6 +707,12 @@ process. This return value behavior is deprecated.
 
 [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)<`string`, `unknown`>
 
+#### Example
+
+```ts
+cache.clientDidCreate(identifier, { name: 'Chris' });
+```
+
 #### Implementation of
 
 ```ts
@@ -669,7 +729,7 @@ commitWasRejected(identifier:
   | ResourceKey[], errors?: ApiError[]): void;
 ```
 
-Defined in: [-private/cache.ts:949](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L949)
+Defined in: [-private/cache.ts:1197](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1197)
 
 \[LIFECYCLE] Signals to the cache that a resource
 was update via a save transaction failed.
@@ -689,6 +749,12 @@ was update via a save transaction failed.
 
 `void`
 
+#### Example
+
+```ts
+cache.commitWasRejected(identifier, errors);
+```
+
 #### Implementation of
 
 ```ts
@@ -701,13 +767,13 @@ Cache.commitWasRejected
 
 ```ts
 didCommit(committedIdentifier: ResourceKey, result: 
-  | StructuredDataDocument<SingleResourceDataDocument<PersistedResourceKey<string>, PersistedResourceKey<string>>>
+  | StructuredDataDocument<SingleResourceDataDocument<ExistingResourceObject<string>, ExistingResourceObject<string>>>
   | null): SingleResourceDataDocument;
 didCommit(committedIdentifier: ResourceKey[], result: 
-  | StructuredDataDocument<SingleResourceDataDocument<PersistedResourceKey<string>, PersistedResourceKey<string>>>
+  | StructuredDataDocument<SingleResourceDataDocument<ExistingResourceObject<string>, ExistingResourceObject<string>>>
   | null): SingleResourceDataDocument;
 didCommit(committedIdentifier: ResourceKey[], result: 
-  | StructuredDataDocument<CollectionResourceDataDocument<PersistedResourceKey<string>>>
+  | StructuredDataDocument<CollectionResourceDataDocument<ExistingResourceObject<string>>>
   | null): CollectionResourceDataDocument;
 ```
 
@@ -715,11 +781,11 @@ didCommit(committedIdentifier: ResourceKey[], result:
 
 ```ts
 didCommit(committedIdentifier: ResourceKey, result: 
-  | StructuredDataDocument<SingleResourceDataDocument<PersistedResourceKey<string>, PersistedResourceKey<string>>>
+  | StructuredDataDocument<SingleResourceDataDocument<ExistingResourceObject<string>, ExistingResourceObject<string>>>
   | null): SingleResourceDataDocument;
 ```
 
-Defined in: [-private/cache.ts:865](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L865)
+Defined in: [-private/cache.ts:1105](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1105)
 
 \[LIFECYCLE] Signals to the cache that a resource
 was successfully updated as part of a save transaction.
@@ -732,12 +798,18 @@ was successfully updated as part of a save transaction.
 
 ###### result
 
-| `StructuredDataDocument`<[`SingleResourceDataDocument`](../../core/types/spec/document/types/SingleResourceDataDocument.md)<[`PersistedResourceKey`](../../core/types/identifier/types/PersistedResourceKey.md)<`string`>, [`PersistedResourceKey`](../../core/types/identifier/types/PersistedResourceKey.md)<`string`>>>
+| `StructuredDataDocument`<[`SingleResourceDataDocument`](../../core/types/spec/document/types/SingleResourceDataDocument.md)<[`ExistingResourceObject`](../../core/types/spec/json-api-raw/types/ExistingResourceObject.md)<`string`>, [`ExistingResourceObject`](../../core/types/spec/json-api-raw/types/ExistingResourceObject.md)<`string`>>>
 | `null`
 
 ##### Returns
 
 [`SingleResourceDataDocument`](../../core/types/spec/document/types/SingleResourceDataDocument.md)
+
+##### Example
+
+```ts
+cache.didCommit(identifier, result);
+```
 
 ##### Implementation of
 
@@ -749,11 +821,11 @@ Cache.didCommit
 
 ```ts
 didCommit(committedIdentifier: ResourceKey[], result: 
-  | StructuredDataDocument<SingleResourceDataDocument<PersistedResourceKey<string>, PersistedResourceKey<string>>>
+  | StructuredDataDocument<SingleResourceDataDocument<ExistingResourceObject<string>, ExistingResourceObject<string>>>
   | null): SingleResourceDataDocument;
 ```
 
-Defined in: [-private/cache.ts:869](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L869)
+Defined in: [-private/cache.ts:1109](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1109)
 
 \[LIFECYCLE] Signals to the cache that a set of resources
 was successfully updated as part of a save transaction that
@@ -767,7 +839,7 @@ resulted in a single resource being returned.
 
 ###### result
 
-| `StructuredDataDocument`<[`SingleResourceDataDocument`](../../core/types/spec/document/types/SingleResourceDataDocument.md)<[`PersistedResourceKey`](../../core/types/identifier/types/PersistedResourceKey.md)<`string`>, [`PersistedResourceKey`](../../core/types/identifier/types/PersistedResourceKey.md)<`string`>>>
+| `StructuredDataDocument`<[`SingleResourceDataDocument`](../../core/types/spec/document/types/SingleResourceDataDocument.md)<[`ExistingResourceObject`](../../core/types/spec/json-api-raw/types/ExistingResourceObject.md)<`string`>, [`ExistingResourceObject`](../../core/types/spec/json-api-raw/types/ExistingResourceObject.md)<`string`>>>
 | `null`
 
 a document in the cache format containing any updated data
@@ -786,11 +858,11 @@ Cache.didCommit
 
 ```ts
 didCommit(committedIdentifier: ResourceKey[], result: 
-  | StructuredDataDocument<CollectionResourceDataDocument<PersistedResourceKey<string>>>
+  | StructuredDataDocument<CollectionResourceDataDocument<ExistingResourceObject<string>>>
   | null): CollectionResourceDataDocument;
 ```
 
-Defined in: [-private/cache.ts:873](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L873)
+Defined in: [-private/cache.ts:1113](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1113)
 
 \[LIFECYCLE] Signals to the cache that a set of resources
 was successfully updated as part of a save transaction that
@@ -804,7 +876,7 @@ resulted in a collection of resources being returned.
 
 ###### result
 
-| `StructuredDataDocument`<[`CollectionResourceDataDocument`](../../core/types/spec/document/types/CollectionResourceDataDocument.md)<[`PersistedResourceKey`](../../core/types/identifier/types/PersistedResourceKey.md)<`string`>>>
+| `StructuredDataDocument`<[`CollectionResourceDataDocument`](../../core/types/spec/document/types/CollectionResourceDataDocument.md)<[`ExistingResourceObject`](../../core/types/spec/json-api-raw/types/ExistingResourceObject.md)<`string`>>>
 | `null`
 
 a document in the cache format containing any updated data
@@ -827,7 +899,7 @@ Cache.didCommit
 unloadRecord(identifier: ResourceKey): void;
 ```
 
-Defined in: [-private/cache.ts:969](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L969)
+Defined in: [-private/cache.ts:1222](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1222)
 
 \[LIFECYCLE] Signals to the cache that all data for a resource
 should be cleared.
@@ -843,6 +915,12 @@ This method is a candidate to become a mutation
 #### Returns
 
 `void`
+
+#### Example
+
+```ts
+cache.unloadRecord(identifier);
+```
 
 #### Implementation of
 
@@ -860,7 +938,7 @@ willCommit(identifier:
   | ResourceKey[], _context: RequestContext | null): void;
 ```
 
-Defined in: [-private/cache.ts:848](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L848)
+Defined in: [-private/cache.ts:1083](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1083)
 
 \[LIFECYCLE] Signals to the cache that a resource
 will be part of a save transaction.
@@ -880,6 +958,12 @@ will be part of a save transaction.
 
 `void`
 
+#### Example
+
+```ts
+cache.willCommit(identifier, context);
+```
+
 #### Implementation of
 
 ```ts
@@ -896,9 +980,21 @@ APIs that support granular field level management of resource data
 changedAttrs(identifier: ResourceKey): ChangedAttributesHash;
 ```
 
-Defined in: [-private/cache.ts:1308](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1308)
+Defined in: [-private/cache.ts:1537](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1537)
 
-Query the cache for the changed attributes of a resource.
+Query the cache for the changed attributes of a resource: every unsaved
+mutation, as a `[before, after]` pair per field.
+
+`before` is the value the mutation replaces, which is not always the
+persisted one. A mutation a save is carrying replaces remote state; an edit
+made while that save is in flight replaces the in-flight value. So this is
+what saving from here would change, which is what `serializePatch` and the
+legacy `Snapshot` consume, rather than a diff against persisted state.
+
+Derived from the layers on each call, so it is always consistent with
+[getAttr](#getattr) and
+[rollbackAttrs](#rollbackattrs). Dirtiness does not go
+through here; see [hasChangedAttrs](#haschangedattrs).
 
 #### Parameters
 
@@ -911,6 +1007,13 @@ Query the cache for the changed attributes of a resource.
 `ChangedAttributesHash`
 
 `{ '<field>': ['<old>', '<new>'] }`
+
+#### Example
+
+```ts
+const changes = cache.changedAttrs(identifier);
+// { name: ['Igor', 'Chris'] }
+```
 
 #### Implementation of
 
@@ -926,7 +1029,7 @@ Cache.changedAttrs
 changedRelationships(identifier: ResourceKey): Map<string, RelationshipDiff>;
 ```
 
-Defined in: [-private/cache.ts:1422](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1422)
+Defined in: [-private/cache.ts:1682](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1682)
 
 Query the cache for the changes to relationships of a resource.
 
@@ -959,6 +1062,13 @@ type RelationshipDiff =
 
 [`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)<`string`, `RelationshipDiff`>
 
+#### Example
+
+```ts
+const diffs = cache.changedRelationships(identifier);
+const comments = diffs.get('comments');
+```
+
 #### Implementation of
 
 ```ts
@@ -973,7 +1083,7 @@ Cache.changedRelationships
 getAttr(identifier: ResourceKey, attr: string | string[]): Value | undefined;
 ```
 
-Defined in: [-private/cache.ts:1051](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1051)
+Defined in: [-private/cache.ts:1310](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1310)
 
 Retrieve the data for an attribute from the cache
 with local mutations applied.
@@ -992,6 +1102,13 @@ with local mutations applied.
 
 [`Value`](../../core/types/json/raw/types/Value.md) | `undefined`
 
+#### Example
+
+```ts
+const name = cache.getAttr(identifier, 'name');
+const zip = cache.getAttr(identifier, ['address', 'zip']);
+```
+
 #### Implementation of
 
 ```ts
@@ -1008,7 +1125,7 @@ getRelationship(identifier: ResourceKey, field: string):
 | CollectionRelationship<ResourceKey>;
 ```
 
-Defined in: [-private/cache.ts:1464](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1464)
+Defined in: [-private/cache.ts:1741](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1741)
 
 Query the cache for the current state of a relationship property
 
@@ -1029,6 +1146,12 @@ Query the cache for the current state of a relationship property
 
 resource relationship object
 
+#### Example
+
+```ts
+const relationship = cache.getRelationship(identifier, 'comments');
+```
+
 #### Implementation of
 
 ```ts
@@ -1043,7 +1166,7 @@ Cache.getRelationship
 getRemoteAttr(identifier: ResourceKey, attr: string | string[]): Value | undefined;
 ```
 
-Defined in: [-private/cache.ts:1122](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1122)
+Defined in: [-private/cache.ts:1362](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1362)
 
 Retrieve the remote data for an attribute from the cache
 
@@ -1061,6 +1184,12 @@ Retrieve the remote data for an attribute from the cache
 
 [`Value`](../../core/types/json/raw/types/Value.md) | `undefined`
 
+#### Example
+
+```ts
+const name = cache.getRemoteAttr(identifier, 'name');
+```
+
 #### Implementation of
 
 ```ts
@@ -1077,7 +1206,7 @@ getRemoteRelationship(identifier: ResourceKey, field: string):
 | CollectionRelationship<ResourceKey>;
 ```
 
-Defined in: [-private/cache.ts:1475](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1475)
+Defined in: [-private/cache.ts:1757](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1757)
 
 Query the cache for the remote state of a relationship property
 
@@ -1098,6 +1227,12 @@ Query the cache for the remote state of a relationship property
 
 resource relationship object
 
+#### Example
+
+```ts
+const relationship = cache.getRemoteRelationship(identifier, 'comments');
+```
+
 #### Implementation of
 
 ```ts
@@ -1112,7 +1247,7 @@ Cache.getRemoteRelationship
 hasChangedAttrs(identifier: ResourceKey): boolean;
 ```
 
-Defined in: [-private/cache.ts:1331](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1331)
+Defined in: [-private/cache.ts:1581](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1581)
 
 Query the cache for whether any mutated attributes exist
 
@@ -1125,6 +1260,14 @@ Query the cache for whether any mutated attributes exist
 #### Returns
 
 `boolean`
+
+#### Example
+
+```ts
+if (cache.hasChangedAttrs(identifier)) {
+  // ...
+}
+```
 
 #### Implementation of
 
@@ -1140,7 +1283,7 @@ Cache.hasChangedAttrs
 hasChangedRelationships(identifier: ResourceKey): boolean;
 ```
 
-Defined in: [-private/cache.ts:1432](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1432)
+Defined in: [-private/cache.ts:1699](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1699)
 
 Query the cache for whether any mutated relationships exist
 
@@ -1153,6 +1296,14 @@ Query the cache for whether any mutated relationships exist
 #### Returns
 
 `boolean`
+
+#### Example
+
+```ts
+if (cache.hasChangedRelationships(identifier)) {
+  // ...
+}
+```
 
 #### Implementation of
 
@@ -1168,7 +1319,7 @@ Cache.hasChangedRelationships
 rollbackAttrs(identifier: ResourceKey): string[];
 ```
 
-Defined in: [-private/cache.ts:1359](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1359)
+Defined in: [-private/cache.ts:1614](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1614)
 
 Tell the cache to discard any uncommitted mutations to attributes
 
@@ -1186,6 +1337,12 @@ This method is a candidate to become a mutation
 
 the names of fields that were restored
 
+#### Example
+
+```ts
+const restoredKeys = cache.rollbackAttrs(identifier);
+```
+
 #### Implementation of
 
 ```ts
@@ -1200,7 +1357,7 @@ Cache.rollbackAttrs
 rollbackRelationships(identifier: ResourceKey): string[];
 ```
 
-Defined in: [-private/cache.ts:1447](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1447)
+Defined in: [-private/cache.ts:1719](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1719)
 
 Tell the cache to discard any uncommitted mutations to relationships.
 
@@ -1220,6 +1377,12 @@ This method is a candidate to become a mutation
 
 the names of relationships that were restored
 
+#### Example
+
+```ts
+const restoredFields = cache.rollbackRelationships(identifier);
+```
+
 #### Implementation of
 
 ```ts
@@ -1238,7 +1401,7 @@ setAttr(
 ): void;
 ```
 
-Defined in: [-private/cache.ts:1189](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1189)
+Defined in: [-private/cache.ts:1416](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1416)
 
 Mutate the data for an attribute in the cache
 
@@ -1262,6 +1425,12 @@ This method is a candidate to become a mutation
 
 `void`
 
+#### Example
+
+```ts
+cache.setAttr(identifier, 'name', 'Chris');
+```
+
 #### Implementation of
 
 ```ts
@@ -1278,7 +1447,7 @@ APIs that support managing Resource states
 getErrors(identifier: ResourceKey): ApiError[];
 ```
 
-Defined in: [-private/cache.ts:1505](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1505)
+Defined in: [-private/cache.ts:1797](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1797)
 
 Query the cache for any validation errors applicable to the given resource.
 
@@ -1291,6 +1460,12 @@ Query the cache for any validation errors applicable to the given resource.
 #### Returns
 
 [`ApiError`](../../core/types/spec/error/types/ApiError.md)\[]
+
+#### Example
+
+```ts
+const errors = cache.getErrors(identifier);
+```
 
 #### Implementation of
 
@@ -1306,7 +1481,7 @@ Cache.getErrors
 isDeleted(identifier: ResourceKey): boolean;
 ```
 
-Defined in: [-private/cache.ts:1539](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1539)
+Defined in: [-private/cache.ts:1852](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1852)
 
 Query the cache for whether a given resource is marked as deleted (but not
 necessarily persisted yet).
@@ -1320,6 +1495,14 @@ necessarily persisted yet).
 #### Returns
 
 `boolean`
+
+#### Example
+
+```ts
+if (cache.isDeleted(identifier)) {
+  // ...
+}
+```
 
 #### Implementation of
 
@@ -1335,7 +1518,7 @@ Cache.isDeleted
 isDeletionCommitted(identifier: ResourceKey): boolean;
 ```
 
-Defined in: [-private/cache.ts:1551](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1551)
+Defined in: [-private/cache.ts:1871](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1871)
 
 Query the cache for whether a given resource has been deleted and that deletion
 has also been persisted.
@@ -1349,6 +1532,14 @@ has also been persisted.
 #### Returns
 
 `boolean`
+
+#### Example
+
+```ts
+if (cache.isDeletionCommitted(identifier)) {
+  // ...
+}
+```
 
 #### Implementation of
 
@@ -1364,7 +1555,7 @@ Cache.isDeletionCommitted
 isEmpty(identifier: ResourceKey): boolean;
 ```
 
-Defined in: [-private/cache.ts:1515](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1515)
+Defined in: [-private/cache.ts:1814](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1814)
 
 Query the cache for whether a given resource has any available data
 
@@ -1377,6 +1568,14 @@ Query the cache for whether a given resource has any available data
 #### Returns
 
 `boolean`
+
+#### Example
+
+```ts
+if (cache.isEmpty(identifier)) {
+  // ...
+}
+```
 
 #### Implementation of
 
@@ -1392,7 +1591,7 @@ Cache.isEmpty
 isNew(identifier: ResourceKey): boolean;
 ```
 
-Defined in: [-private/cache.ts:1527](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1527)
+Defined in: [-private/cache.ts:1833](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1833)
 
 Query the cache for whether a given resource was created locally and not
 yet persisted.
@@ -1406,6 +1605,14 @@ yet persisted.
 #### Returns
 
 `boolean`
+
+#### Example
+
+```ts
+if (cache.isNew(identifier)) {
+  // ...
+}
+```
 
 #### Implementation of
 
@@ -1421,7 +1628,7 @@ Cache.isNew
 setIsDeleted(identifier: ResourceKey, isDeleted: boolean): void;
 ```
 
-Defined in: [-private/cache.ts:1492](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L1492)
+Defined in: [-private/cache.ts:1779](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L1779)
 
 Update the cache state for the given resource to be marked
 as locally deleted, or remove such a mark.
@@ -1442,6 +1649,12 @@ This method is a candidate to become a mutation
 
 `void`
 
+#### Example
+
+```ts
+cache.setIsDeleted(identifier, true);
+```
+
 #### Implementation of
 
 ```ts
@@ -1456,7 +1669,7 @@ Cache.setIsDeleted
 version: "2";
 ```
 
-Defined in: [-private/cache.ts:146](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/json-api/src/-private/cache.ts#L146)
+Defined in: [-private/cache.ts:323](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/json-api/src/-private/cache.ts#L323)
 
 The Cache Version that this implementation implements.
 

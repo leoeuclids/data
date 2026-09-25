@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/schema/fields/types/DerivedField.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/schema/fields/types/DerivedField.md
 ---
 
 # &#x20;DerivedField
@@ -13,7 +14,7 @@ interface DerivedField {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:958](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L958)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:958](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L958)
 
 Represents a field whose value is derived
 from other fields in the schema.
@@ -36,7 +37,7 @@ that may not be loaded should be avoided.
 kind: "derived";
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:964](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L964)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:964](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L964)
 
 The kind of field this is.
 
@@ -48,7 +49,7 @@ The kind of field this is.
 name: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:971](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L971)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:971](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L971)
 
 The name of the field.
 
@@ -60,7 +61,7 @@ The name of the field.
 optional options?: ObjectValue;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:1002](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L1002)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:1002](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L1002)
 
 Options to pass to the derivation, if any
 
@@ -75,7 +76,7 @@ options schema.
 type: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:992](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/schema/fields.ts#L992)
+Defined in: [warp-drive-packages/core/src/types/schema/fields.ts:992](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/schema/fields.ts#L992)
 
 The name of the derivation to use.
 

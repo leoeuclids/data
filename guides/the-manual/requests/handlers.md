@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/requests/handlers.md
+url: https://canary.warp-drive.io/guides/the-manual/requests/handlers.md
 ---
 # Handlers
 

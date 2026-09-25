@@ -1,5 +1,5 @@
 ---
-url: /guides/migrating/two-store-migration.md
+url: https://canary.warp-drive.io/guides/migrating/two-store-migration.md
 ---
 
 :::danger **We've moved!**

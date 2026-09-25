@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/graph/types/UnknownOperation.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/graph/types/UnknownOperation.md
 ---
 
 # &#x20;UnknownOperation
@@ -12,7 +13,7 @@ interface UnknownOperation {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/types/graph.ts:70](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/graph.ts#L70)
+Defined in: [warp-drive-packages/core/src/types/graph.ts:70](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/graph.ts#L70)
 
 A placeholder operation for a relationship whose kind (`to-one` vs
 `to-many`) is not yet known to the Graph.
@@ -25,7 +26,7 @@ A placeholder operation for a relationship whose kind (`to-one` vs
 field: string;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/graph.ts:82](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/graph.ts#L82)
+Defined in: [warp-drive-packages/core/src/types/graph.ts:82](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/graph.ts#L82)
 
 The name of the relationship
 
@@ -37,7 +38,7 @@ The name of the relationship
 op: "never";
 ```
 
-Defined in: [warp-drive-packages/core/src/types/graph.ts:74](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/graph.ts#L74)
+Defined in: [warp-drive-packages/core/src/types/graph.ts:74](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/graph.ts#L74)
 
 The name of the operation
 
@@ -49,6 +50,6 @@ The name of the operation
 record: ResourceKey;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/graph.ts:78](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/graph.ts#L78)
+Defined in: [warp-drive-packages/core/src/types/graph.ts:78](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/graph.ts#L78)
 
 The cache key for the resource whose relationship is affected

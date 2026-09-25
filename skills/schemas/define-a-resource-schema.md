@@ -1,5 +1,5 @@
 ---
-url: /skills/schemas/define-a-resource-schema.md
+url: https://canary.warp-drive.io/skills/schemas/define-a-resource-schema.md
 ---
 # Define a Resource Schema
 

@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/cookbook/auth-handlers.md
+url: https://canary.warp-drive.io/guides/the-manual/cookbook/auth-handlers.md
 ---
 # Auth Handler
 

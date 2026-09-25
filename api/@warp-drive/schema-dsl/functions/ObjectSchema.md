@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/schema-dsl/functions/ObjectSchema.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/schema-dsl/functions/ObjectSchema.md
 ---
 
 # &#x20;ObjectSchema()
@@ -16,7 +17,7 @@ function ObjectSchema(options: ObjectSchemaOptions): (target: AnyConstructor) =>
 function ObjectSchema(target: AnyConstructor): void;
 ```
 
-Defined in: [entities/object-schema.ts:67](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/schema-dsl/src/entities/object-schema.ts#L67)
+Defined in: [entities/object-schema.ts:67](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/schema-dsl/src/entities/object-schema.ts#L67)
 
 **`Class Decorator`**
 
@@ -75,7 +76,7 @@ export class Address {
 function ObjectSchema(type: string, options?: ObjectSchemaOptions): (target: AnyConstructor) => void;
 ```
 
-Defined in: [entities/object-schema.ts:68](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/schema-dsl/src/entities/object-schema.ts#L68)
+Defined in: [entities/object-schema.ts:68](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/schema-dsl/src/entities/object-schema.ts#L68)
 
 **`Class Decorator`**
 
@@ -138,7 +139,7 @@ export class Address {
 function ObjectSchema(options: ObjectSchemaOptions): (target: AnyConstructor) => void;
 ```
 
-Defined in: [entities/object-schema.ts:69](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/schema-dsl/src/entities/object-schema.ts#L69)
+Defined in: [entities/object-schema.ts:69](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/schema-dsl/src/entities/object-schema.ts#L69)
 
 **`Class Decorator`**
 

@@ -1,6 +1,6 @@
 ---
 url: >-
-  /api/@warp-drive/build-config/deprecations/variables/ENABLE_LEGACY_REQUEST_METHODS.md
+  https://canary.warp-drive.io/api/@warp-drive/build-config/deprecations/variables/ENABLE_LEGACY_REQUEST_METHODS.md
 ---
 
 # &#x20;ENABLE\_LEGACY\_REQUEST\_METHODS&#x20;
@@ -9,7 +9,7 @@ url: >-
 const ENABLE_LEGACY_REQUEST_METHODS: boolean = true;
 ```
 
-Defined in: [deprecations.ts:527](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/build-config/src/deprecations.ts#L527)
+Defined in: [deprecations.ts:527](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/build-config/src/deprecations.ts#L527)
 
 Deprecates all the methods that lead to making requests that don't directly
 use `store.request()` or `manager.request()`.

@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/core/types/cache/relationship/types/ResourceRelationship.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/core/types/cache/relationship/types/ResourceRelationship.md
 ---
 
 # &#x20;ResourceRelationship\<T = [`ResourceKey`](../../../identifier/types/ResourceKey.md)>
@@ -12,7 +13,7 @@ interface ResourceRelationship<T = ResourceKey> {
 }
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/relationship.ts:23](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/relationship.ts#L23)
+Defined in: [warp-drive-packages/core/src/types/cache/relationship.ts:23](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/relationship.ts#L23)
 
 The stable-cache-key form of a `to-one` [relationship](../../../spec/json-api-raw/types/SingleResourceRelationship.md).
 
@@ -39,7 +40,7 @@ const relationship: ResourceRelationship = { data: resourceKey };
 optional data?: T | null;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/relationship.ts:27](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/relationship.ts#L27)
+Defined in: [warp-drive-packages/core/src/types/cache/relationship.ts:27](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/relationship.ts#L27)
 
 the related resource, or `null` if the relationship has no related resource
 
@@ -51,7 +52,7 @@ the related resource, or `null` if the relationship has no related resource
 optional links?: Links;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/relationship.ts:35](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/relationship.ts#L35)
+Defined in: [warp-drive-packages/core/src/types/cache/relationship.ts:35](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/relationship.ts#L35)
 
 links related to the relationship
 
@@ -63,6 +64,6 @@ links related to the relationship
 optional meta?: ObjectValue;
 ```
 
-Defined in: [warp-drive-packages/core/src/types/cache/relationship.ts:31](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/core/src/types/cache/relationship.ts#L31)
+Defined in: [warp-drive-packages/core/src/types/cache/relationship.ts:31](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/core/src/types/cache/relationship.ts#L31)
 
 meta information about the relationship

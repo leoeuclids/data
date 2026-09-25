@@ -1,5 +1,6 @@
 ---
-url: /skills/contributors/keep-commits-human-authored.md
+url: >-
+  https://canary.warp-drive.io/skills/contributors/keep-commits-human-authored.md
 ---
 # Keep Commits Human-Authored
 

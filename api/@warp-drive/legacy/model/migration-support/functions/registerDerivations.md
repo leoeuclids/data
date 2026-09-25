@@ -1,6 +1,6 @@
 ---
 url: >-
-  /api/@warp-drive/legacy/model/migration-support/functions/registerDerivations.md
+  https://canary.warp-drive.io/api/@warp-drive/legacy/model/migration-support/functions/registerDerivations.md
 ---
 
 &#x20;
@@ -11,7 +11,7 @@ url: >-
 function registerDerivations(schema: SchemaService): void;
 ```
 
-Defined in: [warp-drive-packages/legacy/src/model/migration-support.ts:436](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/model/migration-support.ts#L436)
+Defined in: [warp-drive-packages/legacy/src/model/migration-support.ts:436](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/model/migration-support.ts#L436)
 
 A function which registers the necessary derivations to support
 the LegacyMode features of @warp-drive/legacy/model while migrating to WarpDrive.

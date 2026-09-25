@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/utilities/handlers/functions/assertInvalidUrlLength.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/utilities/handlers/functions/assertInvalidUrlLength.md
 ---
 
 # &#x20;assertInvalidUrlLength()
@@ -8,7 +9,7 @@ url: /api/@warp-drive/utilities/handlers/functions/assertInvalidUrlLength.md
 function assertInvalidUrlLength(url: string | undefined): void;
 ```
 
-Defined in: [-private/handlers/utils.ts:77](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/-private/handlers/utils.ts#L77)
+Defined in: [-private/handlers/utils.ts:77](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/-private/handlers/utils.ts#L77)
 
 This assertion takes a URL and throws an error if the URL is longer than the maximum URL length.
 

@@ -1,5 +1,5 @@
 ---
-url: /guides/the-manual/cookbook/basic-usage.md
+url: https://canary.warp-drive.io/guides/the-manual/cookbook/basic-usage.md
 ---
 # Requests
 

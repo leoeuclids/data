@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/utilities/functions/filterEmpty.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/utilities/functions/filterEmpty.md
 ---
 
 # &#x20;filterEmpty()
@@ -8,7 +9,7 @@ url: /api/@warp-drive/utilities/functions/filterEmpty.md
 function filterEmpty(source: Record<string, Serializable>): Record<string, Serializable>;
 ```
 
-Defined in: [index.ts:628](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/utilities/src/index.ts#L628)
+Defined in: [index.ts:628](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/utilities/src/index.ts#L628)
 
 filter out keys of an object that have falsy values or point to empty arrays
 returning a new object with only those keys that have truthy values / non-empty arrays

@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/schema-dsl/types/DerivedOptions.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/schema-dsl/types/DerivedOptions.md
 ---
 
 # &#x20;DerivedOptions
@@ -11,7 +12,7 @@ interface DerivedOptions {
 }
 ```
 
-Defined in: [fields/derived.ts:11](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/schema-dsl/src/fields/derived.ts#L11)
+Defined in: [fields/derived.ts:11](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/schema-dsl/src/fields/derived.ts#L11)
 
 Options accepted by the [derived](../functions/derived.md) decorator.
 
@@ -23,7 +24,7 @@ Options accepted by the [derived](../functions/derived.md) decorator.
 optional options?: Record<string, unknown>;
 ```
 
-Defined in: [fields/derived.ts:27](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/schema-dsl/src/fields/derived.ts#L27)
+Defined in: [fields/derived.ts:27](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/schema-dsl/src/fields/derived.ts#L27)
 
 Options to pass to the derivation. Must comply with the specific
 derivation's options schema.
@@ -36,7 +37,7 @@ derivation's options schema.
 type: string;
 ```
 
-Defined in: [fields/derived.ts:19](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/schema-dsl/src/fields/derived.ts#L19)
+Defined in: [fields/derived.ts:19](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/schema-dsl/src/fields/derived.ts#L19)
 
 The name of a [Derivation](../../core/types/schema/concepts/types/Derivation.md) registered with the schema service,
 used to compute this field's value. Compiles onto the

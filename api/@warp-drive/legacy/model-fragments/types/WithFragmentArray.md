@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/legacy/model-fragments/types/WithFragmentArray.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/legacy/model-fragments/types/WithFragmentArray.md
 ---
 
 &#x20;
@@ -10,7 +11,7 @@ url: /api/@warp-drive/legacy/model-fragments/types/WithFragmentArray.md
 type WithFragmentArray<T extends Fragment> = T & WithArrayLike<T> & FragmentArray<T>;
 ```
 
-Defined in: [warp-drive-packages/legacy/src/model-fragments/index.ts:14](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/model-fragments/index.ts#L14)
+Defined in: [warp-drive-packages/legacy/src/model-fragments/index.ts:14](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/model-fragments/index.ts#L14)
 
 Adds Ember's classic array-like API (via [WithArrayLike](../../compat/extensions/types/WithArrayLike.md)) and the
 [FragmentArray](../classes/FragmentArray.md) API to the type of a migrated fragment-array resource.

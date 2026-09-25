@@ -1,6 +1,6 @@
 ---
 url: >-
-  /api/@warp-drive/core/build-config/deprecations/variables/DEPRECATE_TRACKING_PACKAGE.md
+  https://canary.warp-drive.io/api/@warp-drive/core/build-config/deprecations/variables/DEPRECATE_TRACKING_PACKAGE.md
 ---
 
 # &#x20;DEPRECATE\_TRACKING\_PACKAGE&#x20;
@@ -9,7 +9,7 @@ url: >-
 const DEPRECATE_TRACKING_PACKAGE: boolean;
 ```
 
-Defined in: [node\_modules/.pnpm/@warp-d\_25f56f2729dd79700790d78740333f27/node\_modules/@warp-drive/build-config/dist/deprecations.d.ts:501](https://github.com/warp-drive-data/warp-drive/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/node_modules/.pnpm/@warp-d_25f56f2729dd79700790d78740333f27/node_modules/@warp-drive/build-config/dist/deprecations.d.ts#L501)
+Defined in: [node\_modules/.pnpm/@warp-d\_25f56f2729dd79700790d78740333f27/node\_modules/@warp-drive/build-config/dist/deprecations.d.ts:501](https://github.com/warp-drive-data/warp-drive/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/node_modules/.pnpm/@warp-d_25f56f2729dd79700790d78740333f27/node_modules/@warp-drive/build-config/dist/deprecations.d.ts#L501)
 
 Deprecates the use of the @ember-data/tracking package which
 historically provided bindings into Ember's reactivity system.

@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/experiments/storage/functions/effect.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/experiments/storage/functions/effect.md
 ---
 
 &#x20;
@@ -10,7 +11,7 @@ url: /api/@warp-drive/experiments/storage/functions/effect.md
 function effect(fn: <K>(update: ValueTransition<K>) => void, type?: "local" | "session"): PropertyDecorator;
 ```
 
-Defined in: [storage/storage-resource.ts:206](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/experiments/src/storage/storage-resource.ts#L206)
+Defined in: [warp-drive-packages/experiments/src/storage/storage-resource.ts:206](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/experiments/src/storage/storage-resource.ts#L206)
 
 Effects are fields that run a side-effecting function.
 

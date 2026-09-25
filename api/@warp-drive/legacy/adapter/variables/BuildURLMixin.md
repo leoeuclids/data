@@ -1,5 +1,6 @@
 ---
-url: /api/@warp-drive/legacy/adapter/variables/BuildURLMixin.md
+url: >-
+  https://canary.warp-drive.io/api/@warp-drive/legacy/adapter/variables/BuildURLMixin.md
 ---
 
 &#x20;
@@ -10,7 +11,7 @@ url: /api/@warp-drive/legacy/adapter/variables/BuildURLMixin.md
 BuildURLMixin: Mixin;
 ```
 
-Defined in: [warp-drive-packages/legacy/src/adapter/-private/build-url-mixin.ts:26](https://github.com/leoeuclids/data/blob/7d81741dd2bfc81e2f4a70f616c093d01d9d4266/warp-drive-packages/legacy/src/adapter/-private/build-url-mixin.ts#L26)
+Defined in: [warp-drive-packages/legacy/src/adapter/-private/build-url-mixin.ts:26](https://github.com/leoeuclids/data/blob/0fd5d1bd1f071adcf6d45a917c87f4348a980a32/warp-drive-packages/legacy/src/adapter/-private/build-url-mixin.ts#L26)
 
 The `Mixin` implementation of BuildURLMixin, ready to be applied
 to an `EmberObject` subclass such as an `Adapter`.
